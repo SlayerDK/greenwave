@@ -1,0 +1,66 @@
+{
+  "$schema": "./node_modules/fallow/schema.json",
+  "ignorePatterns": ["src/generated/**", "**/*.generated.ts"],
+  "ignoreExports": [
+    {
+      "file": "src/components/ui/**",
+      "exports": ["*"]
+    }
+  ],
+  "ignoreDependencies": ["pg", "@ls-lint/ls-lint"],
+  "ignoreExportsUsedInFile": true,
+  "boundaries": {
+    "zones": [
+      {
+        "name": "db",
+        "patterns": ["src/lib/config/prisma.ts", "src/generated/**"]
+      },
+      {
+        "name": "data",
+        "patterns": [
+          "src/lib/*/queries.ts",
+          "src/lib/*/mutations.ts",
+          "src/lib/*/data-access.ts",
+          "src/lib/*/actions.ts",
+          "src/lib/*/service.ts",
+          "src/lib/*/*-service.ts",
+          "src/lib/*/schema.ts",
+          "src/lib/*/serialization.ts",
+          "src/lib/auth/**"
+        ]
+      },
+      {
+        "name": "hooks",
+        "patterns": ["src/hooks/**"]
+      },
+      {
+        "name": "ui",
+        "patterns": ["src/app/**", "src/components/**", "src/providers/**"]
+      },
+      {
+        "name": "shared",
+        "patterns": ["src/lib/utils/**", "src/lib/config/env.ts"]
+      }
+    ],
+    "rules": [
+      {
+        "from": "ui",
+        "allow": ["data", "hooks", "shared"],
+        "allowTypeOnly": ["db"]
+      },
+      {
+        "from": "hooks",
+        "allow": ["data", "shared"],
+        "allowTypeOnly": ["db"]
+      },
+      {
+        "from": "data",
+        "allow": ["db", "shared"]
+      },
+      {
+        "from": "shared",
+        "allow": []
+      }
+    ]
+  }
+}
