@@ -1,0 +1,2833 @@
+{
+  "routeId": 56634,
+  "routeName": "Ringvejen sydgående",
+  "routeStatus": "ACTIVE",
+  "routePathPoints": [
+    { "latitude": 56.18898785017507, "longitude": 10.218142484272306 },
+    { "latitude": 56.128639766668186, "longitude": 10.162176582744536 }
+  ],
+  "passable": true,
+  "routeLength": 9637,
+  "travelTime": 1017,
+  "createdAt": "2023-12-04T09:49:16Z",
+  "delayTime": 323,
+  "typicalTravelTime": 977,
+  "completeness": 100,
+  "routeConfidence": 100,
+  "typicalTravelTimeCoverage": 100,
+  "detailedSegments": [
+    {
+      "segmentId": 1170420026289651713,
+      "segmentIdStr": "1170420026289651713",
+      "averageSpeed": 35,
+      "typicalSpeed": 35,
+      "segmentLength": 10,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18899, "longitude": 10.21815 },
+        { "latitude": 56.18894, "longitude": 10.21801 }
+      ]
+    },
+    {
+      "segmentId": 1170420026289618945,
+      "segmentIdStr": "1170420026289618945",
+      "averageSpeed": 38,
+      "typicalSpeed": 37,
+      "segmentLength": 24,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18894, "longitude": 10.21801 },
+        { "latitude": 56.18883, "longitude": 10.21767 }
+      ]
+    },
+    {
+      "segmentId": 1170420026289684481,
+      "segmentIdStr": "1170420026289684481",
+      "averageSpeed": 45,
+      "typicalSpeed": 43,
+      "segmentLength": 39,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18883, "longitude": 10.21767 },
+        { "latitude": 56.18865, "longitude": 10.21713 }
+      ]
+    },
+    {
+      "segmentId": 1170420026290372609,
+      "segmentIdStr": "1170420026290372609",
+      "averageSpeed": 49,
+      "typicalSpeed": 48,
+      "segmentLength": 48,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18865, "longitude": 10.21713 },
+        { "latitude": 56.18843, "longitude": 10.21646 }
+      ]
+    },
+    {
+      "segmentId": 1170420026673659905,
+      "segmentIdStr": "1170420026673659905",
+      "averageSpeed": 49,
+      "typicalSpeed": 49,
+      "segmentLength": 6,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18843, "longitude": 10.21646 },
+        { "latitude": 56.1884, "longitude": 10.21637 }
+      ]
+    },
+    {
+      "segmentId": 1170420026673758209,
+      "segmentIdStr": "1170420026673758209",
+      "averageSpeed": 47,
+      "typicalSpeed": 46,
+      "segmentLength": 34,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.1884, "longitude": 10.21637 },
+        { "latitude": 56.18824, "longitude": 10.21591 }
+      ]
+    },
+    {
+      "segmentId": 1170420026673790977,
+      "segmentIdStr": "1170420026673790977",
+      "averageSpeed": 29,
+      "typicalSpeed": 28,
+      "segmentLength": 57,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18824, "longitude": 10.21591 },
+        { "latitude": 56.18798, "longitude": 10.21512 }
+      ]
+    },
+    {
+      "segmentId": 1170420026289553409,
+      "segmentIdStr": "1170420026289553409",
+      "averageSpeed": 16,
+      "typicalSpeed": 15,
+      "segmentLength": 34,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18798, "longitude": 10.21512 },
+        { "latitude": 56.18783, "longitude": 10.21464 }
+      ]
+    },
+    {
+      "segmentId": 1170420026289946625,
+      "segmentIdStr": "1170420026289946625",
+      "averageSpeed": 50,
+      "typicalSpeed": 48,
+      "segmentLength": 114,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18783, "longitude": 10.21464 },
+        { "latitude": 56.18729, "longitude": 10.21307 }
+      ]
+    },
+    {
+      "segmentId": 1170420026195214337,
+      "segmentIdStr": "1170420026195214337",
+      "averageSpeed": 61,
+      "typicalSpeed": 59,
+      "segmentLength": 104,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18729, "longitude": 10.21307 },
+        { "latitude": 56.18683, "longitude": 10.21167 },
+        { "latitude": 56.18681, "longitude": 10.21162 }
+      ]
+    },
+    {
+      "segmentId": 1170420026195116033,
+      "segmentIdStr": "1170420026195116033",
+      "averageSpeed": 60,
+      "typicalSpeed": 58,
+      "segmentLength": 50,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18681, "longitude": 10.21162 },
+        { "latitude": 56.18657, "longitude": 10.21093 }
+      ]
+    },
+    {
+      "segmentId": 1170420026195247105,
+      "segmentIdStr": "1170420026195247105",
+      "averageSpeed": 58,
+      "typicalSpeed": 54,
+      "segmentLength": 64,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18657, "longitude": 10.21093 },
+        { "latitude": 56.18655, "longitude": 10.21085 },
+        { "latitude": 56.18632, "longitude": 10.21015 },
+        { "latitude": 56.18628, "longitude": 10.21003 }
+      ]
+    },
+    {
+      "segmentId": 1170420026226540545,
+      "segmentIdStr": "1170420026226540545",
+      "averageSpeed": 38,
+      "typicalSpeed": 36,
+      "segmentLength": 98,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18628, "longitude": 10.21003 },
+        { "latitude": 56.18624, "longitude": 10.20992 },
+        { "latitude": 56.18617, "longitude": 10.20967 },
+        { "latitude": 56.18584, "longitude": 10.20865 }
+      ]
+    },
+    {
+      "segmentId": 1170420026826096641,
+      "segmentIdStr": "1170420026826096641",
+      "averageSpeed": 49,
+      "typicalSpeed": 48,
+      "segmentLength": 15,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18584, "longitude": 10.20865 },
+        { "latitude": 56.18577, "longitude": 10.20844 }
+      ]
+    },
+    {
+      "segmentId": 1170420026826031105,
+      "segmentIdStr": "1170420026826031105",
+      "averageSpeed": 51,
+      "typicalSpeed": 48,
+      "segmentLength": 10,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18577, "longitude": 10.20844 },
+        { "latitude": 56.18572, "longitude": 10.2083 }
+      ]
+    },
+    {
+      "segmentId": 1170420026537902081,
+      "segmentIdStr": "1170420026537902081",
+      "averageSpeed": 49,
+      "typicalSpeed": 48,
+      "segmentLength": 10,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18572, "longitude": 10.2083 },
+        { "latitude": 56.18568, "longitude": 10.20816 }
+      ]
+    },
+    {
+      "segmentId": 1170420026226409473,
+      "segmentIdStr": "1170420026226409473",
+      "averageSpeed": 54,
+      "typicalSpeed": 53,
+      "segmentLength": 42,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18568, "longitude": 10.20816 },
+        { "latitude": 56.18549, "longitude": 10.20758 }
+      ]
+    },
+    {
+      "segmentId": 1170420026741686273,
+      "segmentIdStr": "1170420026741686273",
+      "averageSpeed": 56,
+      "typicalSpeed": 53,
+      "segmentLength": 216,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18549, "longitude": 10.20758 },
+        { "latitude": 56.1853, "longitude": 10.20697 },
+        { "latitude": 56.18526, "longitude": 10.20686 },
+        { "latitude": 56.18451, "longitude": 10.20457 }
+      ]
+    },
+    {
+      "segmentId": 1170420026670186497,
+      "segmentIdStr": "1170420026670186497",
+      "averageSpeed": 37,
+      "typicalSpeed": 33,
+      "segmentLength": 45,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18451, "longitude": 10.20457 },
+        { "latitude": 56.1843, "longitude": 10.20394 }
+      ]
+    },
+    {
+      "segmentId": 1170420026226606081,
+      "segmentIdStr": "1170420026226606081",
+      "averageSpeed": 20,
+      "typicalSpeed": 19,
+      "segmentLength": 49,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.1843, "longitude": 10.20394 },
+        { "latitude": 56.18421, "longitude": 10.20363 },
+        { "latitude": 56.18408, "longitude": 10.20326 }
+      ]
+    },
+    {
+      "segmentId": 1170420026226442241,
+      "segmentIdStr": "1170420026226442241",
+      "averageSpeed": 42,
+      "typicalSpeed": 40,
+      "segmentLength": 13,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18408, "longitude": 10.20326 },
+        { "latitude": 56.18406, "longitude": 10.20319 },
+        { "latitude": 56.18402, "longitude": 10.20308 }
+      ]
+    },
+    {
+      "segmentId": 1170420026226671617,
+      "segmentIdStr": "1170420026226671617",
+      "averageSpeed": 39,
+      "typicalSpeed": 38,
+      "segmentLength": 27,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18402, "longitude": 10.20308 },
+        { "latitude": 56.1839, "longitude": 10.20271 }
+      ]
+    },
+    {
+      "segmentId": 1170420026537934849,
+      "segmentIdStr": "1170420026537934849",
+      "averageSpeed": 51,
+      "typicalSpeed": 51,
+      "segmentLength": 86,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.1839, "longitude": 10.20271 },
+        { "latitude": 56.18382, "longitude": 10.20245 },
+        { "latitude": 56.18371, "longitude": 10.2021 },
+        { "latitude": 56.18361, "longitude": 10.20171 },
+        { "latitude": 56.18354, "longitude": 10.20148 }
+      ]
+    },
+    {
+      "segmentId": 1170420026537803777,
+      "segmentIdStr": "1170420026537803777",
+      "averageSpeed": 54,
+      "typicalSpeed": 58,
+      "segmentLength": 54,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18354, "longitude": 10.20148 },
+        { "latitude": 56.18348, "longitude": 10.20125 },
+        { "latitude": 56.18339, "longitude": 10.20091 },
+        { "latitude": 56.18333, "longitude": 10.20069 }
+      ]
+    },
+    {
+      "segmentId": 1170420026670252033,
+      "segmentIdStr": "1170420026670252033",
+      "averageSpeed": 49,
+      "typicalSpeed": 55,
+      "segmentLength": 75,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18333, "longitude": 10.20069 },
+        { "latitude": 56.18314, "longitude": 10.1999 },
+        { "latitude": 56.18307, "longitude": 10.19957 }
+      ]
+    },
+    {
+      "segmentId": 1170420026670284801,
+      "segmentIdStr": "1170420026670284801",
+      "averageSpeed": 40,
+      "typicalSpeed": 51,
+      "segmentLength": 20,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18307, "longitude": 10.19957 },
+        { "latitude": 56.18301, "longitude": 10.19927 }
+      ]
+    },
+    {
+      "segmentId": 1170420026620870657,
+      "segmentIdStr": "1170420026620870657",
+      "averageSpeed": 30,
+      "typicalSpeed": 47,
+      "segmentLength": 28,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18301, "longitude": 10.19927 },
+        { "latitude": 56.18292, "longitude": 10.19885 }
+      ]
+    },
+    {
+      "segmentId": 1170420026620903425,
+      "segmentIdStr": "1170420026620903425",
+      "averageSpeed": 17,
+      "typicalSpeed": 24,
+      "segmentLength": 23,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18292, "longitude": 10.19885 },
+        { "latitude": 56.18285, "longitude": 10.1985 }
+      ]
+    },
+    {
+      "segmentId": 1170420026676838401,
+      "segmentIdStr": "1170420026676838401",
+      "averageSpeed": 7,
+      "typicalSpeed": 5,
+      "segmentLength": 35,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18285, "longitude": 10.1985 },
+        { "latitude": 56.18274, "longitude": 10.19797 }
+      ]
+    },
+    {
+      "segmentId": 1170420026676641793,
+      "segmentIdStr": "1170420026676641793",
+      "averageSpeed": 5,
+      "typicalSpeed": 5,
+      "segmentLength": 34,
+      "openLrId": "CwdEjCf2GhpzBf9c/u4acBH8o/1sGnUH/Z//Ohp1B/13/1kaBg==",
+      "currentSpeed": 38,
+      "relativeSpeed": 88,
+      "confidence": 100,
+      "openLrLength": 2224,
+      "shape": [
+        { "latitude": 56.18274, "longitude": 10.19797 },
+        { "latitude": 56.18263, "longitude": 10.19745 }
+      ]
+    },
+    {
+      "segmentId": 1170420026645446657,
+      "segmentIdStr": "1170420026645446657",
+      "averageSpeed": 37,
+      "typicalSpeed": 37,
+      "segmentLength": 10,
+      "openLrId": "CwdAZCfzvRJVAP/h//gSBQ==",
+      "currentSpeed": 39,
+      "relativeSpeed": 100,
+      "confidence": 100,
+      "openLrLength": 21,
+      "shape": [
+        { "latitude": 56.18263, "longitude": 10.19745 },
+        { "latitude": 56.18259, "longitude": 10.19731 }
+      ]
+    },
+    {
+      "segmentId": 1170420026645544961,
+      "segmentIdStr": "1170420026645544961",
+      "averageSpeed": 40,
+      "typicalSpeed": 40,
+      "segmentLength": 4,
+      "openLrId": "CwdAZCfzvRJVAP/h//gSBQ==",
+      "currentSpeed": 39,
+      "relativeSpeed": 100,
+      "confidence": 100,
+      "openLrLength": 21,
+      "shape": [
+        { "latitude": 56.18259, "longitude": 10.19731 },
+        { "latitude": 56.18258, "longitude": 10.19724 }
+      ]
+    },
+    {
+      "segmentId": 1170420026354860033,
+      "segmentIdStr": "1170420026354860033",
+      "averageSpeed": 40,
+      "typicalSpeed": 40,
+      "segmentLength": 7,
+      "openLrId": "CwdAZCfzvRJVAP/h//gSBQ==",
+      "currentSpeed": 39,
+      "relativeSpeed": 100,
+      "confidence": 100,
+      "openLrLength": 21,
+      "shape": [
+        { "latitude": 56.18258, "longitude": 10.19724 },
+        { "latitude": 56.18255, "longitude": 10.19714 }
+      ]
+    },
+    {
+      "segmentId": 1170420026354827265,
+      "segmentIdStr": "1170420026354827265",
+      "averageSpeed": 45,
+      "typicalSpeed": 45,
+      "segmentLength": 67,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 55,
+      "relativeSpeed": 110,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.18255, "longitude": 10.19714 },
+        { "latitude": 56.18233, "longitude": 10.19614 }
+      ]
+    },
+    {
+      "segmentId": 1170420026621165569,
+      "segmentIdStr": "1170420026621165569",
+      "averageSpeed": 54,
+      "typicalSpeed": 53,
+      "segmentLength": 21,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 55,
+      "relativeSpeed": 110,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.18233, "longitude": 10.19614 },
+        { "latitude": 56.18225, "longitude": 10.19584 }
+      ]
+    },
+    {
+      "segmentId": 1170420026742898689,
+      "segmentIdStr": "1170420026742898689",
+      "averageSpeed": 57,
+      "typicalSpeed": 57,
+      "segmentLength": 29,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 55,
+      "relativeSpeed": 110,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.18225, "longitude": 10.19584 },
+        { "latitude": 56.18214, "longitude": 10.19542 }
+      ]
+    },
+    {
+      "segmentId": 1170420026742865921,
+      "segmentIdStr": "1170420026742865921",
+      "averageSpeed": 59,
+      "typicalSpeed": 59,
+      "segmentLength": 11,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 55,
+      "relativeSpeed": 110,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.18214, "longitude": 10.19542 },
+        { "latitude": 56.1821, "longitude": 10.19526 }
+      ]
+    },
+    {
+      "segmentId": 1170420026630111233,
+      "segmentIdStr": "1170420026630111233",
+      "averageSpeed": 62,
+      "typicalSpeed": 62,
+      "segmentLength": 111,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 55,
+      "relativeSpeed": 110,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.1821, "longitude": 10.19526 },
+        { "latitude": 56.18201, "longitude": 10.19488 },
+        { "latitude": 56.18187, "longitude": 10.19434 },
+        { "latitude": 56.18169, "longitude": 10.19363 }
+      ]
+    },
+    {
+      "segmentId": 1170420026743062529,
+      "segmentIdStr": "1170420026743062529",
+      "averageSpeed": 56,
+      "typicalSpeed": 56,
+      "segmentLength": 235,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 34,
+      "relativeSpeed": 68,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.18169, "longitude": 10.19363 },
+        { "latitude": 56.18157, "longitude": 10.1932 },
+        { "latitude": 56.18134, "longitude": 10.19242 },
+        { "latitude": 56.18105, "longitude": 10.19148 },
+        { "latitude": 56.18101, "longitude": 10.19135 },
+        { "latitude": 56.18068, "longitude": 10.19029 }
+      ]
+    },
+    {
+      "segmentId": 1170420026630275073,
+      "segmentIdStr": "1170420026630275073",
+      "averageSpeed": 39,
+      "typicalSpeed": 42,
+      "segmentLength": 12,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 34,
+      "relativeSpeed": 68,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.18068, "longitude": 10.19029 },
+        { "latitude": 56.18063, "longitude": 10.19011 }
+      ]
+    },
+    {
+      "segmentId": 1170420026630307841,
+      "segmentIdStr": "1170420026630307841",
+      "averageSpeed": 21,
+      "typicalSpeed": 19,
+      "segmentLength": 87,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 34,
+      "relativeSpeed": 68,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.18063, "longitude": 10.19011 },
+        { "latitude": 56.18026, "longitude": 10.18888 }
+      ]
+    },
+    {
+      "segmentId": 1170420026350960641,
+      "segmentIdStr": "1170420026350960641",
+      "averageSpeed": 48,
+      "typicalSpeed": 45,
+      "segmentLength": 34,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 34,
+      "relativeSpeed": 68,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.18026, "longitude": 10.18888 },
+        { "latitude": 56.18009, "longitude": 10.18843 }
+      ]
+    },
+    {
+      "segmentId": 1170420026742603777,
+      "segmentIdStr": "1170420026742603777",
+      "averageSpeed": 57,
+      "typicalSpeed": 53,
+      "segmentLength": 216,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 52,
+      "relativeSpeed": 104,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.18009, "longitude": 10.18843 },
+        { "latitude": 56.17983, "longitude": 10.18769 },
+        { "latitude": 56.17965, "longitude": 10.18716 },
+        { "latitude": 56.17927, "longitude": 10.18603 },
+        { "latitude": 56.17906, "longitude": 10.18547 }
+      ]
+    },
+    {
+      "segmentId": 1170420026618249217,
+      "segmentIdStr": "1170420026618249217",
+      "averageSpeed": 40,
+      "typicalSpeed": 38,
+      "segmentLength": 159,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 52,
+      "relativeSpeed": 104,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17906, "longitude": 10.18547 },
+        { "latitude": 56.17869, "longitude": 10.18444 },
+        { "latitude": 56.17826, "longitude": 10.18335 }
+      ]
+    },
+    {
+      "segmentId": 1170420026618413057,
+      "segmentIdStr": "1170420026618413057",
+      "averageSpeed": 52,
+      "typicalSpeed": 44,
+      "segmentLength": 49,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 17,
+      "relativeSpeed": 34,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17826, "longitude": 10.18335 },
+        { "latitude": 56.17816, "longitude": 10.18311 },
+        { "latitude": 56.178, "longitude": 10.18271 }
+      ]
+    },
+    {
+      "segmentId": 1170420026618445825,
+      "segmentIdStr": "1170420026618445825",
+      "averageSpeed": 52,
+      "typicalSpeed": 46,
+      "segmentLength": 27,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 16,
+      "relativeSpeed": 32,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.178, "longitude": 10.18271 },
+        { "latitude": 56.17786, "longitude": 10.18236 }
+      ]
+    },
+    {
+      "segmentId": 1170420026618052609,
+      "segmentIdStr": "1170420026618052609",
+      "averageSpeed": 52,
+      "typicalSpeed": 47,
+      "segmentLength": 34,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 16,
+      "relativeSpeed": 32,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17786, "longitude": 10.18236 },
+        { "latitude": 56.17776, "longitude": 10.18214 },
+        { "latitude": 56.17768, "longitude": 10.18192 }
+      ]
+    },
+    {
+      "segmentId": 1170420026618085377,
+      "segmentIdStr": "1170420026618085377",
+      "averageSpeed": 45,
+      "typicalSpeed": 37,
+      "segmentLength": 102,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 16,
+      "relativeSpeed": 32,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17768, "longitude": 10.18192 },
+        { "latitude": 56.17735, "longitude": 10.18106 },
+        { "latitude": 56.17719, "longitude": 10.18064 },
+        { "latitude": 56.17717, "longitude": 10.18056 }
+      ]
+    },
+    {
+      "segmentId": 1170420026676510721,
+      "segmentIdStr": "1170420026676510721",
+      "averageSpeed": 33,
+      "typicalSpeed": 23,
+      "segmentLength": 14,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 16,
+      "relativeSpeed": 32,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17717, "longitude": 10.18056 },
+        { "latitude": 56.17711, "longitude": 10.18036 }
+      ]
+    },
+    {
+      "segmentId": 1170420026676543489,
+      "segmentIdStr": "1170420026676543489",
+      "averageSpeed": 22,
+      "typicalSpeed": 21,
+      "segmentLength": 26,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 16,
+      "relativeSpeed": 32,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17711, "longitude": 10.18036 },
+        { "latitude": 56.17698, "longitude": 10.18001 }
+      ]
+    },
+    {
+      "segmentId": 1170420026676477953,
+      "segmentIdStr": "1170420026676477953",
+      "averageSpeed": 14,
+      "typicalSpeed": 10,
+      "segmentLength": 22,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 16,
+      "relativeSpeed": 32,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17698, "longitude": 10.18001 },
+        { "latitude": 56.17689, "longitude": 10.17969 }
+      ]
+    },
+    {
+      "segmentId": 1170420026676445185,
+      "segmentIdStr": "1170420026676445185",
+      "averageSpeed": 14,
+      "typicalSpeed": 12,
+      "segmentLength": 34,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 16,
+      "relativeSpeed": 32,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17689, "longitude": 10.17969 },
+        { "latitude": 56.17682, "longitude": 10.17945 },
+        { "latitude": 56.1768, "longitude": 10.1794 },
+        { "latitude": 56.17674, "longitude": 10.17921 }
+      ]
+    },
+    {
+      "segmentId": 1170420026350829569,
+      "segmentIdStr": "1170420026350829569",
+      "averageSpeed": 43,
+      "typicalSpeed": 41,
+      "segmentLength": 8,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 16,
+      "relativeSpeed": 32,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17674, "longitude": 10.17921 },
+        { "latitude": 56.1767, "longitude": 10.17911 }
+      ]
+    },
+    {
+      "segmentId": 1170420026350796801,
+      "segmentIdStr": "1170420026350796801",
+      "averageSpeed": 42,
+      "typicalSpeed": 41,
+      "segmentLength": 8,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 16,
+      "relativeSpeed": 32,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.1767, "longitude": 10.17911 },
+        { "latitude": 56.17667, "longitude": 10.179 }
+      ]
+    },
+    {
+      "segmentId": 1170420026219397121,
+      "segmentIdStr": "1170420026219397121",
+      "averageSpeed": 42,
+      "typicalSpeed": 38,
+      "segmentLength": 48,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 32,
+      "relativeSpeed": 64,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17667, "longitude": 10.179 },
+        { "latitude": 56.17646, "longitude": 10.17833 }
+      ]
+    },
+    {
+      "segmentId": 1170420026741882881,
+      "segmentIdStr": "1170420026741882881",
+      "averageSpeed": 55,
+      "typicalSpeed": 46,
+      "segmentLength": 70,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17646, "longitude": 10.17833 },
+        { "latitude": 56.17643, "longitude": 10.17821 },
+        { "latitude": 56.17626, "longitude": 10.17757 },
+        { "latitude": 56.17619, "longitude": 10.1773 }
+      ]
+    },
+    {
+      "segmentId": 1170420026741915649,
+      "segmentIdStr": "1170420026741915649",
+      "averageSpeed": 59,
+      "typicalSpeed": 50,
+      "segmentLength": 52,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17619, "longitude": 10.1773 },
+        { "latitude": 56.17617, "longitude": 10.1772 },
+        { "latitude": 56.17607, "longitude": 10.17678 },
+        { "latitude": 56.17601, "longitude": 10.17652 }
+      ]
+    },
+    {
+      "segmentId": 1170420026252558337,
+      "segmentIdStr": "1170420026252558337",
+      "averageSpeed": 59,
+      "typicalSpeed": 52,
+      "segmentLength": 229,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17601, "longitude": 10.17652 },
+        { "latitude": 56.17591, "longitude": 10.17608 },
+        { "latitude": 56.17571, "longitude": 10.17512 },
+        { "latitude": 56.17532, "longitude": 10.17303 }
+      ]
+    },
+    {
+      "segmentId": 1170420026791919617,
+      "segmentIdStr": "1170420026791919617",
+      "averageSpeed": 54,
+      "typicalSpeed": 50,
+      "segmentLength": 32,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17532, "longitude": 10.17303 },
+        { "latitude": 56.17527, "longitude": 10.17281 },
+        { "latitude": 56.17522, "longitude": 10.17254 }
+      ]
+    },
+    {
+      "segmentId": 1170420026792083457,
+      "segmentIdStr": "1170420026792083457",
+      "averageSpeed": 41,
+      "typicalSpeed": 40,
+      "segmentLength": 342,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17522, "longitude": 10.17254 },
+        { "latitude": 56.1752, "longitude": 10.17242 },
+        { "latitude": 56.175, "longitude": 10.17139 },
+        { "latitude": 56.1749, "longitude": 10.17088 },
+        { "latitude": 56.17483, "longitude": 10.17053 },
+        { "latitude": 56.17462, "longitude": 10.1694 },
+        { "latitude": 56.17438, "longitude": 10.16806 },
+        { "latitude": 56.17423, "longitude": 10.16731 }
+      ]
+    },
+    {
+      "segmentId": 1170420026278707201,
+      "segmentIdStr": "1170420026278707201",
+      "averageSpeed": 19,
+      "typicalSpeed": 23,
+      "segmentLength": 58,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17423, "longitude": 10.16731 },
+        { "latitude": 56.17411, "longitude": 10.16668 },
+        { "latitude": 56.17406, "longitude": 10.16643 }
+      ]
+    },
+    {
+      "segmentId": 1170420026278543361,
+      "segmentIdStr": "1170420026278543361",
+      "averageSpeed": 18,
+      "typicalSpeed": 19,
+      "segmentLength": 34,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17406, "longitude": 10.16643 },
+        { "latitude": 56.174, "longitude": 10.16614 },
+        { "latitude": 56.17395, "longitude": 10.16591 }
+      ]
+    },
+    {
+      "segmentId": 1170420026278313985,
+      "segmentIdStr": "1170420026278313985",
+      "averageSpeed": 44,
+      "typicalSpeed": 39,
+      "segmentLength": 16,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17395, "longitude": 10.16591 },
+        { "latitude": 56.17393, "longitude": 10.16579 },
+        { "latitude": 56.17391, "longitude": 10.16567 }
+      ]
+    },
+    {
+      "segmentId": 1170420026278641665,
+      "segmentIdStr": "1170420026278641665",
+      "averageSpeed": 44,
+      "typicalSpeed": 40,
+      "segmentLength": 52,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17391, "longitude": 10.16567 },
+        { "latitude": 56.17374, "longitude": 10.16488 }
+      ]
+    },
+    {
+      "segmentId": 1170420026742112257,
+      "segmentIdStr": "1170420026742112257",
+      "averageSpeed": 50,
+      "typicalSpeed": 45,
+      "segmentLength": 56,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17374, "longitude": 10.16488 },
+        { "latitude": 56.1737, "longitude": 10.16468 },
+        { "latitude": 56.17365, "longitude": 10.16443 },
+        { "latitude": 56.17357, "longitude": 10.16403 }
+      ]
+    },
+    {
+      "segmentId": 1170420026742177793,
+      "segmentIdStr": "1170420026742177793",
+      "averageSpeed": 51,
+      "typicalSpeed": 48,
+      "segmentLength": 28,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17357, "longitude": 10.16403 },
+        { "latitude": 56.17349, "longitude": 10.16367 },
+        { "latitude": 56.17348, "longitude": 10.16361 }
+      ]
+    },
+    {
+      "segmentId": 1170420026555727873,
+      "segmentIdStr": "1170420026555727873",
+      "averageSpeed": 39,
+      "typicalSpeed": 40,
+      "segmentLength": 223,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17348, "longitude": 10.16361 },
+        { "latitude": 56.17322, "longitude": 10.16233 },
+        { "latitude": 56.17315, "longitude": 10.16196 },
+        { "latitude": 56.1731, "longitude": 10.16168 },
+        { "latitude": 56.17302, "longitude": 10.16131 },
+        { "latitude": 56.1729, "longitude": 10.16081 },
+        { "latitude": 56.17274, "longitude": 10.16026 }
+      ]
+    },
+    {
+      "segmentId": 1170420026278412289,
+      "segmentIdStr": "1170420026278412289",
+      "averageSpeed": 28,
+      "typicalSpeed": 28,
+      "segmentLength": 48,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17274, "longitude": 10.16026 },
+        { "latitude": 56.17261, "longitude": 10.15978 },
+        { "latitude": 56.17255, "longitude": 10.15957 }
+      ]
+    },
+    {
+      "segmentId": 1170420026278445057,
+      "segmentIdStr": "1170420026278445057",
+      "averageSpeed": 41,
+      "typicalSpeed": 40,
+      "segmentLength": 48,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17255, "longitude": 10.15957 },
+        { "latitude": 56.17248, "longitude": 10.15933 },
+        { "latitude": 56.17233, "longitude": 10.15891 }
+      ]
+    },
+    {
+      "segmentId": 1170138551472652289,
+      "segmentIdStr": "1170138551472652289",
+      "averageSpeed": 34,
+      "typicalSpeed": 36,
+      "segmentLength": 75,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17233, "longitude": 10.15891 },
+        { "latitude": 56.17226, "longitude": 10.1587 },
+        { "latitude": 56.1722, "longitude": 10.15853 },
+        { "latitude": 56.1721, "longitude": 10.15829 },
+        { "latitude": 56.17201, "longitude": 10.15808 },
+        { "latitude": 56.17194, "longitude": 10.15793 }
+      ]
+    },
+    {
+      "segmentId": 1170138551472586753,
+      "segmentIdStr": "1170138551472586753",
+      "averageSpeed": 27,
+      "typicalSpeed": 33,
+      "segmentLength": 26,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17194, "longitude": 10.15793 },
+        { "latitude": 56.17189, "longitude": 10.15781 },
+        { "latitude": 56.17184, "longitude": 10.15771 },
+        { "latitude": 56.17179, "longitude": 10.15761 }
+      ]
+    },
+    {
+      "segmentId": 1170138551099752449,
+      "segmentIdStr": "1170138551099752449",
+      "averageSpeed": 24,
+      "typicalSpeed": 31,
+      "segmentLength": 7,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17179, "longitude": 10.15761 },
+        { "latitude": 56.17175, "longitude": 10.15753 }
+      ]
+    },
+    {
+      "segmentId": 1170138551474388993,
+      "segmentIdStr": "1170138551474388993",
+      "averageSpeed": 14,
+      "typicalSpeed": 12,
+      "segmentLength": 52,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17175, "longitude": 10.15753 },
+        { "latitude": 56.1715, "longitude": 10.15704 },
+        { "latitude": 56.17143, "longitude": 10.15691 }
+      ]
+    },
+    {
+      "segmentId": 1170138551474716673,
+      "segmentIdStr": "1170138551474716673",
+      "averageSpeed": 13,
+      "typicalSpeed": 13,
+      "segmentLength": 36,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17143, "longitude": 10.15691 },
+        { "latitude": 56.1712, "longitude": 10.15649 }
+      ]
+    },
+    {
+      "segmentId": 1170138551124262913,
+      "segmentIdStr": "1170138551124262913",
+      "averageSpeed": 42,
+      "typicalSpeed": 42,
+      "segmentLength": 8,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.1712, "longitude": 10.15649 },
+        { "latitude": 56.17115, "longitude": 10.1564 }
+      ]
+    },
+    {
+      "segmentId": 1170138551124230145,
+      "segmentIdStr": "1170138551124230145",
+      "averageSpeed": 44,
+      "typicalSpeed": 44,
+      "segmentLength": 10,
+      "openLrId": "CwdAVifzuRJWFflP/dMSVQ/6sv7cElYH/Zf/fBJVA/7v/50SVAH/hf+9EgM=",
+      "currentSpeed": 35,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2853,
+      "shape": [
+        { "latitude": 56.17115, "longitude": 10.1564 },
+        { "latitude": 56.17108, "longitude": 10.1563 }
+      ]
+    },
+    {
+      "segmentId": 1170138551123738625,
+      "segmentIdStr": "1170138551123738625",
+      "averageSpeed": 47,
+      "typicalSpeed": 42,
+      "segmentLength": 75,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.17108, "longitude": 10.1563 },
+        { "latitude": 56.17057, "longitude": 10.1555 }
+      ]
+    },
+    {
+      "segmentId": 1170138551474257921,
+      "segmentIdStr": "1170138551474257921",
+      "averageSpeed": 54,
+      "typicalSpeed": 49,
+      "segmentLength": 40,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.17057, "longitude": 10.1555 },
+        { "latitude": 56.1703, "longitude": 10.15507 }
+      ]
+    },
+    {
+      "segmentId": 1170138551474323457,
+      "segmentIdStr": "1170138551474323457",
+      "averageSpeed": 52,
+      "typicalSpeed": 44,
+      "segmentLength": 67,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.1703, "longitude": 10.15507 },
+        { "latitude": 56.16984, "longitude": 10.15436 }
+      ]
+    },
+    {
+      "segmentId": 1170138551474487297,
+      "segmentIdStr": "1170138551474487297",
+      "averageSpeed": 38,
+      "typicalSpeed": 31,
+      "segmentLength": 18,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.16984, "longitude": 10.15436 },
+        { "latitude": 56.16972, "longitude": 10.15417 }
+      ]
+    },
+    {
+      "segmentId": 1170138551474782209,
+      "segmentIdStr": "1170138551474782209",
+      "averageSpeed": 28,
+      "typicalSpeed": 25,
+      "segmentLength": 35,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.16972, "longitude": 10.15417 },
+        { "latitude": 56.16965, "longitude": 10.15407 },
+        { "latitude": 56.16948, "longitude": 10.1538 }
+      ]
+    },
+    {
+      "segmentId": 1170138551123869697,
+      "segmentIdStr": "1170138551123869697",
+      "averageSpeed": 52,
+      "typicalSpeed": 49,
+      "segmentLength": 12,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.16948, "longitude": 10.1538 },
+        { "latitude": 56.16944, "longitude": 10.15373 },
+        { "latitude": 56.1694, "longitude": 10.15367 }
+      ]
+    },
+    {
+      "segmentId": 1170138551124131841,
+      "segmentIdStr": "1170138551124131841",
+      "averageSpeed": 55,
+      "typicalSpeed": 51,
+      "segmentLength": 50,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.1694, "longitude": 10.15367 },
+        { "latitude": 56.16906, "longitude": 10.15314 }
+      ]
+    },
+    {
+      "segmentId": 1170138551124099073,
+      "segmentIdStr": "1170138551124099073",
+      "averageSpeed": 60,
+      "typicalSpeed": 54,
+      "segmentLength": 62,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.16906, "longitude": 10.15314 },
+        { "latitude": 56.16864, "longitude": 10.15249 }
+      ]
+    },
+    {
+      "segmentId": 1170138551421763585,
+      "segmentIdStr": "1170138551421763585",
+      "averageSpeed": 61,
+      "typicalSpeed": 53,
+      "segmentLength": 59,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.16864, "longitude": 10.15249 },
+        { "latitude": 56.16824, "longitude": 10.15186 }
+      ]
+    },
+    {
+      "segmentId": 1170138551421796353,
+      "segmentIdStr": "1170138551421796353",
+      "averageSpeed": 61,
+      "typicalSpeed": 54,
+      "segmentLength": 8,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.16824, "longitude": 10.15186 },
+        { "latitude": 56.16818, "longitude": 10.15178 }
+      ]
+    },
+    {
+      "segmentId": 1170138551421730817,
+      "segmentIdStr": "1170138551421730817",
+      "averageSpeed": 60,
+      "typicalSpeed": 53,
+      "segmentLength": 10,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.16818, "longitude": 10.15178 },
+        { "latitude": 56.16811, "longitude": 10.15167 }
+      ]
+    },
+    {
+      "segmentId": 1170138551124492289,
+      "segmentIdStr": "1170138551124492289",
+      "averageSpeed": 49,
+      "typicalSpeed": 51,
+      "segmentLength": 246,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.16811, "longitude": 10.15167 },
+        { "latitude": 56.16802, "longitude": 10.15152 },
+        { "latitude": 56.16775, "longitude": 10.15111 },
+        { "latitude": 56.16717, "longitude": 10.15021 },
+        { "latitude": 56.16696, "longitude": 10.14988 },
+        { "latitude": 56.16644, "longitude": 10.14907 }
+      ]
+    },
+    {
+      "segmentId": 1170138551144448001,
+      "segmentIdStr": "1170138551144448001",
+      "averageSpeed": 34,
+      "typicalSpeed": 29,
+      "segmentLength": 38,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.16644, "longitude": 10.14907 },
+        { "latitude": 56.16618, "longitude": 10.14867 }
+      ]
+    },
+    {
+      "segmentId": 1170138551144513537,
+      "segmentIdStr": "1170138551144513537",
+      "averageSpeed": 54,
+      "typicalSpeed": 51,
+      "segmentLength": 46,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.16618, "longitude": 10.14867 },
+        { "latitude": 56.16587, "longitude": 10.14819 }
+      ]
+    },
+    {
+      "segmentId": 1170138551570989057,
+      "segmentIdStr": "1170138551570989057",
+      "averageSpeed": 53,
+      "typicalSpeed": 53,
+      "segmentLength": 309,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.16587, "longitude": 10.14819 },
+        { "latitude": 56.16574, "longitude": 10.14797 },
+        { "latitude": 56.16533, "longitude": 10.14736 },
+        { "latitude": 56.16512, "longitude": 10.14706 },
+        { "latitude": 56.16494, "longitude": 10.14681 },
+        { "latitude": 56.16467, "longitude": 10.14646 },
+        { "latitude": 56.16442, "longitude": 10.14616 },
+        { "latitude": 56.16419, "longitude": 10.14591 },
+        { "latitude": 56.16399, "longitude": 10.14569 },
+        { "latitude": 56.16373, "longitude": 10.14542 },
+        { "latitude": 56.16361, "longitude": 10.1453 }
+      ]
+    },
+    {
+      "segmentId": 1170138551476060161,
+      "segmentIdStr": "1170138551476060161",
+      "averageSpeed": 44,
+      "typicalSpeed": 37,
+      "segmentLength": 30,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.16361, "longitude": 10.1453 },
+        { "latitude": 56.16353, "longitude": 10.14522 },
+        { "latitude": 56.16345, "longitude": 10.14514 },
+        { "latitude": 56.16337, "longitude": 10.14507 }
+      ]
+    },
+    {
+      "segmentId": 1170138551475994625,
+      "segmentIdStr": "1170138551475994625",
+      "averageSpeed": 29,
+      "typicalSpeed": 22,
+      "segmentLength": 49,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.16337, "longitude": 10.14507 },
+        { "latitude": 56.16326, "longitude": 10.14496 },
+        { "latitude": 56.16297, "longitude": 10.14473 }
+      ]
+    },
+    {
+      "segmentId": 1170138551476027393,
+      "segmentIdStr": "1170138551476027393",
+      "averageSpeed": 15,
+      "typicalSpeed": 14,
+      "segmentLength": 35,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.16297, "longitude": 10.14473 },
+        { "latitude": 56.16288, "longitude": 10.14465 },
+        { "latitude": 56.16268, "longitude": 10.1445 }
+      ]
+    },
+    {
+      "segmentId": 1170138551438671873,
+      "segmentIdStr": "1170138551438671873",
+      "averageSpeed": 38,
+      "typicalSpeed": 36,
+      "segmentLength": 11,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.16268, "longitude": 10.1445 },
+        { "latitude": 56.16259, "longitude": 10.14443 }
+      ]
+    },
+    {
+      "segmentId": 1170138551167516673,
+      "segmentIdStr": "1170138551167516673",
+      "averageSpeed": 49,
+      "typicalSpeed": 46,
+      "segmentLength": 11,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.16259, "longitude": 10.14443 },
+        { "latitude": 56.16254, "longitude": 10.14439 },
+        { "latitude": 56.1625, "longitude": 10.14437 }
+      ]
+    },
+    {
+      "segmentId": 1170138551167483905,
+      "segmentIdStr": "1170138551167483905",
+      "averageSpeed": 52,
+      "typicalSpeed": 48,
+      "segmentLength": 8,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 39,
+      "relativeSpeed": 70,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.1625, "longitude": 10.14437 },
+        { "latitude": 56.16247, "longitude": 10.14435 },
+        { "latitude": 56.16243, "longitude": 10.14432 }
+      ]
+    },
+    {
+      "segmentId": 1170138551167385601,
+      "segmentIdStr": "1170138551167385601",
+      "averageSpeed": 51,
+      "typicalSpeed": 48,
+      "segmentLength": 54,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 56,
+      "relativeSpeed": 101,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.16243, "longitude": 10.14432 },
+        { "latitude": 56.16197, "longitude": 10.14405 }
+      ]
+    },
+    {
+      "segmentId": 1170138551570497537,
+      "segmentIdStr": "1170138551570497537",
+      "averageSpeed": 59,
+      "typicalSpeed": 55,
+      "segmentLength": 214,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 57,
+      "relativeSpeed": 103,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.16197, "longitude": 10.14405 },
+        { "latitude": 56.16173, "longitude": 10.14391 },
+        { "latitude": 56.16127, "longitude": 10.14367 },
+        { "latitude": 56.1609, "longitude": 10.14352 },
+        { "latitude": 56.1606, "longitude": 10.1434 },
+        { "latitude": 56.16022, "longitude": 10.14329 },
+        { "latitude": 56.1601, "longitude": 10.14325 }
+      ]
+    },
+    {
+      "segmentId": 1170138551628955649,
+      "segmentIdStr": "1170138551628955649",
+      "averageSpeed": 55,
+      "typicalSpeed": 53,
+      "segmentLength": 85,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 33,
+      "relativeSpeed": 60,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.1601, "longitude": 10.14325 },
+        { "latitude": 56.15993, "longitude": 10.14321 },
+        { "latitude": 56.15976, "longitude": 10.14317 },
+        { "latitude": 56.1596, "longitude": 10.14315 },
+        { "latitude": 56.15934, "longitude": 10.14312 }
+      ]
+    },
+    {
+      "segmentId": 1170138551628988417,
+      "segmentIdStr": "1170138551628988417",
+      "averageSpeed": 42,
+      "typicalSpeed": 41,
+      "segmentLength": 59,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 32,
+      "relativeSpeed": 58,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.15934, "longitude": 10.14312 },
+        { "latitude": 56.15924, "longitude": 10.14311 },
+        { "latitude": 56.15881, "longitude": 10.14308 }
+      ]
+    },
+    {
+      "segmentId": 1170138551628922881,
+      "segmentIdStr": "1170138551628922881",
+      "averageSpeed": 31,
+      "typicalSpeed": 28,
+      "segmentLength": 30,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 32,
+      "relativeSpeed": 58,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.15881, "longitude": 10.14308 },
+        { "latitude": 56.15854, "longitude": 10.14307 }
+      ]
+    },
+    {
+      "segmentId": 1170138551628890113,
+      "segmentIdStr": "1170138551628890113",
+      "averageSpeed": 36,
+      "typicalSpeed": 33,
+      "segmentLength": 42,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 32,
+      "relativeSpeed": 58,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.15854, "longitude": 10.14307 },
+        { "latitude": 56.15847, "longitude": 10.14307 },
+        { "latitude": 56.15834, "longitude": 10.14306 },
+        { "latitude": 56.15816, "longitude": 10.14305 }
+      ]
+    },
+    {
+      "segmentId": 1170138551141990401,
+      "segmentIdStr": "1170138551141990401",
+      "averageSpeed": 55,
+      "typicalSpeed": 53,
+      "segmentLength": 78,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 32,
+      "relativeSpeed": 58,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.15816, "longitude": 10.14305 },
+        { "latitude": 56.15795, "longitude": 10.14304 },
+        { "latitude": 56.15746, "longitude": 10.14304 }
+      ]
+    },
+    {
+      "segmentId": 1170138551571775489,
+      "segmentIdStr": "1170138551571775489",
+      "averageSpeed": 56,
+      "typicalSpeed": 53,
+      "segmentLength": 294,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 32,
+      "relativeSpeed": 58,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.15746, "longitude": 10.14304 },
+        { "latitude": 56.15689, "longitude": 10.14305 },
+        { "latitude": 56.15646, "longitude": 10.14307 },
+        { "latitude": 56.15615, "longitude": 10.14309 },
+        { "latitude": 56.15585, "longitude": 10.14311 },
+        { "latitude": 56.15513, "longitude": 10.14317 },
+        { "latitude": 56.15499, "longitude": 10.14319 },
+        { "latitude": 56.15482, "longitude": 10.14322 }
+      ]
+    },
+    {
+      "segmentId": 1170138551567286273,
+      "segmentIdStr": "1170138551567286273",
+      "averageSpeed": 40,
+      "typicalSpeed": 39,
+      "segmentLength": 30,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 32,
+      "relativeSpeed": 58,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.15482, "longitude": 10.14322 },
+        { "latitude": 56.15455, "longitude": 10.14327 }
+      ]
+    },
+    {
+      "segmentId": 1170138551567319041,
+      "segmentIdStr": "1170138551567319041",
+      "averageSpeed": 34,
+      "typicalSpeed": 27,
+      "segmentLength": 15,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 32,
+      "relativeSpeed": 58,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.15455, "longitude": 10.14327 },
+        { "latitude": 56.15442, "longitude": 10.1433 }
+      ]
+    },
+    {
+      "segmentId": 1170138551477469185,
+      "segmentIdStr": "1170138551477469185",
+      "averageSpeed": 23,
+      "typicalSpeed": 19,
+      "segmentLength": 35,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 32,
+      "relativeSpeed": 58,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.15442, "longitude": 10.1433 },
+        { "latitude": 56.15423, "longitude": 10.14335 },
+        { "latitude": 56.15411, "longitude": 10.14339 }
+      ]
+    },
+    {
+      "segmentId": 1170138551477436417,
+      "segmentIdStr": "1170138551477436417",
+      "averageSpeed": 14,
+      "typicalSpeed": 13,
+      "segmentLength": 58,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 32,
+      "relativeSpeed": 58,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.15411, "longitude": 10.14339 },
+        { "latitude": 56.15406, "longitude": 10.1434 },
+        { "latitude": 56.15392, "longitude": 10.14345 },
+        { "latitude": 56.1536, "longitude": 10.14359 }
+      ]
+    },
+    {
+      "segmentId": 1170138551213752320,
+      "segmentIdStr": "1170138551213752320",
+      "averageSpeed": 45,
+      "typicalSpeed": 42,
+      "segmentLength": 8,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 32,
+      "relativeSpeed": 58,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.1536, "longitude": 10.14359 },
+        { "latitude": 56.15353, "longitude": 10.14362 }
+      ]
+    },
+    {
+      "segmentId": 1170138551213785088,
+      "segmentIdStr": "1170138551213785088",
+      "averageSpeed": 46,
+      "typicalSpeed": 43,
+      "segmentLength": 6,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 32,
+      "relativeSpeed": 58,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.15353, "longitude": 10.14362 },
+        { "latitude": 56.15348, "longitude": 10.14365 }
+      ]
+    },
+    {
+      "segmentId": 1170138551213457408,
+      "segmentIdStr": "1170138551213457408",
+      "averageSpeed": 49,
+      "typicalSpeed": 42,
+      "segmentLength": 25,
+      "openLrId": "Cwc45ifxoxJTA/8+/4QSUxj7mPuxElAIABP+VhJPAgAx/38SHg==",
+      "currentSpeed": 32,
+      "relativeSpeed": 58,
+      "confidence": 100,
+      "openLrLength": 2254,
+      "shape": [
+        { "latitude": 56.15348, "longitude": 10.14365 },
+        { "latitude": 56.1534, "longitude": 10.14369 },
+        { "latitude": 56.15334, "longitude": 10.14372 },
+        { "latitude": 56.15326, "longitude": 10.14376 }
+      ]
+    },
+    {
+      "segmentId": 1170138551213490176,
+      "segmentIdStr": "1170138551213490176",
+      "averageSpeed": 51,
+      "typicalSpeed": 48,
+      "segmentLength": 61,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 62,
+      "relativeSpeed": 106,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.15326, "longitude": 10.14376 },
+        { "latitude": 56.15274, "longitude": 10.14409 }
+      ]
+    },
+    {
+      "segmentId": 1170138551571709952,
+      "segmentIdStr": "1170138551571709952",
+      "averageSpeed": 60,
+      "typicalSpeed": 55,
+      "segmentLength": 56,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 62,
+      "relativeSpeed": 106,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.15274, "longitude": 10.14409 },
+        { "latitude": 56.15257, "longitude": 10.14421 },
+        { "latitude": 56.15228, "longitude": 10.14444 }
+      ]
+    },
+    {
+      "segmentId": 1170138551571677184,
+      "segmentIdStr": "1170138551571677184",
+      "averageSpeed": 63,
+      "typicalSpeed": 58,
+      "segmentLength": 40,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 62,
+      "relativeSpeed": 106,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.15228, "longitude": 10.14444 },
+        { "latitude": 56.15222, "longitude": 10.14449 },
+        { "latitude": 56.15196, "longitude": 10.14472 }
+      ]
+    },
+    {
+      "segmentId": 1170138551571447808,
+      "segmentIdStr": "1170138551571447808",
+      "averageSpeed": 61,
+      "typicalSpeed": 55,
+      "segmentLength": 164,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 62,
+      "relativeSpeed": 106,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.15196, "longitude": 10.14472 },
+        { "latitude": 56.1512, "longitude": 10.14535 },
+        { "latitude": 56.15086, "longitude": 10.14563 },
+        { "latitude": 56.15063, "longitude": 10.14585 }
+      ]
+    },
+    {
+      "segmentId": 1170138551571316736,
+      "segmentIdStr": "1170138551571316736",
+      "averageSpeed": 48,
+      "typicalSpeed": 45,
+      "segmentLength": 56,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.15063, "longitude": 10.14585 },
+        { "latitude": 56.15059, "longitude": 10.14589 },
+        { "latitude": 56.15038, "longitude": 10.14608 },
+        { "latitude": 56.15019, "longitude": 10.1463 }
+      ]
+    },
+    {
+      "segmentId": 1170138551571382272,
+      "segmentIdStr": "1170138551571382272",
+      "averageSpeed": 61,
+      "typicalSpeed": 55,
+      "segmentLength": 90,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.15019, "longitude": 10.1463 },
+        { "latitude": 56.15011, "longitude": 10.1464 },
+        { "latitude": 56.15006, "longitude": 10.14645 },
+        { "latitude": 56.14997, "longitude": 10.14657 },
+        { "latitude": 56.14968, "longitude": 10.14697 },
+        { "latitude": 56.14962, "longitude": 10.14706 },
+        { "latitude": 56.14955, "longitude": 10.14718 }
+      ]
+    },
+    {
+      "segmentId": 1170138551571415040,
+      "segmentIdStr": "1170138551571415040",
+      "averageSpeed": 60,
+      "typicalSpeed": 61,
+      "segmentLength": 92,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.14955, "longitude": 10.14718 },
+        { "latitude": 56.14924, "longitude": 10.14769 },
+        { "latitude": 56.14896, "longitude": 10.14821 }
+      ]
+    },
+    {
+      "segmentId": 1170138551210901504,
+      "segmentIdStr": "1170138551210901504",
+      "averageSpeed": 56,
+      "typicalSpeed": 54,
+      "segmentLength": 183,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.14896, "longitude": 10.14821 },
+        { "latitude": 56.14816, "longitude": 10.14968 },
+        { "latitude": 56.1478, "longitude": 10.1503 }
+      ]
+    },
+    {
+      "segmentId": 1170138551211098112,
+      "segmentIdStr": "1170138551211098112",
+      "averageSpeed": 44,
+      "typicalSpeed": 43,
+      "segmentLength": 53,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.1478, "longitude": 10.1503 },
+        { "latitude": 56.1477, "longitude": 10.15048 },
+        { "latitude": 56.14757, "longitude": 10.1507 },
+        { "latitude": 56.14746, "longitude": 10.15089 }
+      ]
+    },
+    {
+      "segmentId": 1170138551211130880,
+      "segmentIdStr": "1170138551211130880",
+      "averageSpeed": 30,
+      "typicalSpeed": 36,
+      "segmentLength": 67,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.14746, "longitude": 10.15089 },
+        { "latitude": 56.14731, "longitude": 10.15109 },
+        { "latitude": 56.1472, "longitude": 10.15123 },
+        { "latitude": 56.14706, "longitude": 10.15139 },
+        { "latitude": 56.14696, "longitude": 10.15148 }
+      ]
+    },
+    {
+      "segmentId": 1170138551567220736,
+      "segmentIdStr": "1170138551567220736",
+      "averageSpeed": 20,
+      "typicalSpeed": 19,
+      "segmentLength": 28,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.14696, "longitude": 10.15148 },
+        { "latitude": 56.14672, "longitude": 10.15164 }
+      ]
+    },
+    {
+      "segmentId": 1170138551567253504,
+      "segmentIdStr": "1170138551567253504",
+      "averageSpeed": 17,
+      "typicalSpeed": 17,
+      "segmentLength": 18,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.14672, "longitude": 10.15164 },
+        { "latitude": 56.14668, "longitude": 10.15167 },
+        { "latitude": 56.1466, "longitude": 10.15172 },
+        { "latitude": 56.14657, "longitude": 10.15174 }
+      ]
+    },
+    {
+      "segmentId": 1170138551210934272,
+      "segmentIdStr": "1170138551210934272",
+      "averageSpeed": 37,
+      "typicalSpeed": 37,
+      "segmentLength": 6,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.14657, "longitude": 10.15174 },
+        { "latitude": 56.14652, "longitude": 10.15177 }
+      ]
+    },
+    {
+      "segmentId": 1170138551210999808,
+      "segmentIdStr": "1170138551210999808",
+      "averageSpeed": 42,
+      "typicalSpeed": 41,
+      "segmentLength": 15,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.14652, "longitude": 10.15177 },
+        { "latitude": 56.14645, "longitude": 10.15181 },
+        { "latitude": 56.14639, "longitude": 10.15185 }
+      ]
+    },
+    {
+      "segmentId": 1170138551211163648,
+      "segmentIdStr": "1170138551211163648",
+      "averageSpeed": 45,
+      "typicalSpeed": 45,
+      "segmentLength": 8,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.14639, "longitude": 10.15185 },
+        { "latitude": 56.14635, "longitude": 10.15188 },
+        { "latitude": 56.14632, "longitude": 10.15189 }
+      ]
+    },
+    {
+      "segmentId": 1170138551622795264,
+      "segmentIdStr": "1170138551622795264",
+      "averageSpeed": 46,
+      "typicalSpeed": 46,
+      "segmentLength": 22,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.14632, "longitude": 10.15189 },
+        { "latitude": 56.14627, "longitude": 10.15192 },
+        { "latitude": 56.14623, "longitude": 10.15193 },
+        { "latitude": 56.14613, "longitude": 10.15198 }
+      ]
+    },
+    {
+      "segmentId": 1170138551622828032,
+      "segmentIdStr": "1170138551622828032",
+      "averageSpeed": 48,
+      "typicalSpeed": 47,
+      "segmentLength": 44,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.14613, "longitude": 10.15198 },
+        { "latitude": 56.14574, "longitude": 10.15213 }
+      ]
+    },
+    {
+      "segmentId": 1170138551221452800,
+      "segmentIdStr": "1170138551221452800",
+      "averageSpeed": 50,
+      "typicalSpeed": 49,
+      "segmentLength": 19,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.14574, "longitude": 10.15213 },
+        { "latitude": 56.14557, "longitude": 10.1522 }
+      ]
+    },
+    {
+      "segmentId": 1170138551572234240,
+      "segmentIdStr": "1170138551572234240",
+      "averageSpeed": 45,
+      "typicalSpeed": 45,
+      "segmentLength": 264,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.14557, "longitude": 10.1522 },
+        { "latitude": 56.14542, "longitude": 10.15225 },
+        { "latitude": 56.14517, "longitude": 10.15235 },
+        { "latitude": 56.14487, "longitude": 10.15246 },
+        { "latitude": 56.14439, "longitude": 10.15264 },
+        { "latitude": 56.14373, "longitude": 10.15289 },
+        { "latitude": 56.14325, "longitude": 10.15307 }
+      ]
+    },
+    {
+      "segmentId": 1170138551572594688,
+      "segmentIdStr": "1170138551572594688",
+      "averageSpeed": 58,
+      "typicalSpeed": 54,
+      "segmentLength": 301,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.14325, "longitude": 10.15307 },
+        { "latitude": 56.14257, "longitude": 10.15335 },
+        { "latitude": 56.14237, "longitude": 10.15344 },
+        { "latitude": 56.14172, "longitude": 10.15369 },
+        { "latitude": 56.14061, "longitude": 10.15412 }
+      ]
+    },
+    {
+      "segmentId": 1170138551572561920,
+      "segmentIdStr": "1170138551572561920",
+      "averageSpeed": 64,
+      "typicalSpeed": 59,
+      "segmentLength": 41,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.14061, "longitude": 10.15412 },
+        { "latitude": 56.14025, "longitude": 10.15426 }
+      ]
+    },
+    {
+      "segmentId": 1170138551234232320,
+      "segmentIdStr": "1170138551234232320",
+      "averageSpeed": 65,
+      "typicalSpeed": 59,
+      "segmentLength": 12,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.14025, "longitude": 10.15426 },
+        { "latitude": 56.1402, "longitude": 10.15428 },
+        { "latitude": 56.14014, "longitude": 10.1543 }
+      ]
+    },
+    {
+      "segmentId": 1170138551234265088,
+      "segmentIdStr": "1170138551234265088",
+      "averageSpeed": 65,
+      "typicalSpeed": 64,
+      "segmentLength": 11,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.14014, "longitude": 10.1543 },
+        { "latitude": 56.14004, "longitude": 10.15434 }
+      ]
+    },
+    {
+      "segmentId": 1170138551233576960,
+      "segmentIdStr": "1170138551233576960",
+      "averageSpeed": 65,
+      "typicalSpeed": 60,
+      "segmentLength": 18,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.14004, "longitude": 10.15434 },
+        { "latitude": 56.13988, "longitude": 10.1544 }
+      ]
+    },
+    {
+      "segmentId": 1170138551233609728,
+      "segmentIdStr": "1170138551233609728",
+      "averageSpeed": 66,
+      "typicalSpeed": 65,
+      "segmentLength": 18,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.13988, "longitude": 10.1544 },
+        { "latitude": 56.13972, "longitude": 10.15446 }
+      ]
+    },
+    {
+      "segmentId": 1170138551233052672,
+      "segmentIdStr": "1170138551233052672",
+      "averageSpeed": 66,
+      "typicalSpeed": 65,
+      "segmentLength": 34,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.13972, "longitude": 10.15446 },
+        { "latitude": 56.13942, "longitude": 10.15458 }
+      ]
+    },
+    {
+      "segmentId": 1170138551567581184,
+      "segmentIdStr": "1170138551567581184",
+      "averageSpeed": 66,
+      "typicalSpeed": 65,
+      "segmentLength": 41,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.13942, "longitude": 10.15458 },
+        { "latitude": 56.13906, "longitude": 10.15471 }
+      ]
+    },
+    {
+      "segmentId": 1170138551614504960,
+      "segmentIdStr": "1170138551614504960",
+      "averageSpeed": 66,
+      "typicalSpeed": 65,
+      "segmentLength": 23,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.13906, "longitude": 10.15471 },
+        { "latitude": 56.13899, "longitude": 10.15474 },
+        { "latitude": 56.13886, "longitude": 10.15479 }
+      ]
+    },
+    {
+      "segmentId": 1170138551614537728,
+      "segmentIdStr": "1170138551614537728",
+      "averageSpeed": 66,
+      "typicalSpeed": 65,
+      "segmentLength": 15,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.13886, "longitude": 10.15479 },
+        { "latitude": 56.13873, "longitude": 10.15484 }
+      ]
+    },
+    {
+      "segmentId": 1170138551233249280,
+      "segmentIdStr": "1170138551233249280",
+      "averageSpeed": 66,
+      "typicalSpeed": 65,
+      "segmentLength": 11,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.13873, "longitude": 10.15484 },
+        { "latitude": 56.13863, "longitude": 10.15488 }
+      ]
+    },
+    {
+      "segmentId": 1170138551234002944,
+      "segmentIdStr": "1170138551234002944",
+      "averageSpeed": 66,
+      "typicalSpeed": 65,
+      "segmentLength": 10,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.13863, "longitude": 10.15488 },
+        { "latitude": 56.13854, "longitude": 10.15491 }
+      ]
+    },
+    {
+      "segmentId": 1170138551234035712,
+      "segmentIdStr": "1170138551234035712",
+      "averageSpeed": 58,
+      "typicalSpeed": 57,
+      "segmentLength": 184,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.13854, "longitude": 10.15491 },
+        { "latitude": 56.1383, "longitude": 10.155 },
+        { "latitude": 56.13805, "longitude": 10.1551 },
+        { "latitude": 56.1372, "longitude": 10.15542 },
+        { "latitude": 56.13711, "longitude": 10.15546 },
+        { "latitude": 56.13692, "longitude": 10.15553 }
+      ]
+    },
+    {
+      "segmentId": 1170138551233871872,
+      "segmentIdStr": "1170138551233871872",
+      "averageSpeed": 39,
+      "typicalSpeed": 35,
+      "segmentLength": 20,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.13692, "longitude": 10.15553 },
+        { "latitude": 56.13685, "longitude": 10.15555 },
+        { "latitude": 56.13674, "longitude": 10.15558 }
+      ]
+    },
+    {
+      "segmentId": 1170138551233904640,
+      "segmentIdStr": "1170138551233904640",
+      "averageSpeed": 18,
+      "typicalSpeed": 15,
+      "segmentLength": 69,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.13674, "longitude": 10.15558 },
+        { "latitude": 56.13649, "longitude": 10.15566 },
+        { "latitude": 56.13623, "longitude": 10.15574 },
+        { "latitude": 56.13613, "longitude": 10.15579 }
+      ]
+    },
+    {
+      "segmentId": 1170138551233413120,
+      "segmentIdStr": "1170138551233413120",
+      "averageSpeed": 12,
+      "typicalSpeed": 12,
+      "segmentLength": 20,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.13613, "longitude": 10.15579 },
+        { "latitude": 56.13595, "longitude": 10.15585 }
+      ]
+    },
+    {
+      "segmentId": 1170138551233314816,
+      "segmentIdStr": "1170138551233314816",
+      "averageSpeed": 39,
+      "typicalSpeed": 38,
+      "segmentLength": 14,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.13595, "longitude": 10.15585 },
+        { "latitude": 56.13583, "longitude": 10.1559 }
+      ]
+    },
+    {
+      "segmentId": 1170138551233150976,
+      "segmentIdStr": "1170138551233150976",
+      "averageSpeed": 45,
+      "typicalSpeed": 45,
+      "segmentLength": 12,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.13583, "longitude": 10.1559 },
+        { "latitude": 56.13577, "longitude": 10.15592 },
+        { "latitude": 56.13572, "longitude": 10.15594 }
+      ]
+    },
+    {
+      "segmentId": 1170138551253762048,
+      "segmentIdStr": "1170138551253762048",
+      "averageSpeed": 48,
+      "typicalSpeed": 48,
+      "segmentLength": 14,
+      "openLrId": "Cwc2nifuZBJODgME/YoSThYBw/uQEh4=",
+      "currentSpeed": 39,
+      "relativeSpeed": 67,
+      "confidence": 100,
+      "openLrLength": 2155,
+      "shape": [
+        { "latitude": 56.13572, "longitude": 10.15594 },
+        { "latitude": 56.1356, "longitude": 10.15599 }
+      ]
+    },
+    {
+      "segmentId": 1170138551568105472,
+      "segmentIdStr": "1170138551568105472",
+      "averageSpeed": 48,
+      "typicalSpeed": 48,
+      "segmentLength": 22,
+      "openLrId": "Cwc42CfrLRpuCQD8/jQabAIAlf+XGmwDAPL/dRoa",
+      "currentSpeed": 20,
+      "relativeSpeed": 51,
+      "confidence": 98,
+      "openLrLength": 906,
+      "shape": [
+        { "latitude": 56.1356, "longitude": 10.15599 },
+        { "latitude": 56.13541, "longitude": 10.15606 }
+      ]
+    },
+    {
+      "segmentId": 1170138551568007168,
+      "segmentIdStr": "1170138551568007168",
+      "averageSpeed": 51,
+      "typicalSpeed": 51,
+      "segmentLength": 23,
+      "openLrId": "Cwc42CfrLRpuCQD8/jQabAIAlf+XGmwDAPL/dRoa",
+      "currentSpeed": 20,
+      "relativeSpeed": 51,
+      "confidence": 98,
+      "openLrLength": 906,
+      "shape": [
+        { "latitude": 56.13541, "longitude": 10.15606 },
+        { "latitude": 56.13521, "longitude": 10.15614 }
+      ]
+    },
+    {
+      "segmentId": 1170138551572758528,
+      "segmentIdStr": "1170138551572758528",
+      "averageSpeed": 55,
+      "typicalSpeed": 52,
+      "segmentLength": 60,
+      "openLrId": "Cwc42CfrLRpuCQD8/jQabAIAlf+XGmwDAPL/dRoa",
+      "currentSpeed": 20,
+      "relativeSpeed": 51,
+      "confidence": 98,
+      "openLrLength": 906,
+      "shape": [
+        { "latitude": 56.13521, "longitude": 10.15614 },
+        { "latitude": 56.13492, "longitude": 10.15627 },
+        { "latitude": 56.13469, "longitude": 10.15637 }
+      ]
+    },
+    {
+      "segmentId": 1170138551572725760,
+      "segmentIdStr": "1170138551572725760",
+      "averageSpeed": 58,
+      "typicalSpeed": 59,
+      "segmentLength": 10,
+      "openLrId": "Cwc42CfrLRpuCQD8/jQabAIAlf+XGmwDAPL/dRoa",
+      "currentSpeed": 20,
+      "relativeSpeed": 51,
+      "confidence": 98,
+      "openLrLength": 906,
+      "shape": [
+        { "latitude": 56.13469, "longitude": 10.15637 },
+        { "latitude": 56.1346, "longitude": 10.15641 }
+      ]
+    },
+    {
+      "segmentId": 1170138551253565440,
+      "segmentIdStr": "1170138551253565440",
+      "averageSpeed": 55,
+      "typicalSpeed": 55,
+      "segmentLength": 368,
+      "openLrId": "Cwc42CfrLRpuCQD8/jQabAIAlf+XGmwDAPL/dRoa",
+      "currentSpeed": 20,
+      "relativeSpeed": 51,
+      "confidence": 98,
+      "openLrLength": 906,
+      "shape": [
+        { "latitude": 56.1346, "longitude": 10.15641 },
+        { "latitude": 56.13431, "longitude": 10.15653 },
+        { "latitude": 56.13421, "longitude": 10.15657 },
+        { "latitude": 56.13373, "longitude": 10.15675 },
+        { "latitude": 56.13343, "longitude": 10.15686 },
+        { "latitude": 56.13284, "longitude": 10.1571 },
+        { "latitude": 56.13251, "longitude": 10.15721 },
+        { "latitude": 56.13234, "longitude": 10.15729 },
+        { "latitude": 56.13223, "longitude": 10.15734 },
+        { "latitude": 56.13213, "longitude": 10.15739 },
+        { "latitude": 56.13201, "longitude": 10.15745 },
+        { "latitude": 56.13187, "longitude": 10.15756 },
+        { "latitude": 56.13174, "longitude": 10.15765 },
+        { "latitude": 56.1316, "longitude": 10.15778 },
+        { "latitude": 56.13142, "longitude": 10.15796 }
+      ]
+    },
+    {
+      "segmentId": 1170138551253598208,
+      "segmentIdStr": "1170138551253598208",
+      "averageSpeed": 30,
+      "typicalSpeed": 25,
+      "segmentLength": 58,
+      "openLrId": "Cwc42CfrLRpuCQD8/jQabAIAlf+XGmwDAPL/dRoa",
+      "currentSpeed": 20,
+      "relativeSpeed": 51,
+      "confidence": 98,
+      "openLrLength": 906,
+      "shape": [
+        { "latitude": 56.13142, "longitude": 10.15796 },
+        { "latitude": 56.13122, "longitude": 10.1582 },
+        { "latitude": 56.131, "longitude": 10.15851 }
+      ]
+    },
+    {
+      "segmentId": 1170420026056376320,
+      "segmentIdStr": "1170420026056376320",
+      "averageSpeed": 17,
+      "typicalSpeed": 15,
+      "segmentLength": 66,
+      "openLrId": "Cwc42CfrLRpuCQD8/jQabAIAlf+XGmwDAPL/dRoa",
+      "currentSpeed": 20,
+      "relativeSpeed": 51,
+      "confidence": 98,
+      "openLrLength": 906,
+      "shape": [
+        { "latitude": 56.131, "longitude": 10.15851 },
+        { "latitude": 56.13053, "longitude": 10.15917 }
+      ]
+    },
+    {
+      "segmentId": 1170420026056441856,
+      "segmentIdStr": "1170420026056441856",
+      "averageSpeed": 40,
+      "typicalSpeed": 37,
+      "segmentLength": 77,
+      "openLrId": "Cwc42CfrLRpuCQD8/jQabAIAlf+XGmwDAPL/dRoa",
+      "currentSpeed": 20,
+      "relativeSpeed": 51,
+      "confidence": 98,
+      "openLrLength": 906,
+      "shape": [
+        { "latitude": 56.13053, "longitude": 10.15917 },
+        { "latitude": 56.13028, "longitude": 10.15953 },
+        { "latitude": 56.12999, "longitude": 10.15994 }
+      ]
+    },
+    {
+      "segmentId": 1170420026056474624,
+      "segmentIdStr": "1170420026056474624",
+      "averageSpeed": 44,
+      "typicalSpeed": 45,
+      "segmentLength": 6,
+      "openLrId": "Cwc42CfrLRpuCQD8/jQabAIAlf+XGmwDAPL/dRoa",
+      "currentSpeed": 20,
+      "relativeSpeed": 51,
+      "confidence": 98,
+      "openLrLength": 906,
+      "shape": [
+        { "latitude": 56.12999, "longitude": 10.15994 },
+        { "latitude": 56.12995, "longitude": 10.16 }
+      ]
+    },
+    {
+      "segmentId": 1170420026056507392,
+      "segmentIdStr": "1170420026056507392",
+      "averageSpeed": 43,
+      "typicalSpeed": 40,
+      "segmentLength": 27,
+      "openLrId": "Cwc42CfrLRpuCQD8/jQabAIAlf+XGmwDAPL/dRoa",
+      "currentSpeed": 20,
+      "relativeSpeed": 51,
+      "confidence": 98,
+      "openLrLength": 906,
+      "shape": [
+        { "latitude": 56.12995, "longitude": 10.16 },
+        { "latitude": 56.12976, "longitude": 10.16027 }
+      ]
+    },
+    {
+      "segmentId": 1170420026055458816,
+      "segmentIdStr": "1170420026055458816",
+      "averageSpeed": 41,
+      "typicalSpeed": 39,
+      "segmentLength": 53,
+      "openLrId": "Cwc42CfrLRpuCQD8/jQabAIAlf+XGmwDAPL/dRoa",
+      "currentSpeed": 20,
+      "relativeSpeed": 51,
+      "confidence": 98,
+      "openLrLength": 906,
+      "shape": [
+        { "latitude": 56.12976, "longitude": 10.16027 },
+        { "latitude": 56.12939, "longitude": 10.16081 }
+      ]
+    },
+    {
+      "segmentId": 1170420026664026112,
+      "segmentIdStr": "1170420026664026112",
+      "averageSpeed": 37,
+      "typicalSpeed": 35,
+      "segmentLength": 17,
+      "openLrId": "Cwc42CfrLRpuCQD8/jQabAIAlf+XGmwDAPL/dRoa",
+      "currentSpeed": 20,
+      "relativeSpeed": 51,
+      "confidence": 98,
+      "openLrLength": 906,
+      "shape": [
+        { "latitude": 56.12939, "longitude": 10.16081 },
+        { "latitude": 56.12927, "longitude": 10.16099 }
+      ]
+    },
+    {
+      "segmentId": 1170420026664124416,
+      "segmentIdStr": "1170420026664124416",
+      "averageSpeed": 31,
+      "typicalSpeed": 28,
+      "segmentLength": 25,
+      "openLrId": "Cwc42CfrLRpuCQD8/jQabAIAlf+XGmwDAPL/dRoa",
+      "currentSpeed": 20,
+      "relativeSpeed": 51,
+      "confidence": 98,
+      "openLrLength": 906,
+      "shape": [
+        { "latitude": 56.12927, "longitude": 10.16099 },
+        { "latitude": 56.12921, "longitude": 10.16107 },
+        { "latitude": 56.12917, "longitude": 10.16114 },
+        { "latitude": 56.12914, "longitude": 10.1612 },
+        { "latitude": 56.1291, "longitude": 10.16126 }
+      ]
+    },
+    {
+      "segmentId": 1170420026739523584,
+      "segmentIdStr": "1170420026739523584",
+      "averageSpeed": 6,
+      "typicalSpeed": 5,
+      "segmentLength": 42,
+      "openLrId": "Cwc42CfrLRpuCQD8/jQabAIAlf+XGmwDAPL/dRoa",
+      "currentSpeed": 20,
+      "relativeSpeed": 51,
+      "confidence": 98,
+      "openLrLength": 906,
+      "shape": [
+        { "latitude": 56.1291, "longitude": 10.16126 },
+        { "latitude": 56.12901, "longitude": 10.16141 },
+        { "latitude": 56.12897, "longitude": 10.1615 },
+        { "latitude": 56.12884, "longitude": 10.16175 }
+      ]
+    },
+    {
+      "segmentId": 1170420026739589120,
+      "segmentIdStr": "1170420026739589120",
+      "averageSpeed": 5,
+      "typicalSpeed": 3,
+      "segmentLength": 35,
+      "openLrId": "Cwc42CfrLRpuCQD8/jQabAIAlf+XGmwDAPL/dRoa",
+      "currentSpeed": 20,
+      "relativeSpeed": 51,
+      "confidence": 98,
+      "openLrLength": 906,
+      "shape": [
+        { "latitude": 56.12884, "longitude": 10.16175 },
+        { "latitude": 56.12879, "longitude": 10.16185 },
+        { "latitude": 56.12871, "longitude": 10.16204 },
+        { "latitude": 56.12864, "longitude": 10.16218 }
+      ]
+    }
+  ]
+}

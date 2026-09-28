@@ -111,6 +111,39 @@ export type SerializedDevice = ReturnType<typeof serializeDevice>;
 
 The serialize function is the one place with no return annotation — annotating it would defeat the inference the type depends on. See `src/lib/devices/serialization.ts`.
 
+## Traffic (external API domain)
+
+`src/lib/traffic/` consumes TomTom's Route Monitoring API and is the reference for talking to a
+third party. It differs from `devices/` in two ways worth knowing:
+
+- **`tomtom-service.ts`, not `client.ts`.** fallow's `data` zone is a whitelist of filenames, so an
+  arbitrary name lands in no zone and `pnpm analyze` fails. `*-service.ts` is on both that list and
+  the ESLint exempt list. `queries.ts` / `mutations.ts` stay reserved for the Prisma side.
+- **`serialization.ts` has no `server-only`.** It is a pure transform with no Prisma import, so
+  keeping the marker off makes it unit-testable. `vitest.config.mts` aliases `server-only` to the
+  package's empty module so the modules that _do_ need it stay testable too.
+
+Three things that will silently produce wrong output if changed:
+
+1. **Use `segmentIdStr`, never `segmentId`.** TomTom's numeric segment ids exceed
+   `Number.MAX_SAFE_INTEGER`; `JSON.parse` corrupts 164 of the 165 ids on route 56634.
+   `segmentId` is deliberately absent from the Zod schema so it cannot reach the domain.
+2. **GeoJSON is `[longitude, latitude]`** (RFC 7946 §3.1.1) while TomTom returns
+   `{ latitude, longitude }`. Everything goes through `toPosition` / `toPositions`.
+3. **`fetchedAt` comes from TomTom's `date` response header**, not the local clock — reads are
+   cached for 60s, so stamping at serialize time reports a cache hit as fresh.
+
+Auth is Better Auth throughout, with no second scheme: `recordRouteSnapshotAction` and the
+`data-access` reads sit behind `requireAuth()`, and the route handlers check `getSession()` so an API
+client gets a 401 instead of an `unauthorized()` interrupt. Reads are cached (`next.revalidate`);
+recording a snapshot passes `0` to bypass that cache so the row reflects the moment it was taken.
+Segment geometry is static, so it is stored once per segment and snapshots carry only the speeds
+that change.
+
+> `src/hooks/traffic/use-traffic.ts` has no consumer until a map lands, so it is listed in
+> `ignoreFindings` in `.fallowrc.json`. Remove that entry when the map arrives. Snapshots are only
+> recorded when something calls `useRecordRouteSnapshot` — there is no scheduled collection.
+
 ## Project-specific deviations from the template
 
 - **Prisma 7** requires `prisma.config.ts`; the datasource URL lives there, not in `schema.prisma`. Client is generated to `src/generated/prisma` (git-ignored).

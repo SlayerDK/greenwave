@@ -128,3 +128,52 @@
     @apply font-sans;
   }
 }
+
+/**
+ * Mapbox ships its popup and controls with a hardcoded `#fff`, so they stay
+ * light while the rest of the app is dark. These are the only DOM pieces of the
+ * map — the canvas itself follows the basemap style — so repainting them with
+ * the theme tokens is what makes the whole map theme-aware.
+ *
+ * Deliberately NOT inside `@layer components`: `mapbox-gl.css` arrives as an
+ * unlayered chunk, and unlayered rules beat layered ones no matter their
+ * specificity. These therefore stay unlayered too and win on specificity —
+ * every selector below is one compound longer than the rule it overrides.
+ */
+.mapboxgl-popup .mapboxgl-popup-content {
+  background: var(--popover);
+  color: var(--popover-foreground);
+  border-radius: var(--radius);
+  padding: 0.625rem 0.75rem;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.12);
+}
+
+.mapboxgl-popup .mapboxgl-popup-close-button {
+  color: var(--popover-foreground);
+  padding-inline: 0.375rem;
+}
+
+.mapboxgl-popup.mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
+  border-bottom-color: var(--popover);
+}
+
+.mapboxgl-popup.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+  border-top-color: var(--popover);
+}
+
+.mapboxgl-popup.mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+  border-right-color: var(--popover);
+}
+
+.mapboxgl-popup.mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+  border-left-color: var(--popover);
+}
+
+.mapboxgl-ctrl.mapboxgl-ctrl-group {
+  background: var(--popover);
+}
+
+/* The control glyphs are baked-in dark SVGs; invert them on a dark surface. */
+.dark .mapboxgl-ctrl-icon {
+  filter: invert(1);
+}

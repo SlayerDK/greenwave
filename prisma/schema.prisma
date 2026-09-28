@@ -8,13 +8,13 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String   @id @default(cuid())
   name          String
-  email         String    @unique
-  emailVerified Boolean   @default(false)
+  email         String   @unique
+  emailVerified Boolean  @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   sessions Session[]
   accounts Account[]
@@ -99,4 +99,57 @@ model Reading {
 
   @@index([deviceId, recordedAt])
   @@map("reading")
+}
+
+/// A TomTom monitored route. `id` is TomTom's own routeId.
+model TrafficRoute {
+  id           Int      @id
+  name         String
+  status       String
+  lengthMeters Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  segments  TrafficSegment[]
+  snapshots TrafficSnapshot[]
+
+  @@map("traffic_route")
+}
+
+/// Road geometry is static, so it is stored once per segment rather than on
+/// every snapshot. `segmentIdStr` is TomTom's id as a string: the numeric form
+/// exceeds Number.MAX_SAFE_INTEGER and does not survive JSON parsing.
+model TrafficSegment {
+  id           String @id @default(cuid())
+  segmentIdStr String
+  ordinal      Int
+  lengthMeters Int
+  shape        Json
+
+  routeId Int
+  route   TrafficRoute @relation(fields: [routeId], references: [id], onDelete: Cascade)
+
+  @@unique([routeId, segmentIdStr])
+  @@index([routeId, ordinal])
+  @@map("traffic_segment")
+}
+
+/// One poll of a route: the route-level totals plus the per-segment speeds that
+/// actually change between polls.
+model TrafficSnapshot {
+  id                String   @id @default(cuid())
+  recordedAt        DateTime @default(now())
+  travelTime        Int
+  typicalTravelTime Int
+  delayTime         Int
+  completeness      Int
+  routeConfidence   Int
+  passable          Boolean
+  segmentSpeeds     Json
+
+  routeId Int
+  route   TrafficRoute @relation(fields: [routeId], references: [id], onDelete: Cascade)
+
+  @@index([routeId, recordedAt])
+  @@map("traffic_snapshot")
 }
