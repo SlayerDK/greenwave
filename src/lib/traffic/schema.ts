@@ -3,6 +3,14 @@ import { z } from "zod";
 /** "Ringvejen sydgående" in Aarhus — the route this dashboard monitors by default. */
 export const DEFAULT_ROUTE_ID = 56634;
 
+/**
+ * TomTom refreshes roughly once a minute. The server read cache, the client
+ * poll interval, and the client stale window all derive from this one number:
+ * a shorter poll would hammer a warm cache, a longer stale window would paint
+ * data the cache had already replaced.
+ */
+export const TRAFFIC_REFRESH_SECONDS = 60;
+
 export const trafficTag = (routeId: number) => `traffic-${routeId}`;
 
 export const routeIdSchema = z.coerce.number().int().positive();
@@ -61,23 +69,6 @@ export const tomtomErrorBodySchema = z.union([
   }),
   z.object({ errorMessage: z.string() }),
 ]);
-
-/**
- * Shapes of the `Json` columns, so reading them back is validated rather than
- * cast — Prisma hands them over as `JsonValue`.
- */
-export const segmentSpeedsSchema = z.array(
-  z.object({ s: z.string(), c: z.number(), r: z.number() }),
-);
-
-/**
- * Mapbox hands a clicked feature's properties back untyped, so they are parsed
- * rather than cast. The feature `id` is not usable for this: mapbox-gl runs
- * `parseInt` over it when building the tile feature, which rounds every TomTom
- * id past Number.MAX_SAFE_INTEGER — the very corruption `segmentIdStr` exists
- * to dodge. Properties pass through untouched, so the string id does survive.
- */
-export const clickedSegmentSchema = z.object({ segmentIdStr: z.string() });
 
 export type TomTomPoint = z.infer<typeof tomtomPointSchema>;
 export type TomTomSegment = z.infer<typeof tomtomSegmentSchema>;

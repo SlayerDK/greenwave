@@ -1,12 +1,9 @@
-import { type TrafficSnapshot } from "@/generated/prisma/client";
 import {
-  segmentSpeedsSchema,
   type TomTomPoint,
   type TomTomRouteDetails,
   type TomTomSegment,
 } from "@/lib/traffic/schema";
 import {
-  type BBox,
   type Feature,
   type FeatureCollection,
   type LineString,
@@ -53,10 +50,23 @@ export type TrafficSegmentProperties = {
   confidence: number;
 };
 
-export type TrafficFeatureCollection = FeatureCollection<
-  LineString,
-  TrafficSegmentProperties
->;
+/**
+ * geojson's `BBox` also admits a six-element form carrying altitudes, on which
+ * index 2 is a height rather than the eastern edge. Road geometry is flat, so
+ * narrowing here is what stops a consumer from reading the wrong element — the
+ * 3D case then fails to compile instead of silently framing the map nowhere.
+ */
+export type TrafficBbox = [
+  west: number,
+  south: number,
+  east: number,
+  north: number,
+];
+
+export type TrafficFeatureCollection = Omit<
+  FeatureCollection<LineString, TrafficSegmentProperties>,
+  "bbox"
+> & { bbox?: TrafficBbox };
 
 type TrafficSegmentFeature = Feature<LineString, TrafficSegmentProperties>;
 
@@ -81,7 +91,9 @@ const toSegmentFeature = (segment: TomTomSegment): TrafficSegmentFeature => ({
 });
 
 /** RFC 7946 §5 order: [west, south, east, north]. */
-const computeBbox = (features: TrafficSegmentFeature[]): BBox | undefined => {
+const computeBbox = (
+  features: TrafficSegmentFeature[],
+): TrafficBbox | undefined => {
   const positions = features.flatMap((feature) => feature.geometry.coordinates);
   if (positions.length === 0) return undefined;
 
@@ -132,17 +144,3 @@ export const serializeRouteTraffic = (
 };
 
 export type SerializedRouteTraffic = ReturnType<typeof serializeRouteTraffic>;
-
-/**
- * Prisma returns `segmentSpeeds` as an opaque `JsonValue`; validating it is the
- * boundary rule, and it keeps the one sanctioned `as` cast in routes.ts alone.
- */
-export const serializeTrafficSnapshot = (snapshot: TrafficSnapshot) => ({
-  ...snapshot,
-  recordedAt: snapshot.recordedAt.toISOString(),
-  segmentSpeeds: segmentSpeedsSchema.parse(snapshot.segmentSpeeds),
-});
-
-export type SerializedTrafficSnapshot = ReturnType<
-  typeof serializeTrafficSnapshot
->;

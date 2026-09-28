@@ -5,10 +5,14 @@ import {
   TRAFFIC_LAYER_ID,
   trafficLineLayer,
 } from "@/app/(app)/map/_lib/congestion-style";
-import { type Selection } from "@/app/(app)/map/_lib/segment-lookup";
-import { clickedSegmentSchema } from "@/lib/traffic/schema";
-import { type SerializedRouteTraffic } from "@/lib/traffic/serialization";
-import { type BBox } from "geojson";
+import {
+  clickedSegmentSchema,
+  type Selection,
+} from "@/app/(app)/map/_lib/segment-lookup";
+import {
+  type SerializedRouteTraffic,
+  type TrafficBbox,
+} from "@/lib/traffic/serialization";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useTheme } from "next-themes";
 import { useState } from "react";
@@ -22,7 +26,7 @@ import {
   type MapMouseEvent,
 } from "react-map-gl/mapbox";
 
-const FILL = { width: "100%", height: "100%" };
+const FILL_PARENT = { width: "100%", height: "100%" };
 
 /** Only reached if a route somehow has no geometry to frame. */
 const FALLBACK_VIEW = { longitude: 10.2039, latitude: 56.1629, zoom: 11 };
@@ -36,12 +40,16 @@ const toMapStyle = (resolvedTheme: string | undefined) =>
  * `computeBbox` already framed the route for us, in RFC 7946 order
  * [west, south, east, north] — so the view fits any route, not just the default.
  */
-const toBounds = (bbox: BBox): LngLatBoundsLike => [
-  [bbox[0], bbox[1]],
-  [bbox[2], bbox[3]],
-];
+const toBounds = (bbox: TrafficBbox): LngLatBoundsLike => {
+  const [west, south, east, north] = bbox;
 
-const toInitialViewState = (bbox: BBox | undefined) =>
+  return [
+    [west, south],
+    [east, north],
+  ];
+};
+
+const toInitialViewState = (bbox: TrafficBbox | undefined) =>
   bbox
     ? { bounds: toBounds(bbox), fitBoundsOptions: { padding: 48 } }
     : FALLBACK_VIEW;
@@ -94,7 +102,7 @@ export const TrafficMap = ({
       mapboxAccessToken={mapboxToken}
       mapStyle={toMapStyle(resolvedTheme)}
       initialViewState={toInitialViewState(traffic.featureCollection.bbox)}
-      style={FILL}
+      style={FILL_PARENT}
       onClick={(event) => setSelection(toSelection(event))}
     >
       <NavigationControl position="top-right" />

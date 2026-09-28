@@ -7,6 +7,11 @@ import { Button } from "@/components/ui/button";
  * throws `TrafficError` when TomTom is down, rate-limiting, or rejecting the
  * key. The route handlers turn that into a status via `respondWithRouteId`;
  * an RSC has no such wrapper, so without this boundary the whole page 500s.
+ *
+ * `error.message` is deliberately not rendered. Next redacts the message of any
+ * error thrown during a server render before it reaches the client, so in
+ * production it holds a paragraph of framework boilerplate rather than the
+ * TomTom reason — only `digest` survives, and only as a log correlator.
  */
 export default function MapError({
   error,
@@ -20,8 +25,14 @@ export default function MapError({
       <div className="flex flex-col gap-1">
         <h1 className="text-2xl font-semibold">Traffic map</h1>
         <p className="text-sm text-muted-foreground">
-          Could not load traffic data. {error.message}
+          Could not load traffic data. The upstream service may be unavailable
+          or rate-limiting — try again in a moment.
         </p>
+        {error.digest && (
+          <p className="text-xs text-muted-foreground">
+            Reference: {error.digest}
+          </p>
+        )}
       </div>
 
       <Button variant="outline" onClick={reset}>

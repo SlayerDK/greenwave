@@ -2,6 +2,7 @@ import "server-only";
 
 import { env } from "@/lib/config/env";
 import {
+  TRAFFIC_REFRESH_SECONDS,
   TrafficError,
   tomtomErrorBodySchema,
   tomtomRouteDetailsSchema,
@@ -14,11 +15,11 @@ const ROUTES_URL = "https://api.tomtom.com/routemonitoring/3/routes";
 const REQUEST_TIMEOUT_MS = 8_000;
 
 /**
- * TomTom refreshes roughly once a minute and answers with `no-store`, which the
- * Next Data Cache ignores in favour of these options. Caching here deduplicates
- * upstream calls across every concurrent viewer; `revalidateTag` forces a refresh.
+ * TomTom answers with `no-store`, which the Next Data Cache ignores in favour of
+ * these options. Caching here deduplicates upstream calls across every
+ * concurrent viewer; `recordRouteSnapshotAction` calls `updateTag` to expire the
+ * entry once it has read something newer.
  */
-const REVALIDATE_SECONDS = 60;
 
 /**
  * TomTom's own `date` header, which the Data Cache stores with the response.
@@ -59,7 +60,7 @@ export type RouteDetailsResult = {
 /** `revalidateSeconds: 0` bypasses the cache — what the ingest path needs. */
 export const fetchRouteDetails = async (
   routeId: number,
-  revalidateSeconds: number = REVALIDATE_SECONDS,
+  revalidateSeconds: number = TRAFFIC_REFRESH_SECONDS,
 ): Promise<RouteDetailsResult> => {
   const url = new URL(`${ROUTES_URL}/${routeId}/details`);
   url.searchParams.set("key", env.TOMTOM_API_KEY);

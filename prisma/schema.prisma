@@ -101,14 +101,27 @@ model Reading {
   @@map("reading")
 }
 
+/// Mirrors the `routeStatus` union in src/lib/traffic/schema.ts. Assigning the
+/// Zod value to this column in mutations.ts is what makes the two fail to
+/// compile if they ever drift apart.
+enum TrafficRouteStatus {
+  NEW
+  ACTIVE
+  PENDING_UPDATE
+  MM_FAILED
+  ARCHIVED
+
+  @@map("traffic_route_status")
+}
+
 /// A TomTom monitored route. `id` is TomTom's own routeId.
 model TrafficRoute {
-  id           Int      @id
+  id           Int                @id
   name         String
-  status       String
+  status       TrafficRouteStatus
   lengthMeters Int
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
 
   segments  TrafficSegment[]
   snapshots TrafficSnapshot[]

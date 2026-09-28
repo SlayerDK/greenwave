@@ -1,9 +1,9 @@
-import { findSegment } from "@/app/(app)/map/_lib/segment-lookup";
-import routeDetailsFixture from "@/lib/traffic/fixtures/route-details.json";
 import {
   clickedSegmentSchema,
-  tomtomRouteDetailsSchema,
-} from "@/lib/traffic/schema";
+  findSegment,
+} from "@/app/(app)/map/_lib/segment-lookup";
+import routeDetailsFixture from "@/lib/traffic/fixtures/route-details.json";
+import { tomtomRouteDetailsSchema } from "@/lib/traffic/schema";
 import { serializeRouteTraffic } from "@/lib/traffic/serialization";
 import { describe, expect, it } from "vitest";
 

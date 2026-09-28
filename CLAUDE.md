@@ -114,7 +114,7 @@ The serialize function is the one place with no return annotation — annotating
 ## Traffic (external API domain)
 
 `src/lib/traffic/` consumes TomTom's Route Monitoring API and is the reference for talking to a
-third party. It differs from `devices/` in two ways worth knowing:
+third party. It differs from `devices/` in three ways worth knowing:
 
 - **`tomtom-service.ts`, not `client.ts`.** fallow's `data` zone is a whitelist of filenames, so an
   arbitrary name lands in no zone and `pnpm analyze` fails. `*-service.ts` is on both that list and
@@ -122,6 +122,13 @@ third party. It differs from `devices/` in two ways worth knowing:
 - **`serialization.ts` has no `server-only`.** It is a pure transform with no Prisma import, so
   keeping the marker off makes it unit-testable. `vitest.config.mts` aliases `server-only` to the
   package's empty module so the modules that _do_ need it stay testable too.
+- **`TrafficRoute.status` is a Prisma enum mirroring the `routeStatus` Zod union.** Assigning one to
+  the other in `mutations.ts` is the whole drift guard — no runtime check, it just stops compiling.
+  It is one-directional by nature, and deliberately so: it catches a status the Zod schema accepts
+  but the column cannot store (verified — both `upsert` branches error), and stays quiet when the
+  column allows a value we never write, which is harmless. Do not derive the Zod enum from the
+  generated Prisma one: `schema.ts` is value-imported by `"use client"` code, so that would pull
+  Prisma into the browser bundle.
 
 Three things that will silently produce wrong output if changed:
 
@@ -129,20 +136,33 @@ Three things that will silently produce wrong output if changed:
    `Number.MAX_SAFE_INTEGER`; `JSON.parse` corrupts 164 of the 165 ids on route 56634.
    `segmentId` is deliberately absent from the Zod schema so it cannot reach the domain.
 2. **GeoJSON is `[longitude, latitude]`** (RFC 7946 §3.1.1) while TomTom returns
-   `{ latitude, longitude }`. Everything goes through `toPosition` / `toPositions`.
+   `{ latitude, longitude }`. Everything goes through `toPosition` / `toPositions`. Bounding boxes
+   use `TrafficBbox`, not geojson's `BBox`, whose 3D form puts an altitude at index 2.
 3. **`fetchedAt` comes from TomTom's `date` response header**, not the local clock — reads are
    cached for 60s, so stamping at serialize time reports a cache hit as fresh.
 
 Auth is Better Auth throughout, with no second scheme: `recordRouteSnapshotAction` and the
-`data-access` reads sit behind `requireAuth()`, and the route handlers check `getSession()` so an API
-client gets a 401 instead of an `unauthorized()` interrupt. Reads are cached (`next.revalidate`);
-recording a snapshot passes `0` to bypass that cache so the row reflects the moment it was taken.
-Segment geometry is static, so it is stored once per segment and snapshots carry only the speeds
-that change.
+`data-access` reads sit behind `requireAuth()`, and `/api/traffic` checks `getSession()` so an API
+client gets a 401 instead of an `unauthorized()` interrupt. Segment geometry is static, so it is
+stored once per segment and snapshots carry only the speeds that change.
 
-> `src/hooks/traffic/use-traffic.ts` has no consumer until a map lands, so it is listed in
-> `ignoreFindings` in `.fallowrc.json`. Remove that entry when the map arrives. Snapshots are only
-> recorded when something calls `useRecordRouteSnapshot` — there is no scheduled collection.
+**The cache contract is three-sided and all three sides derive from `TRAFFIC_REFRESH_SECONDS`:**
+the `next.revalidate` window on the upstream read, the client `staleTime`, and the client
+`refetchInterval`. Recording a snapshot passes `revalidateSeconds: 0` to read past that cache, and
+must therefore also call `updateTag(trafficTag(routeId))` — the `router.refresh()` in
+`useRecordRouteSnapshot` otherwise re-renders straight out of the still-warm cache and the map keeps
+painting the payload the snapshot just superseded. That failure is silent: nothing errors.
+
+`updateTag`, not `revalidateTag`. Next 16 split the two: `revalidateTag(tag, profile)` is
+stale-while-revalidate and would serve the superseded payload to the very refresh it triggers, while
+`updateTag` expires immediately for read-your-own-writes and is Server-Action-only. Reach for
+`updateTag` whenever a mutation's own `router.refresh()` has to observe the write.
+
+> Snapshots are write-only today. They are recorded when something calls `useRecordRouteSnapshot`
+> — there is no scheduled collection — and nothing reads them back yet. The read path
+> (`queries.ts`, a history endpoint, a `serializeTrafficSnapshot`) was deleted rather than left
+> unused; add it together with whatever renders it, and give the query an explicit `select` so a
+> 24h window does not drag every `segmentSpeeds` blob along with it.
 
 ## Project-specific deviations from the template
 

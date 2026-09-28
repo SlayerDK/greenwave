@@ -6,10 +6,12 @@ import {
 } from "@/lib/traffic/schema";
 import { NextResponse, type NextRequest } from "next/server";
 
+type RouteError = { error: string };
+
 /**
- * Every traffic endpoint checks the session, takes the same optional `routeId`,
- * and turns a `TrafficError` back into the status TomTom gave us. Anything else
- * is a real fault and is rethrown for the framework to handle.
+ * Checks the session, resolves the optional `routeId`, and turns a
+ * `TrafficError` back into the status TomTom gave us. Anything else is a real
+ * fault and is rethrown for the framework to handle.
  *
  * The data-access layer calls `requireAuth()` too; checking here as well is what
  * lets an API client get a 401 rather than an `unauthorized()` interrupt.
@@ -17,7 +19,7 @@ import { NextResponse, type NextRequest } from "next/server";
 export const respondWithRouteId = async <T>(
   request: NextRequest,
   handle: (routeId: number) => Promise<T>,
-): Promise<NextResponse> => {
+): Promise<NextResponse<T | RouteError>> => {
   const session = await getSession();
   if (!session)
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });

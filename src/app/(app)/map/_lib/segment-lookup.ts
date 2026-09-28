@@ -1,10 +1,18 @@
 import { type TrafficFeatureCollection } from "@/lib/traffic/serialization";
+import { z } from "zod";
 
 export type Selection = {
   segmentIdStr: string;
   longitude: number;
   latitude: number;
 };
+
+/**
+ * Mapbox hands a clicked feature's properties back untyped, so they are parsed
+ * rather than cast. Lives here beside `findSegment` because it describes what
+ * mapbox-gl returns, not anything TomTom sends or we store.
+ */
+export const clickedSegmentSchema = z.object({ segmentIdStr: z.string() });
 
 /**
  * Resolves a click back to our own typed feature.
