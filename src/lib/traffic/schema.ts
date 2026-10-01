@@ -1,19 +1,27 @@
 import { z } from "zod";
 
-/** "Ringvejen sydgående" in Aarhus — the route this dashboard monitors by default. */
-export const DEFAULT_ROUTE_ID = 56634;
+/**
+ * Every TomTom route this dashboard monitors, in display order: the two
+ * Ringvejen directions followed by the Aarhus corridor pairs.
+ *
+ * It replaces the single default route id, and because no user input reaches a
+ * route id any more it is also the allowlist — nothing can ask us to spend our
+ * `TOMTOM_API_KEY` on a route that is not in here.
+ */
+export const MONITORED_ROUTE_IDS = [
+  56634, 56628, 313719, 313720, 313721, 313722, 313723, 313724, 313725, 313726,
+  313727, 313728, 313729,
+] as const;
 
 /**
- * TomTom refreshes roughly once a minute. The server read cache, the client
- * poll interval, and the client stale window all derive from this one number:
- * a shorter poll would hammer a warm cache, a longer stale window would paint
- * data the cache had already replaced.
+ * TomTom refreshes roughly once a minute, which is how long a read stays in the
+ * Next Data Cache. Nothing on the client polls, so this is now the server side
+ * alone: it is the window within which pressing Refresh re-reads the cache
+ * rather than spending thirteen upstream calls.
  */
 export const TRAFFIC_REFRESH_SECONDS = 60;
 
 export const trafficTag = (routeId: number) => `traffic-${routeId}`;
-
-export const routeIdSchema = z.coerce.number().int().positive();
 
 const tomtomPointSchema = z.object({
   latitude: z.number(),

@@ -2,8 +2,14 @@
 
 import { CongestionLegend } from "@/app/(app)/map/_components/congestion-legend";
 import { RecordSnapshotButton } from "@/app/(app)/map/_components/record-snapshot-button";
-import { useRouteTraffic } from "@/hooks/traffic/use-traffic";
-import { type SerializedRouteTraffic } from "@/lib/traffic/serialization";
+import { RefreshTrafficButton } from "@/app/(app)/map/_components/refresh-traffic-button";
+import { RouteSummaryList } from "@/app/(app)/map/_components/route-summary-list";
+import { useNetworkTraffic } from "@/hooks/traffic/use-traffic";
+import {
+  mergeFeatureCollections,
+  type NetworkTraffic,
+  type RouteFailure,
+} from "@/lib/traffic/serialization";
 import dynamic from "next/dynamic";
 
 /**
@@ -21,55 +27,46 @@ const TrafficMap = dynamic(
   },
 );
 
-/**
- * The data describes Danish roads, so the clock that matters is theirs — and
- * pinning it keeps the server and client markup identical.
- */
-const timeFormat = new Intl.DateTimeFormat("da-DK", {
-  timeZone: "Europe/Copenhagen",
-  hour: "2-digit",
-  minute: "2-digit",
-});
-
-const formatDelay = (seconds: number) => {
-  if (seconds <= 0) return "No delay";
-
-  const minutes = Math.round(seconds / 60);
-
-  return minutes >= 1 ? `+${minutes} min delay` : `+${seconds} s delay`;
-};
-
-const RouteSummary = ({
-  summary,
-}: {
-  summary: SerializedRouteTraffic["summary"];
-}) => (
-  <div className="flex flex-col gap-0.5">
-    <p className="font-medium">{summary.routeName}</p>
-    <p className="text-sm text-muted-foreground">
-      {formatDelay(summary.delayTime)} · updated{" "}
-      {timeFormat.format(new Date(summary.fetchedAt))}
-      {summary.passable ? "" : " · route impassable"}
-    </p>
-  </div>
-);
+/** Named by id: a route that failed never delivered its name. */
+const describeFailures = (failures: RouteFailure[]) =>
+  failures.map(({ routeId }) => routeId).join(", ");
 
 export const TrafficMapPanel = ({
   initialTraffic,
   mapboxToken,
 }: {
-  initialTraffic: SerializedRouteTraffic;
+  initialTraffic: NetworkTraffic;
   mapboxToken: string;
 }) => {
-  const routeId = initialTraffic.summary.routeId;
-  const query = useRouteTraffic(routeId, initialTraffic);
+  const query = useNetworkTraffic(initialTraffic);
   const traffic = query.data ?? initialTraffic;
+
+  /**
+   * One source for every route, merged here rather than served that way so the
+   * geometry is not sent twice. No `useMemo` — React Compiler is on, and it is
+   * what keeps this referentially stable between polls; were it to re-run on
+   * every render, mapbox would re-upload the whole collection each time.
+   */
+  const featureCollection = mergeFeatureCollections(
+    traffic.routes.map((route) => route.featureCollection),
+  );
+
+  const routeCount = traffic.routes.length + traffic.failures.length;
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <RouteSummary summary={traffic.summary} />
-        <RecordSnapshotButton routeId={routeId} />
+        <p className="text-sm text-muted-foreground">
+          {traffic.routes.length} of {routeCount} routes ·{" "}
+          {featureCollection.features.length} segments
+        </p>
+        <div className="flex items-center gap-2">
+          <RefreshTrafficButton
+            onRefresh={() => void query.refetch()}
+            isFetching={query.isFetching}
+          />
+          <RecordSnapshotButton />
+        </div>
       </div>
 
       {/* Left beside the map rather than replacing it: stale segments beat a
@@ -77,11 +74,29 @@ export const TrafficMapPanel = ({
       {query.isError && (
         <p className="text-sm text-destructive">
           Could not refresh traffic data. Showing the last successful reading.
+          Try Refresh again in a moment.
         </p>
       )}
 
-      <div className="h-[70vh] min-h-96 overflow-hidden rounded-lg border">
-        <TrafficMap traffic={traffic} mapboxToken={mapboxToken} />
+      {traffic.failures.length > 0 && (
+        <p className="text-sm text-destructive">
+          {traffic.failures.length} of {routeCount} routes are unavailable (
+          {describeFailures(traffic.failures)}). The rest are shown below.
+        </p>
+      )}
+
+      <div className="grid gap-4 lg:grid-cols-[2fr_1fr]">
+        <div className="h-[70vh] min-h-96 overflow-hidden rounded-lg border">
+          <TrafficMap
+            featureCollection={featureCollection}
+            routes={traffic.routes}
+            mapboxToken={mapboxToken}
+          />
+        </div>
+
+        <div className="max-h-[70vh] overflow-y-auto">
+          <RouteSummaryList routes={traffic.routes} />
+        </div>
       </div>
 
       <CongestionLegend />

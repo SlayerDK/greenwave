@@ -1,20 +1,19 @@
 import { GET } from "@/app/api/traffic/route";
 import { getSession } from "@/lib/auth/session";
-import { getRouteTraffic } from "@/lib/traffic/data-access";
+import { getNetworkTraffic } from "@/lib/traffic/data-access";
+import edwinRahrsFixture from "@/lib/traffic/fixtures/route-details-313727.json";
 import routeDetailsFixture from "@/lib/traffic/fixtures/route-details.json";
+import { tomtomRouteDetailsSchema } from "@/lib/traffic/schema";
 import {
-  DEFAULT_ROUTE_ID,
-  tomtomRouteDetailsSchema,
-  TrafficError,
-} from "@/lib/traffic/schema";
-import { serializeRouteTraffic } from "@/lib/traffic/serialization";
-import { NextRequest } from "next/server";
+  serializeNetworkTraffic,
+  type NetworkTraffic,
+} from "@/lib/traffic/serialization";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("@/lib/traffic/data-access", () => ({ getRouteTraffic: vi.fn() }));
+vi.mock("@/lib/traffic/data-access", () => ({ getNetworkTraffic: vi.fn() }));
 vi.mock("@/lib/auth/session", () => ({ getSession: vi.fn() }));
 
-const mockedGetRouteTraffic = vi.mocked(getRouteTraffic);
+const mockedGetNetworkTraffic = vi.mocked(getNetworkTraffic);
 const mockedGetSession = vi.mocked(getSession);
 
 const NOW = new Date("2026-09-28T12:00:00.000Z");
@@ -41,13 +40,19 @@ const signIn = () => {
   });
 };
 
-const traffic = serializeRouteTraffic(
-  tomtomRouteDetailsSchema.parse(routeDetailsFixture),
-  "2026-09-28T12:00:00.000Z",
-);
-
-const request = (query = "") =>
-  new NextRequest(`http://localhost/api/traffic${query}`);
+const traffic = serializeNetworkTraffic([
+  {
+    ok: true,
+    details: tomtomRouteDetailsSchema.parse(routeDetailsFixture),
+    fetchedAt: "2026-09-28T12:00:00.000Z",
+  },
+  {
+    ok: true,
+    details: tomtomRouteDetailsSchema.parse(edwinRahrsFixture),
+    fetchedAt: "2026-09-28T12:00:30.000Z",
+  },
+  { ok: false, routeId: 313719, error: "Not found Route by id(313719)" },
+]);
 
 beforeEach(() => {
   vi.resetAllMocks();
@@ -58,52 +63,45 @@ describe("GET /api/traffic", () => {
   it("refuses a request without a session", async () => {
     mockedGetSession.mockResolvedValue(null);
 
-    const response = await GET(request());
+    const response = await GET();
 
     expect(response.status).toBe(401);
-    expect(mockedGetRouteTraffic).not.toHaveBeenCalled();
+    expect(mockedGetNetworkTraffic).not.toHaveBeenCalled();
   });
 
-  it("defaults to the monitored route", async () => {
-    mockedGetRouteTraffic.mockResolvedValue(traffic);
+  it("returns every monitored route that answered", async () => {
+    mockedGetNetworkTraffic.mockResolvedValue(traffic);
 
-    const response = await GET(request());
+    const response = await GET();
 
     expect(response.status).toBe(200);
-    expect(mockedGetRouteTraffic).toHaveBeenCalledWith(DEFAULT_ROUTE_ID);
+
+    const body = (await response.json()) as NetworkTraffic;
+    expect(body.routes.map(({ summary }) => summary.routeId)).toEqual([
+      56634, 313727,
+    ]);
   });
 
-  it("forwards an explicit routeId", async () => {
-    mockedGetRouteTraffic.mockResolvedValue(traffic);
+  /**
+   * An unreachable route is a value in the payload, not a status: one route
+   * must not cost a poll the twelve that did answer.
+   */
+  it("reports a failed route without failing the response", async () => {
+    mockedGetNetworkTraffic.mockResolvedValue(traffic);
 
-    await GET(request("?routeId=57263"));
+    const response = await GET();
 
-    expect(mockedGetRouteTraffic).toHaveBeenCalledWith(57263);
-  });
+    expect(response.status).toBe(200);
 
-  it("rejects a routeId that is not a positive integer", async () => {
-    const response = await GET(request("?routeId=not-a-number"));
-
-    expect(response.status).toBe(400);
-    expect(mockedGetRouteTraffic).not.toHaveBeenCalled();
-  });
-
-  it("surfaces the upstream status carried by a TrafficError", async () => {
-    mockedGetRouteTraffic.mockRejectedValue(
-      new TrafficError("not_found", 404, "Not found Route by id(999999999)"),
-    );
-
-    const response = await GET(request("?routeId=999999999"));
-
-    expect(response.status).toBe(404);
-    expect(await response.json()).toEqual({
-      error: "Not found Route by id(999999999)",
-    });
+    const body = (await response.json()) as NetworkTraffic;
+    expect(body.failures).toEqual([
+      { routeId: 313719, error: "Not found Route by id(313719)" },
+    ]);
   });
 
   it("lets unexpected errors through to the framework", async () => {
-    mockedGetRouteTraffic.mockRejectedValue(new Error("boom"));
+    mockedGetNetworkTraffic.mockRejectedValue(new Error("boom"));
 
-    await expect(GET(request())).rejects.toThrow("boom");
+    await expect(GET()).rejects.toThrow("boom");
   });
 });

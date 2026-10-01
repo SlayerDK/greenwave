@@ -5,7 +5,10 @@ import {
   findSegment,
   type Selection,
 } from "@/app/(app)/map/_lib/segment-lookup";
-import { type TrafficFeatureCollection } from "@/lib/traffic/serialization";
+import {
+  type SerializedRouteTraffic,
+  type TrafficFeatureCollection,
+} from "@/lib/traffic/serialization";
 import { Popup } from "react-map-gl/mapbox";
 
 /**
@@ -16,16 +19,24 @@ import { Popup } from "react-map-gl/mapbox";
 export const SegmentPopup = ({
   selection,
   features,
+  routes,
   onClose,
 }: {
   selection: Selection;
   features: TrafficFeatureCollection["features"];
+  routes: SerializedRouteTraffic[];
   onClose: () => void;
 }) => {
   const feature = findSegment(features, selection.segmentIdStr);
   if (!feature) return null;
 
   const segment = feature.properties;
+
+  // Every route's segments share one collection, so the road has to be named
+  // from the segment's own `routeId` rather than assumed.
+  const routeName = routes.find(
+    ({ summary }) => summary.routeId === segment.routeId,
+  )?.summary.routeName;
 
   return (
     <Popup
@@ -38,6 +49,9 @@ export const SegmentPopup = ({
     >
       <div className="flex flex-col gap-1">
         <p className="font-medium">{congestionLabel(segment.congestion)}</p>
+        {routeName && (
+          <p className="text-xs text-muted-foreground">{routeName}</p>
+        )}
 
         <dl className="grid grid-cols-2 gap-x-3 gap-y-0.5 text-xs">
           <dt className="text-muted-foreground">Current</dt>

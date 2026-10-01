@@ -2,7 +2,7 @@ import "server-only";
 
 import { prisma } from "@/lib/config/prisma";
 import { type TomTomRouteDetails } from "@/lib/traffic/schema";
-import { toPositions } from "@/lib/traffic/serialization";
+import { toPositions, toRouteLabel } from "@/lib/traffic/serialization";
 
 /**
  * Segment geometry is static, so it is inserted once and left alone; only the
@@ -15,12 +15,12 @@ export const trafficMutations = {
         where: { id: details.routeId },
         create: {
           id: details.routeId,
-          name: details.routeName,
+          name: toRouteLabel(details.routeName),
           status: details.routeStatus,
           lengthMeters: details.routeLength,
         },
         update: {
-          name: details.routeName,
+          name: toRouteLabel(details.routeName),
           status: details.routeStatus,
           lengthMeters: details.routeLength,
         },

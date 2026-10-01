@@ -12,6 +12,7 @@ import {
 import {
   type SerializedRouteTraffic,
   type TrafficBbox,
+  type TrafficFeatureCollection,
 } from "@/lib/traffic/serialization";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useTheme } from "next-themes";
@@ -28,7 +29,7 @@ import {
 
 const FILL_PARENT = { width: "100%", height: "100%" };
 
-/** Only reached if a route somehow has no geometry to frame. */
+/** Only reached if every monitored route failed, leaving nothing to frame. */
 const FALLBACK_VIEW = { longitude: 10.2039, latitude: 56.1629, zoom: 11 };
 
 const toMapStyle = (resolvedTheme: string | undefined) =>
@@ -37,8 +38,8 @@ const toMapStyle = (resolvedTheme: string | undefined) =>
     : "mapbox://styles/mapbox/light-v11";
 
 /**
- * `computeBbox` already framed the route for us, in RFC 7946 order
- * [west, south, east, north] — so the view fits any route, not just the default.
+ * The merged collection arrives already framed, in RFC 7946 order
+ * [west, south, east, north] — so the view fits whichever routes came back.
  */
 const toBounds = (bbox: TrafficBbox): LngLatBoundsLike => {
   const [west, south, east, north] = bbox;
@@ -87,10 +88,13 @@ const toSelection = (event: MapMouseEvent): Selection | null => {
 };
 
 export const TrafficMap = ({
-  traffic,
+  featureCollection,
+  routes,
   mapboxToken,
 }: {
-  traffic: SerializedRouteTraffic;
+  featureCollection: TrafficFeatureCollection;
+  /** Only so the popup can name the road a clicked segment belongs to. */
+  routes: SerializedRouteTraffic[];
   mapboxToken: string;
 }) => {
   const { resolvedTheme } = useTheme();
@@ -101,21 +105,22 @@ export const TrafficMap = ({
       reuseMaps
       mapboxAccessToken={mapboxToken}
       mapStyle={toMapStyle(resolvedTheme)}
-      initialViewState={toInitialViewState(traffic.featureCollection.bbox)}
+      initialViewState={toInitialViewState(featureCollection.bbox)}
       style={FILL_PARENT}
       onClick={(event) => setSelection(toSelection(event))}
     >
       <NavigationControl position="top-right" />
       <ScaleControl position="bottom-left" />
 
-      <Source id="traffic" type="geojson" data={traffic.featureCollection}>
+      <Source id="traffic" type="geojson" data={featureCollection}>
         <Layer {...trafficLineLayer} />
       </Source>
 
       {selection && (
         <SegmentPopup
           selection={selection}
-          features={traffic.featureCollection.features}
+          features={featureCollection.features}
+          routes={routes}
           onClose={() => setSelection(null)}
         />
       )}

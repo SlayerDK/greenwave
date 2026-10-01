@@ -1,60 +1,61 @@
 "use client";
 
-import { recordRouteSnapshotAction } from "@/lib/traffic/actions";
-import {
-  DEFAULT_ROUTE_ID,
-  TRAFFIC_REFRESH_SECONDS,
-} from "@/lib/traffic/schema";
-import { type SerializedRouteTraffic } from "@/lib/traffic/serialization";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { recordRouteSnapshotsAction } from "@/lib/traffic/actions";
+import { type NetworkTraffic } from "@/lib/traffic/serialization";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-/** Matched to the server read cache, so a poll never lands on a warm entry. */
-const REFRESH_INTERVAL_MS = TRAFFIC_REFRESH_SECONDS * 1000;
+/** Shared by the read and by the invalidation that follows a snapshot. */
+const TRAFFIC_QUERY_KEY = ["traffic", "network"];
 
 /**
- * Polling is the case CLAUDE.md carves out for `useQuery` — it goes through the
- * route handler, never through an action.
+ * The client genuinely needs this data itself, which is the case CLAUDE.md
+ * carves out for `useQuery` — so it goes through the route handler, never
+ * through an action.
  *
- * `initialData` is the payload the RSC already rendered, so the map paints
- * populated instead of flashing. It is dated with TomTom's own `fetchedAt`
- * rather than mount time: the upstream read is cached, so treating a server
- * payload as brand new would let the first refresh land up to two windows late.
+ * Nothing here refetches on its own. `initialData` is the payload the RSC
+ * already rendered, so a page load paints populated without a second read, and
+ * `staleTime: Infinity` is what keeps it that way: a stale query would be
+ * refetched on mount, on reconnect, and on every remount of the panel. The only
+ * ways to new data are a page reload, which re-renders the RSC, and
+ * `refetch()` behind the refresh button.
  *
- * `staleTime` is set here rather than inherited from the query client's default,
- * because the value that matters is the server cache window above — the two have
- * to agree, and a change to the global default must not silently break that.
+ * `refetch()` ignores `staleTime` by design, so the button always re-reads —
+ * though within `TRAFFIC_REFRESH_SECONDS` the upstream read is still cached and
+ * will hand back the same payload rather than spending thirteen TomTom calls.
  */
-export const useRouteTraffic = (
-  routeId: number = DEFAULT_ROUTE_ID,
-  initialData?: SerializedRouteTraffic,
-) =>
+export const useNetworkTraffic = (initialData?: NetworkTraffic) =>
   useQuery({
-    queryKey: ["traffic", routeId],
-    queryFn: async (): Promise<SerializedRouteTraffic> => {
-      const response = await fetch(`/api/traffic?routeId=${routeId}`);
+    queryKey: TRAFFIC_QUERY_KEY,
+    queryFn: async (): Promise<NetworkTraffic> => {
+      const response = await fetch("/api/traffic");
       if (!response.ok) throw new Error("Failed to load traffic data.");
 
-      return response.json() as Promise<SerializedRouteTraffic>;
+      return response.json() as Promise<NetworkTraffic>;
     },
     initialData,
-    initialDataUpdatedAt: initialData
-      ? new Date(initialData.summary.fetchedAt).getTime()
-      : undefined,
-    staleTime: REFRESH_INTERVAL_MS,
-    refetchInterval: REFRESH_INTERVAL_MS,
+    staleTime: Infinity,
+    refetchInterval: false,
   });
 
-export const useRecordRouteSnapshot = (routeId: number = DEFAULT_ROUTE_ID) => {
-  const router = useRouter();
+export const useRecordNetworkSnapshot = () => {
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async () => {
-      const result = await recordRouteSnapshotAction(routeId);
+      const result = await recordRouteSnapshotsAction();
       if (!result.success) throw new Error(result.error);
 
       return result.data;
     },
-    onSuccess: () => router.refresh(),
+    /**
+     * The action read past the server cache and called `updateTag`, so the next
+     * read is of fresh data — but `initialData` cannot overwrite a cache entry
+     * that already has data, so without invalidating here the map would keep
+     * painting the payload the snapshot just superseded. `router.refresh()`
+     * would not fix it: once `query.data` exists, the RSC's payload is no
+     * longer what the panel renders.
+     */
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: TRAFFIC_QUERY_KEY }),
   });
 };

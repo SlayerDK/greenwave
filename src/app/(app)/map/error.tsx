@@ -3,10 +3,11 @@
 import { Button } from "@/components/ui/button";
 
 /**
- * The only page that reaches a third party while rendering: `getRouteTraffic()`
- * throws `TrafficError` when TomTom is down, rate-limiting, or rejecting the
- * key. The route handlers turn that into a status via `respondWithRouteId`;
- * an RSC has no such wrapper, so without this boundary the whole page 500s.
+ * The only page that reaches a third party while rendering. `getNetworkTraffic()`
+ * absorbs an expected upstream failure — TomTom down, rate-limiting, or not
+ * recognising a route — into that route's `failures` entry, so this boundary is
+ * reached only by a genuine fault. An RSC has no wrapper to turn one into a
+ * status, so without it the whole page 500s.
  *
  * `error.message` is deliberately not rendered. Next redacts the message of any
  * error thrown during a server render before it reaches the client, so in

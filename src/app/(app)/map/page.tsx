@@ -1,9 +1,9 @@
 import { TrafficMapPanel } from "@/app/(app)/map/_components/traffic-map-panel";
 import { env } from "@/lib/config/env";
-import { getRouteTraffic } from "@/lib/traffic/data-access";
+import { getNetworkTraffic } from "@/lib/traffic/data-access";
 
 export default async function MapPage() {
-  const traffic = await getRouteTraffic();
+  const traffic = await getNetworkTraffic();
 
   return (
     <div className="flex flex-col gap-6">

@@ -118,7 +118,8 @@ third party. It differs from `devices/` in three ways worth knowing:
 
 - **`tomtom-service.ts`, not `client.ts`.** fallow's `data` zone is a whitelist of filenames, so an
   arbitrary name lands in no zone and `pnpm analyze` fails. `*-service.ts` is on both that list and
-  the ESLint exempt list. `queries.ts` / `mutations.ts` stay reserved for the Prisma side.
+  the ESLint exempt list. `queries.ts` / `mutations.ts` stay reserved for the Prisma side. The same
+  whitelist is why `MONITORED_ROUTE_IDS` lives in `schema.ts` rather than a `routes.ts` of its own.
 - **`serialization.ts` has no `server-only`.** It is a pure transform with no Prisma import, so
   keeping the marker off makes it unit-testable. `vitest.config.mts` aliases `server-only` to the
   package's empty module so the modules that _do_ need it stay testable too.
@@ -129,6 +130,32 @@ third party. It differs from `devices/` in three ways worth knowing:
   column allows a value we never write, which is harmless. Do not derive the Zod enum from the
   generated Prisma one: `schema.ts` is value-imported by `"use client"` code, so that would pull
   Prisma into the browser bundle.
+
+**Thirteen routes, one registry.** `MONITORED_ROUTE_IDS` in `schema.ts` is the whole fan-out list,
+and since no user input reaches a route id any more it doubles as the allowlist — nothing can spend
+our `TOMTOM_API_KEY` on a route that is not in it. Every read goes through it: `getNetworkTraffic()`
+takes no argument, `GET /api/traffic` takes no query parameter, and `recordRouteSnapshotsAction()`
+takes no input. Adding a route is a one-line change plus whatever its label needs.
+
+- **One route failing must not cost the other twelve.** `readRoute` in `data-access.ts` turns an
+  expected `TrafficError` into a `failures` entry and rethrows anything else, so `map/error.tsx` is
+  reached only by a genuine fault. `Promise.all`, not `allSettled` — `readRoute` only rejects on a
+  real bug, so a rejected entry would be one being swallowed. Read in parallel: `fetchRouteDetails`
+  allows itself eight seconds each, so thirteen sequential awaits would be a two-minute page.
+- **Geometry is merged on the client, in `TrafficMapPanel`.** Each route is serialized on its own and
+  `mergeFeatureCollections` flattens them into the single source mapbox takes. Serving a pre-merged
+  copy beside the per-route ones would send the same ~1100 segments twice; serving only the merged
+  one would mean dismantling `serializeRouteTraffic`. The merge relies on React Compiler for
+  referential stability — were it to re-run every render, mapbox would re-upload the whole
+  collection each time.
+- **`toRouteLabel` trims the `CW_AU_` prefix** TomTom puts on the twelve corridor routes (the two
+  Ringvejen ones carry none). `mutations.ts` applies it too, so the stored name matches the UI.
+  Derived rather than curated, which means a route that fails upstream can only be named by its id —
+  its `routeName` never arrived.
+- **Every feature carries `routeId`.** All thirteen routes share one collection, so the popup names
+  the clicked road from the segment's own `routeId` rather than assuming. Segment ids happen to be
+  unique across the thirteen (verified against live data), which is what keeps the `segmentIdStr`-keyed
+  `findSegment` unambiguous.
 
 Three things that will silently produce wrong output if changed:
 
@@ -141,24 +168,41 @@ Three things that will silently produce wrong output if changed:
 3. **`fetchedAt` comes from TomTom's `date` response header**, not the local clock — reads are
    cached for 60s, so stamping at serialize time reports a cache hit as fresh.
 
-Auth is Better Auth throughout, with no second scheme: `recordRouteSnapshotAction` and the
+Auth is Better Auth throughout, with no second scheme: `recordRouteSnapshotsAction` and the
 `data-access` reads sit behind `requireAuth()`, and `/api/traffic` checks `getSession()` so an API
 client gets a 401 instead of an `unauthorized()` interrupt. Segment geometry is static, so it is
 stored once per segment and snapshots carry only the speeds that change.
 
-**The cache contract is three-sided and all three sides derive from `TRAFFIC_REFRESH_SECONDS`:**
-the `next.revalidate` window on the upstream read, the client `staleTime`, and the client
-`refetchInterval`. Recording a snapshot passes `revalidateSeconds: 0` to read past that cache, and
-must therefore also call `updateTag(trafficTag(routeId))` — the `router.refresh()` in
-`useRecordRouteSnapshot` otherwise re-renders straight out of the still-warm cache and the map keeps
-painting the payload the snapshot just superseded. That failure is silent: nothing errors.
+**Nothing refetches on its own.** The map is painted from the RSC's `initialData` and stays there:
+`useNetworkTraffic` sets `staleTime: Infinity` and `refetchInterval: false`, so there is no poll, no
+refetch on mount, and none on reconnect. The only two ways to new data are a page reload, which
+re-renders the RSC, and the Refresh button, which calls `query.refetch()` — `refetch` ignores
+`staleTime` by design, which is what makes the button work at all. Do not reintroduce a poll;
+thirteen routes on a timer is thirteen route-handler reads a minute per open tab.
+
+`TRAFFIC_REFRESH_SECONDS` is therefore a server-side number only — the `next.revalidate` window on
+the upstream read. Within it, Refresh re-reads a warm cache and legitimately hands back the same
+payload rather than spending thirteen TomTom calls.
+
+Recording a snapshot passes `revalidateSeconds: 0` to read past that cache, and must therefore also
+call `updateTag(trafficTag(routeId))` for **every route it recorded**, or the next read comes out of
+the still-warm cache and the map keeps painting the payload the snapshot just superseded. That
+failure is silent: nothing errors. Call it from the action body after the fan-out, not inside the
+per-route helper, so it is unambiguously on the Server Action's own context. A route that failed has
+nothing newer to expire, so it gets no `updateTag`.
+
+**`updateTag` alone is not enough on the client side.** `useRecordNetworkSnapshot` must also
+`invalidateQueries` — `initialData` cannot overwrite a cache entry that already holds data, so the
+panel would go on rendering the superseded `query.data`. `router.refresh()` does not fix it either:
+once `query.data` exists, the RSC's payload is no longer what the panel renders. This used to be
+masked by the poll, which corrected it within a window; with the poll gone it would never correct.
 
 `updateTag`, not `revalidateTag`. Next 16 split the two: `revalidateTag(tag, profile)` is
 stale-while-revalidate and would serve the superseded payload to the very refresh it triggers, while
 `updateTag` expires immediately for read-your-own-writes and is Server-Action-only. Reach for
 `updateTag` whenever a mutation's own `router.refresh()` has to observe the write.
 
-> Snapshots are write-only today. They are recorded when something calls `useRecordRouteSnapshot`
+> Snapshots are write-only today. They are recorded when something calls `useRecordNetworkSnapshot`
 > — there is no scheduled collection — and nothing reads them back yet. The read path
 > (`queries.ts`, a history endpoint, a `serializeTrafficSnapshot`) was deleted rather than left
 > unused; add it together with whatever renders it, and give the query an explicit `select` so a

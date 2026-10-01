@@ -1,7 +1,10 @@
 import routeDetailsFixture from "@/lib/traffic/fixtures/route-details.json";
-import { DEFAULT_ROUTE_ID, TrafficError } from "@/lib/traffic/schema";
+import { MONITORED_ROUTE_IDS, TrafficError } from "@/lib/traffic/schema";
 import { fetchRouteDetails } from "@/lib/traffic/tomtom-service";
 import { afterEach, describe, expect, it, vi } from "vitest";
+
+/** The fixture is route 56634, the first of the monitored routes. */
+const ROUTE_ID = MONITORED_ROUTE_IDS[0];
 
 vi.mock("@/lib/config/env", () => ({ env: { TOMTOM_API_KEY: "test-key" } }));
 
@@ -36,22 +39,22 @@ describe("fetchRouteDetails", () => {
   it("sends the api key as a query parameter and caches the response", async () => {
     const mock = stubFetch(jsonResponse(routeDetailsFixture, 200));
 
-    await fetchRouteDetails(DEFAULT_ROUTE_ID);
+    await fetchRouteDetails(ROUTE_ID);
 
     const [url, init] = mock.mock.calls[0];
     expect(url).toBe(
-      `https://api.tomtom.com/routemonitoring/3/routes/${DEFAULT_ROUTE_ID}/details?key=test-key`,
+      `https://api.tomtom.com/routemonitoring/3/routes/${ROUTE_ID}/details?key=test-key`,
     );
     expect(init?.next).toEqual({
       revalidate: 60,
-      tags: [`traffic-${DEFAULT_ROUTE_ID}`],
+      tags: [`traffic-${ROUTE_ID}`],
     });
   });
 
   it("returns the validated payload", async () => {
     stubFetch(jsonResponse(routeDetailsFixture, 200));
 
-    const { details } = await fetchRouteDetails(DEFAULT_ROUTE_ID);
+    const { details } = await fetchRouteDetails(ROUTE_ID);
 
     expect(details.routeName).toBe("Ringvejen sydgående");
     expect(details.detailedSegments).toHaveLength(165);
@@ -64,7 +67,7 @@ describe("fetchRouteDetails", () => {
       }),
     );
 
-    const { fetchedAt } = await fetchRouteDetails(DEFAULT_ROUTE_ID);
+    const { fetchedAt } = await fetchRouteDetails(ROUTE_ID);
 
     expect(fetchedAt).toBe("2026-09-28T12:51:50.000Z");
   });
@@ -74,7 +77,7 @@ describe("fetchRouteDetails", () => {
       new Response(JSON.stringify(routeDetailsFixture), { status: 200 }),
     );
 
-    const { fetchedAt } = await fetchRouteDetails(DEFAULT_ROUTE_ID);
+    const { fetchedAt } = await fetchRouteDetails(ROUTE_ID);
 
     expect(Number.isNaN(Date.parse(fetchedAt))).toBe(false);
   });
@@ -82,11 +85,11 @@ describe("fetchRouteDetails", () => {
   it("bypasses the cache when asked for a fresh read", async () => {
     const mock = stubFetch(jsonResponse(routeDetailsFixture, 200));
 
-    await fetchRouteDetails(DEFAULT_ROUTE_ID, 0);
+    await fetchRouteDetails(ROUTE_ID, 0);
 
     expect(mock.mock.calls[0][1]?.next).toEqual({
       revalidate: 0,
-      tags: [`traffic-${DEFAULT_ROUTE_ID}`],
+      tags: [`traffic-${ROUTE_ID}`],
     });
   });
 
@@ -103,7 +106,7 @@ describe("fetchRouteDetails", () => {
       ),
     );
 
-    const error = await catchTrafficError(fetchRouteDetails(DEFAULT_ROUTE_ID));
+    const error = await catchTrafficError(fetchRouteDetails(ROUTE_ID));
 
     expect(error.code).toBe("unauthorized");
     expect(error.status).toBe(401);
@@ -127,7 +130,7 @@ describe("fetchRouteDetails", () => {
   it("falls back to the status text for an unrecognised error body", async () => {
     stubFetch(new Response("<html>gateway</html>", { status: 502 }));
 
-    const error = await catchTrafficError(fetchRouteDetails(DEFAULT_ROUTE_ID));
+    const error = await catchTrafficError(fetchRouteDetails(ROUTE_ID));
 
     expect(error.code).toBe("upstream");
     expect(error.status).toBe(502);
@@ -136,7 +139,7 @@ describe("fetchRouteDetails", () => {
   it("rejects a response whose shape drifted", async () => {
     stubFetch(jsonResponse({ routeId: 56634, detailedSegments: [] }, 200));
 
-    const error = await catchTrafficError(fetchRouteDetails(DEFAULT_ROUTE_ID));
+    const error = await catchTrafficError(fetchRouteDetails(ROUTE_ID));
 
     expect(error.code).toBe("invalid_response");
     expect(error.status).toBe(502);
@@ -148,7 +151,7 @@ describe("fetchRouteDetails", () => {
       vi.fn<typeof fetch>().mockRejectedValue(new Error("timed out")),
     );
 
-    const error = await catchTrafficError(fetchRouteDetails(DEFAULT_ROUTE_ID));
+    const error = await catchTrafficError(fetchRouteDetails(ROUTE_ID));
 
     expect(error.code).toBe("network");
     expect(error.status).toBe(504);

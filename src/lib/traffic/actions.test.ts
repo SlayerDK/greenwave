@@ -1,7 +1,7 @@
-import { recordRouteSnapshotAction } from "@/lib/traffic/actions";
+import { recordRouteSnapshotsAction } from "@/lib/traffic/actions";
 import routeDetailsFixture from "@/lib/traffic/fixtures/route-details.json";
 import {
-  DEFAULT_ROUTE_ID,
+  MONITORED_ROUTE_IDS,
   tomtomRouteDetailsSchema,
   TrafficError,
   trafficTag,
@@ -27,37 +27,45 @@ const mockedFetch = vi.mocked(fetchRouteDetails);
 const mockedUpdateTag = vi.mocked(updateTag);
 
 const details = tomtomRouteDetailsSchema.parse(routeDetailsFixture);
+const FETCHED_AT = "2026-09-28T12:00:00.000Z";
+
+/** Every route answers with the same fixture; only the count is under test. */
+const everyRouteAnswers = () => {
+  mockedFetch.mockResolvedValue({ details, fetchedAt: FETCHED_AT });
+  recordSnapshot.mockResolvedValue({ id: "snapshot-1" });
+};
 
 beforeEach(() => {
   vi.resetAllMocks();
 });
 
-describe("recordRouteSnapshotAction", () => {
-  it("stores a snapshot and reports what it wrote", async () => {
-    mockedFetch.mockResolvedValue({
-      details,
-      fetchedAt: "2026-09-28T12:00:00.000Z",
-    });
-    recordSnapshot.mockResolvedValue({ id: "snapshot-1" });
+describe("recordRouteSnapshotsAction", () => {
+  it("records one snapshot per monitored route", async () => {
+    everyRouteAnswers();
 
-    const result = await recordRouteSnapshotAction(DEFAULT_ROUTE_ID);
+    const result = await recordRouteSnapshotsAction();
 
     expect(result).toEqual({
       success: true,
-      data: { snapshotId: "snapshot-1", segmentCount: 165 },
+      data: {
+        recorded: MONITORED_ROUTE_IDS.map((routeId) => ({
+          routeId,
+          segmentCount: 165,
+        })),
+        failed: [],
+      },
     });
+    expect(recordSnapshot).toHaveBeenCalledTimes(MONITORED_ROUTE_IDS.length);
   });
 
-  it("reads the upstream uncached so the snapshot is of this moment", async () => {
-    mockedFetch.mockResolvedValue({
-      details,
-      fetchedAt: "2026-09-28T12:00:00.000Z",
+  it("reads every upstream uncached so the snapshots are of this moment", async () => {
+    everyRouteAnswers();
+
+    await recordRouteSnapshotsAction();
+
+    MONITORED_ROUTE_IDS.forEach((routeId) => {
+      expect(mockedFetch).toHaveBeenCalledWith(routeId, 0);
     });
-    recordSnapshot.mockResolvedValue({ id: "snapshot-1" });
-
-    await recordRouteSnapshotAction(DEFAULT_ROUTE_ID);
-
-    expect(mockedFetch).toHaveBeenCalledWith(DEFAULT_ROUTE_ID, 0);
   });
 
   /**
@@ -65,37 +73,56 @@ describe("recordRouteSnapshotAction", () => {
    * re-renders out of the read cache, so the map keeps painting the payload the
    * snapshot has already superseded — a silent staleness with no failing call.
    */
-  it("drops the read cache entry it has just read past", async () => {
-    mockedFetch.mockResolvedValue({
-      details,
-      fetchedAt: "2026-09-28T12:00:00.000Z",
+  it("drops the read cache entry of every route it has read past", async () => {
+    everyRouteAnswers();
+
+    await recordRouteSnapshotsAction();
+
+    expect(mockedUpdateTag).toHaveBeenCalledTimes(MONITORED_ROUTE_IDS.length);
+    MONITORED_ROUTE_IDS.forEach((routeId) => {
+      expect(mockedUpdateTag).toHaveBeenCalledWith(trafficTag(routeId));
     });
-    recordSnapshot.mockResolvedValue({ id: "snapshot-1" });
-
-    await recordRouteSnapshotAction(DEFAULT_ROUTE_ID);
-
-    expect(mockedUpdateTag).toHaveBeenCalledWith(trafficTag(DEFAULT_ROUTE_ID));
   });
 
-  it("returns an upstream failure as a result rather than throwing", async () => {
-    mockedFetch.mockRejectedValue(
-      new TrafficError("not_found", 404, "Not found Route by id(1)"),
-    );
+  it("still records the other routes when one is unavailable", async () => {
+    const [failing, ...rest] = MONITORED_ROUTE_IDS;
 
-    const result = await recordRouteSnapshotAction(1);
+    mockedFetch.mockImplementation((routeId) =>
+      routeId === failing
+        ? Promise.reject(
+            new TrafficError(
+              "not_found",
+              404,
+              `Not found Route by id(${routeId})`,
+            ),
+          )
+        : Promise.resolve({ details, fetchedAt: FETCHED_AT }),
+    );
+    recordSnapshot.mockResolvedValue({ id: "snapshot-1" });
+
+    const result = await recordRouteSnapshotsAction();
+
+    expect(result.success).toBe(true);
+    if (!result.success) return;
+
+    expect(result.data.recorded.map(({ routeId }) => routeId)).toEqual(rest);
+    expect(result.data.failed).toEqual([
+      { routeId: failing, error: `Not found Route by id(${failing})` },
+    ]);
+
+    // The route that never answered has nothing newer to expire.
+    expect(mockedUpdateTag).not.toHaveBeenCalledWith(trafficTag(failing));
+    expect(mockedUpdateTag).toHaveBeenCalledTimes(rest.length);
+  });
+
+  it("lets an unexpected error through rather than reporting it as a failed route", async () => {
+    mockedFetch.mockRejectedValue(new Error("boom"));
+
+    const result = await recordRouteSnapshotsAction();
 
     expect(result).toEqual({
       success: false,
-      error: "Not found Route by id(1)",
+      error: "Something went wrong. Please try again.",
     });
-    expect(recordSnapshot).not.toHaveBeenCalled();
-    expect(mockedUpdateTag).not.toHaveBeenCalled();
-  });
-
-  it("rejects a routeId that is not a positive integer", async () => {
-    const result = await recordRouteSnapshotAction(-5);
-
-    expect(result.success).toBe(false);
-    expect(mockedFetch).not.toHaveBeenCalled();
   });
 });

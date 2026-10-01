@@ -1,0 +1,366 @@
+{
+  "routeId": 313727,
+  "routeName": "CW_AU_Edwin Rahrs Vej østgående",
+  "routeStatus": "ACTIVE",
+  "routePathPoints": [
+    {
+      "latitude": 56.16209621101851,
+      "longitude": 10.134304935018605
+    },
+    {
+      "latitude": 56.162525103600956,
+      "longitude": 10.143733742403924
+    },
+    {
+      "latitude": 56.16249000282389,
+      "longitude": 10.144367807819066
+    }
+  ],
+  "passable": true,
+  "routeLength": 629,
+  "travelTime": 134,
+  "createdAt": "2026-10-01T06:04:44Z",
+  "delayTime": 52,
+  "typicalTravelTime": 116,
+  "completeness": 100,
+  "routeConfidence": 96,
+  "typicalTravelTimeCoverage": 100,
+  "detailedSegments": [
+    {
+      "segmentId": 1170138551609262080,
+      "segmentIdStr": "1170138551609262080",
+      "averageSpeed": 16,
+      "typicalSpeed": 19,
+      "segmentLength": 23,
+      "openLrId": "Cwc0dyfv/xpoCQN7ADoaGA==",
+      "currentSpeed": 28,
+      "relativeSpeed": 90,
+      "confidence": 98,
+      "openLrLength": 557,
+      "shape": [
+        {
+          "latitude": 56.16211,
+          "longitude": 10.13432
+        },
+        {
+          "latitude": 56.16211,
+          "longitude": 10.13447
+        },
+        {
+          "latitude": 56.16213,
+          "longitude": 10.13469
+        }
+      ]
+    },
+    {
+      "segmentId": 1170138551415373824,
+      "segmentIdStr": "1170138551415373824",
+      "averageSpeed": 43,
+      "typicalSpeed": 43,
+      "segmentLength": 69,
+      "openLrId": "Cwc0dyfv/xpoCQN7ADoaGA==",
+      "currentSpeed": 28,
+      "relativeSpeed": 90,
+      "confidence": 98,
+      "openLrLength": 557,
+      "shape": [
+        {
+          "latitude": 56.16213,
+          "longitude": 10.13469
+        },
+        {
+          "latitude": 56.16215,
+          "longitude": 10.13499
+        },
+        {
+          "latitude": 56.16222,
+          "longitude": 10.13579
+        }
+      ]
+    },
+    {
+      "segmentId": 1170138551415472128,
+      "segmentIdStr": "1170138551415472128",
+      "averageSpeed": 47,
+      "typicalSpeed": 46,
+      "segmentLength": 42,
+      "openLrId": "Cwc0dyfv/xpoCQN7ADoaGA==",
+      "currentSpeed": 41,
+      "relativeSpeed": 93,
+      "confidence": 98,
+      "openLrLength": 557,
+      "shape": [
+        {
+          "latitude": 56.16222,
+          "longitude": 10.13579
+        },
+        {
+          "latitude": 56.1623,
+          "longitude": 10.13645
+        }
+      ]
+    },
+    {
+      "segmentId": 1170138551415504896,
+      "segmentIdStr": "1170138551415504896",
+      "averageSpeed": 47,
+      "typicalSpeed": 46,
+      "segmentLength": 42,
+      "openLrId": "Cwc0dyfv/xpoCQN7ADoaGA==",
+      "currentSpeed": 41,
+      "relativeSpeed": 93,
+      "confidence": 98,
+      "openLrLength": 557,
+      "shape": [
+        {
+          "latitude": 56.1623,
+          "longitude": 10.13645
+        },
+        {
+          "latitude": 56.16237,
+          "longitude": 10.13712
+        }
+      ]
+    },
+    {
+      "segmentId": 1170138551096442880,
+      "segmentIdStr": "1170138551096442880",
+      "averageSpeed": 47,
+      "typicalSpeed": 46,
+      "segmentLength": 55,
+      "openLrId": "Cwc0dyfv/xpoCQN7ADoaGA==",
+      "currentSpeed": 41,
+      "relativeSpeed": 93,
+      "confidence": 98,
+      "openLrLength": 557,
+      "shape": [
+        {
+          "latitude": 56.16237,
+          "longitude": 10.13712
+        },
+        {
+          "latitude": 56.16249,
+          "longitude": 10.13798
+        }
+      ]
+    },
+    {
+      "segmentId": 1170138551166664704,
+      "segmentIdStr": "1170138551166664704",
+      "averageSpeed": 48,
+      "typicalSpeed": 46,
+      "segmentLength": 14,
+      "openLrId": "Cwc0dyfv/xpoCQN7ADoaGA==",
+      "currentSpeed": 41,
+      "relativeSpeed": 93,
+      "confidence": 98,
+      "openLrLength": 557,
+      "shape": [
+        {
+          "latitude": 56.16249,
+          "longitude": 10.13798
+        },
+        {
+          "latitude": 56.16251,
+          "longitude": 10.13821
+        }
+      ]
+    },
+    {
+      "segmentId": 1170138551166566400,
+      "segmentIdStr": "1170138551166566400",
+      "averageSpeed": 45,
+      "typicalSpeed": 46,
+      "segmentLength": 98,
+      "openLrId": "Cwc0dyfv/xpoCQN7ADoaGA==",
+      "currentSpeed": 41,
+      "relativeSpeed": 93,
+      "confidence": 98,
+      "openLrLength": 557,
+      "shape": [
+        {
+          "latitude": 56.16251,
+          "longitude": 10.13821
+        },
+        {
+          "latitude": 56.16263,
+          "longitude": 10.13978
+        }
+      ]
+    },
+    {
+      "segmentId": 1170138551438508032,
+      "segmentIdStr": "1170138551438508032",
+      "averageSpeed": 31,
+      "typicalSpeed": 27,
+      "segmentLength": 25,
+      "openLrId": "Cwc0dyfv/xpoCQN7ADoaGA==",
+      "currentSpeed": 41,
+      "relativeSpeed": 93,
+      "confidence": 98,
+      "openLrLength": 557,
+      "shape": [
+        {
+          "latitude": 56.16263,
+          "longitude": 10.13978
+        },
+        {
+          "latitude": 56.16263,
+          "longitude": 10.13987
+        },
+        {
+          "latitude": 56.16264,
+          "longitude": 10.14018
+        }
+      ]
+    },
+    {
+      "segmentId": 1170138551438540800,
+      "segmentIdStr": "1170138551438540800",
+      "averageSpeed": 19,
+      "typicalSpeed": 18,
+      "segmentLength": 41,
+      "openLrId": "Cwc0dyfv/xpoCQN7ADoaGA==",
+      "currentSpeed": 41,
+      "relativeSpeed": 93,
+      "confidence": 98,
+      "openLrLength": 557,
+      "shape": [
+        {
+          "latitude": 56.16264,
+          "longitude": 10.14018
+        },
+        {
+          "latitude": 56.16265,
+          "longitude": 10.14049
+        },
+        {
+          "latitude": 56.16265,
+          "longitude": 10.14084
+        }
+      ]
+    },
+    {
+      "segmentId": 1170138551609884672,
+      "segmentIdStr": "1170138551609884672",
+      "averageSpeed": 41,
+      "typicalSpeed": 42,
+      "segmentLength": 49,
+      "openLrId": "Cwc2FifwGhpoAwF1/+caGQ==",
+      "currentSpeed": 17,
+      "relativeSpeed": 62,
+      "confidence": 98,
+      "openLrLength": 233,
+      "shape": [
+        {
+          "latitude": 56.16265,
+          "longitude": 10.14084
+        },
+        {
+          "latitude": 56.16264,
+          "longitude": 10.14146
+        },
+        {
+          "latitude": 56.16263,
+          "longitude": 10.14163
+        }
+      ]
+    },
+    {
+      "segmentId": 1170138551609917440,
+      "segmentIdStr": "1170138551609917440",
+      "averageSpeed": 31,
+      "typicalSpeed": 39,
+      "segmentLength": 102,
+      "openLrId": "Cwc2FifwGhpoAwF1/+caGQ==",
+      "currentSpeed": 17,
+      "relativeSpeed": 62,
+      "confidence": 98,
+      "openLrLength": 233,
+      "shape": [
+        {
+          "latitude": 56.16263,
+          "longitude": 10.14163
+        },
+        {
+          "latitude": 56.16257,
+          "longitude": 10.14263
+        },
+        {
+          "latitude": 56.16252,
+          "longitude": 10.14327
+        }
+      ]
+    },
+    {
+      "segmentId": 1170138551475929088,
+      "segmentIdStr": "1170138551475929088",
+      "averageSpeed": 6,
+      "typicalSpeed": 6,
+      "segmentLength": 30,
+      "openLrId": "Cwc2hyfwFB5nAQCH//wbGA==",
+      "currentSpeed": 4,
+      "relativeSpeed": 40,
+      "confidence": 81,
+      "openLrLength": 84,
+      "shape": [
+        {
+          "latitude": 56.16252,
+          "longitude": 10.14327
+        },
+        {
+          "latitude": 56.16255,
+          "longitude": 10.14346
+        },
+        {
+          "latitude": 56.16253,
+          "longitude": 10.14375
+        }
+      ]
+    },
+    {
+      "segmentId": 1170138551612932096,
+      "segmentIdStr": "1170138551612932096",
+      "averageSpeed": 5,
+      "typicalSpeed": 2,
+      "segmentLength": 23,
+      "openLrId": "Cwc2hyfwFB5nAQCH//wbGA==",
+      "currentSpeed": 4,
+      "relativeSpeed": 40,
+      "confidence": 81,
+      "openLrLength": 84,
+      "shape": [
+        {
+          "latitude": 56.16253,
+          "longitude": 10.14375
+        },
+        {
+          "latitude": 56.16251,
+          "longitude": 10.14412
+        }
+      ]
+    },
+    {
+      "segmentId": 1170138551612899328,
+      "segmentIdStr": "1170138551612899328",
+      "averageSpeed": 10,
+      "typicalSpeed": 10,
+      "segmentLength": 16,
+      "openLrId": "Cwc2hyfwFB5nAQCH//wbGA==",
+      "currentSpeed": 4,
+      "relativeSpeed": 40,
+      "confidence": 81,
+      "openLrLength": 84,
+      "shape": [
+        {
+          "latitude": 56.16251,
+          "longitude": 10.14412
+        },
+        {
+          "latitude": 56.1625,
+          "longitude": 10.14437
+        }
+      ]
+    }
+  ]
+}
