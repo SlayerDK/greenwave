@@ -16,6 +16,7 @@ IoT device + sensor-reading dashboard. Built from `NEXTJS_FULLSTACK_TEMPLATE.md`
 | `pnpm analyze:ci`             | fallow changed-file gate (pre-push + CI) |
 | `pnpm db:up` / `db:down`      | Local Postgres container                 |
 | `pnpm db:migrate` / `db:seed` | Prisma migrate / seed                    |
+| `pnpm build-vercel`           | Vercel build: generate, migrate, build   |
 
 pnpm only (`only-allow` preinstall hook). Husky runs lint-staged on `pre-commit` and `ls-lint` + `fallow audit` on `pre-push`.
 
@@ -134,14 +135,16 @@ third party. It differs from `devices/` in three ways worth knowing:
 **Thirteen routes, one registry.** `MONITORED_ROUTE_IDS` in `schema.ts` is the whole fan-out list,
 and since no user input reaches a route id any more it doubles as the allowlist — nothing can spend
 our `TOMTOM_API_KEY` on a route that is not in it. Every read goes through it: `getNetworkTraffic()`
-takes no argument, `GET /api/traffic` takes no query parameter, and `recordRouteSnapshotsAction()`
-takes no input. Adding a route is a one-line change plus whatever its label needs.
+takes no argument, `GET /api/traffic` takes no query parameter, and neither
+`recordRouteSnapshotsAction()` nor the cron's `recordTrafficHistory()` takes any input. Adding a route is a one-line change plus whatever its label needs.
 
-- **One route failing must not cost the other twelve.** `readRoute` in `data-access.ts` turns an
+- **One route failing must not cost the other twelve.** `readRoute` in `tomtom-service.ts` turns an
   expected `TrafficError` into a `failures` entry and rethrows anything else, so `map/error.tsx` is
   reached only by a genuine fault. `Promise.all`, not `allSettled` — `readRoute` only rejects on a
   real bug, so a rejected entry would be one being swallowed. Read in parallel: `fetchRouteDetails`
-  allows itself eight seconds each, so thirteen sequential awaits would be a two-minute page.
+  allows itself eight seconds each, so thirteen sequential awaits would be a two-minute page. The
+  fan-out is `readMonitoredRoutes(revalidateSeconds?)`, shared by the map and the history job; keep
+  its explicit arrow — `.map(readRoute)` would pass each index as `revalidateSeconds`.
 - **Geometry is merged on the client, in `TrafficMapPanel`.** Each route is serialized on its own and
   `mergeFeatureCollections` flattens them into the single source mapbox takes. Serving a pre-merged
   copy beside the per-route ones would send the same ~1100 segments twice; serving only the merged
@@ -168,7 +171,8 @@ Three things that will silently produce wrong output if changed:
 3. **`fetchedAt` comes from TomTom's `date` response header**, not the local clock — reads are
    cached for 60s, so stamping at serialize time reports a cache hit as fresh.
 
-Auth is Better Auth throughout, with no second scheme: `recordRouteSnapshotsAction` and the
+Auth is Better Auth throughout, with one exception: `/api/cron/*`, whose scheduler has no session
+and instead sends `Authorization: Bearer $CRON_SECRET`. `recordRouteSnapshotsAction` and the
 `data-access` reads sit behind `requireAuth()`, and `/api/traffic` checks `getSession()` so an API
 client gets a 401 instead of an `unauthorized()` interrupt. Segment geometry is static, so it is
 stored once per segment and snapshots carry only the speeds that change.
@@ -203,10 +207,54 @@ stale-while-revalidate and would serve the superseded payload to the very refres
 `updateTag` whenever a mutation's own `router.refresh()` has to observe the write.
 
 > Snapshots are write-only today. They are recorded when something calls `useRecordNetworkSnapshot`
-> — there is no scheduled collection — and nothing reads them back yet. The read path
+> — there is no scheduled collection of snapshots (the hourly job writes `traffic_history`, below) —
+> and nothing reads them back yet. The read path
 > (`queries.ts`, a history endpoint, a `serializeTrafficSnapshot`) was deleted rather than left
 > unused; add it together with whatever renders it, and give the query an explicit `select` so a
 > 24h window does not drag every `segmentSpeeds` blob along with it.
+
+## Traffic history (scheduled)
+
+`GET /api/cron/traffic-history` → `recordTrafficHistory()` in `history-service.ts` → one
+`trafficMutations.recordHistory` `createMany`. It writes one `traffic_history` row per segment per
+run: route, `segmentIdStr`, current/average/relative/typical speed. About 1,100 rows an hour, so
+roughly 110–120 MB a month. Neon's free 1 GB blocks writes once full; prune or upgrade before then.
+
+- **Rows are keyed by `(recordedAt, routeId, segmentIdStr)`, and `recordedAt` is the run's UTC hour**,
+  taken once from the run's own clock, not TomTom's `date` header: thirteen reads can straddle an
+  hour boundary. With `skipDuplicates`, a duplicated, retried or manual run in the same hour inserts
+  nothing (`inserted: 0`), which is what makes the scheduler's retries safe. No foreign keys: an
+  append-only log must not be cascade-deleted with `traffic_route`.
+- **Reads uncached and calls no `updateTag`.** That is Server-Action-only, and nothing re-renders off
+  this write; the map's 60s cache just ages out. Unlike the snapshot action, this is correct.
+- **It is a `*-service.ts`, never an action.** It has no `requireAuth()` — the route checks
+  `CRON_SECRET` — and a `"use server"` export would be a public, unauthenticated endpoint.
+- **`src/proxy.ts` must not match `api/cron`.** The scheduler has no session; the redirect to
+  `/login` is a 307, which `curl --fail` and Vercel Cron both treat as success — a green run that
+  recorded nothing. `src/proxy.test.ts` guards it.
+- **The route returns 502 when no route answered**, so the scheduled run fails and notifies.
+
+**Scheduler.** Vercel Hobby rejects hourly crons at deploy time, so
+`.github/workflows/traffic-history.yml` calls the endpoint at minute 7 of every hour (UTC), using
+repo secret `CRON_SECRET` and repo variable `APP_URL` (the production domain — per-deployment URLs
+sit behind Vercel's deployment protection). GitHub delays or occasionally drops scheduled runs,
+disables schedules in a public repo after 60 days without repository activity, and emails failures
+to whoever last edited the cron line. On Vercel Pro, replace the workflow with
+`"crons": [{ "path": "/api/cron/traffic-history", "schedule": "0 * * * *" }]` in `vercel.json` —
+Vercel sends the same bearer header automatically.
+
+## Deployment (Vercel)
+
+- `vercel.json` builds **production only** (`ignoreCommand`): Preview would share production's env
+  vars, and with them its database and migrations. To enable previews, first give Preview its own
+  database (e.g. Neon preview branching).
+- `pnpm build-vercel` runs `prisma generate && prisma migrate deploy && next build`. Generate is
+  explicit because `src/generated` is git-ignored and must not depend on `postinstall`.
+- `prisma.config.ts` prefers `DATABASE_URL_UNPOOLED`: Migrate's advisory lock cannot be held
+  through Neon's pooled `DATABASE_URL`. The runtime keeps the pooled URL.
+- Functions are pinned to `fra1`, next to the Neon database in AWS Frankfurt.
+- `ENABLE_EXPERIMENTAL_COREPACK=1` must be set on Vercel: it natively runs pnpm 6–10, and
+  `packageManager` pins pnpm 12 (whose `allowBuilds` older versions ignore).
 
 ## Project-specific deviations from the template
 

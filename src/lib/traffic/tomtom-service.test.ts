@@ -1,6 +1,9 @@
 import routeDetailsFixture from "@/lib/traffic/fixtures/route-details.json";
 import { MONITORED_ROUTE_IDS, TrafficError } from "@/lib/traffic/schema";
-import { fetchRouteDetails } from "@/lib/traffic/tomtom-service";
+import {
+  fetchRouteDetails,
+  readMonitoredRoutes,
+} from "@/lib/traffic/tomtom-service";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 /** The fixture is route 56634, the first of the monitored routes. */
@@ -156,5 +159,71 @@ describe("fetchRouteDetails", () => {
     expect(error.code).toBe("network");
     expect(error.status).toBe(504);
     expect(error.message).toContain("timed out");
+  });
+});
+
+/** A fresh `Response` per call — a body can only be read once. */
+const stubEveryRoute = (respond: (routeId: number) => Response) => {
+  const mock = vi.fn<typeof fetch>().mockImplementation((input) => {
+    const routeId = Number(
+      /routes\/(\d+)\//.exec(typeof input === "string" ? input : "")?.[1],
+    );
+
+    return Promise.resolve(respond(routeId));
+  });
+  vi.stubGlobal("fetch", mock);
+
+  return mock;
+};
+
+describe("readMonitoredRoutes", () => {
+  it("reads every monitored route through the cache by default", async () => {
+    const mock = stubEveryRoute(() => jsonResponse(routeDetailsFixture, 200));
+
+    const outcomes = await readMonitoredRoutes();
+
+    expect(outcomes).toHaveLength(MONITORED_ROUTE_IDS.length);
+    expect(outcomes.every((outcome) => outcome.ok)).toBe(true);
+    mock.mock.calls.forEach(([, init]) => {
+      expect(init?.next?.revalidate).toBe(60);
+    });
+  });
+
+  it("passes an uncached read through to every route", async () => {
+    const mock = stubEveryRoute(() => jsonResponse(routeDetailsFixture, 200));
+
+    await readMonitoredRoutes(0);
+
+    expect(mock).toHaveBeenCalledTimes(MONITORED_ROUTE_IDS.length);
+    mock.mock.calls.forEach(([, init]) => {
+      expect(init?.next?.revalidate).toBe(0);
+    });
+  });
+
+  it("turns an expected upstream failure into that route's value", async () => {
+    const [failing] = MONITORED_ROUTE_IDS;
+    stubEveryRoute((routeId) =>
+      routeId === failing
+        ? jsonResponse(
+            { errorMessage: `Not found Route by id(${routeId})` },
+            404,
+          )
+        : jsonResponse(routeDetailsFixture, 200),
+    );
+
+    const outcomes = await readMonitoredRoutes();
+
+    expect(outcomes[0]).toEqual({
+      ok: false,
+      routeId: failing,
+      error: `Not found Route by id(${failing})`,
+    });
+    expect(outcomes.slice(1).every((outcome) => outcome.ok)).toBe(true);
+  });
+
+  it("lets a genuine fault through rather than reporting it as a failed route", async () => {
+    stubEveryRoute(() => new Response("not json", { status: 200 }));
+
+    await expect(readMonitoredRoutes()).rejects.toThrow(SyntaxError);
   });
 });

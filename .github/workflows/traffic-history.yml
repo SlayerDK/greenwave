@@ -1,0 +1,33 @@
+# Records one hour of traffic history by calling the deployed cron endpoint.
+# Vercel Hobby rejects hourly crons, so GitHub schedules it instead. On Vercel
+# Pro this can be replaced by a `crons` entry in vercel.json — the endpoint
+# already accepts Vercel Cron's `Authorization: Bearer $CRON_SECRET`.
+#
+# Needs repository secret CRON_SECRET (same value as on Vercel) and repository
+# variable APP_URL (the production domain, e.g. https://greenwave.vercel.app).
+name: Traffic history
+
+on:
+  schedule:
+    # UTC. Off the top of the hour, where GitHub delays and drops scheduled
+    # runs; rows are keyed by the hour, so the offset is harmless.
+    - cron: "7 * * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Call the cron endpoint
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        # Retries are safe: a repeat within the same hour inserts nothing.
+        run: >-
+          curl --fail-with-body --silent --show-error
+          --retry 2 --retry-delay 30 --max-time 90
+          --header "Authorization: Bearer $CRON_SECRET"
+          "$APP_URL/api/cron/traffic-history"
