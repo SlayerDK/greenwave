@@ -8,6 +8,7 @@ export const env = createEnv({
     BETTER_AUTH_URL: z.url(),
     TOMTOM_API_KEY: z.string().min(1),
     MAPBOX_PUBLIC_TOKEN: z.string().min(1),
+    CRON_SECRET: z.string().min(16),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -21,6 +22,7 @@ export const env = createEnv({
     BETTER_AUTH_URL: process.env.BETTER_AUTH_URL,
     TOMTOM_API_KEY: process.env.TOMTOM_API_KEY,
     MAPBOX_PUBLIC_TOKEN: process.env.MAPBOX_PUBLIC_TOKEN,
+    CRON_SECRET: process.env.CRON_SECRET,
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   },

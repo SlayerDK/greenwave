@@ -2,6 +2,7 @@ import "server-only";
 
 import { env } from "@/lib/config/env";
 import {
+  MONITORED_ROUTE_IDS,
   TRAFFIC_REFRESH_SECONDS,
   TrafficError,
   tomtomErrorBodySchema,
@@ -10,6 +11,7 @@ import {
   type TomTomRouteDetails,
   type TrafficErrorCode,
 } from "@/lib/traffic/schema";
+import { type RouteOutcome } from "@/lib/traffic/serialization";
 
 const ROUTES_URL = "https://api.tomtom.com/routemonitoring/3/routes";
 const REQUEST_TIMEOUT_MS = 8_000;
@@ -102,4 +104,48 @@ export const fetchRouteDetails = async (
     details: parsed.data,
     fetchedAt: toFetchedAt(response.headers.get("date")),
   };
+};
+
+/**
+ * Reads every monitored route, shared by the map (`getNetworkTraffic`) and the
+ * hourly history job. Read in parallel, not in sequence: `fetchRouteDetails`
+ * allows itself eight seconds per call, so thirteen awaits in a row would take
+ * up to two minutes.
+ *
+ * `Promise.all` rather than `allSettled` — `readRoute` only rejects on a
+ * genuine fault, so a rejected entry would be a bug being swallowed.
+ *
+ * The explicit arrow matters: `.map(readRoute)` would pass each array index as
+ * `revalidateSeconds`, silently caching route i for i seconds.
+ */
+export const readMonitoredRoutes = async (
+  revalidateSeconds?: number,
+): Promise<RouteOutcome[]> =>
+  Promise.all(
+    MONITORED_ROUTE_IDS.map((routeId) => readRoute(routeId, revalidateSeconds)),
+  );
+
+/**
+ * A `TrafficError` is an expected outcome — TomTom down, rate-limiting, or not
+ * recognising the route — so it becomes this route's failure value and the rest
+ * of the network still comes back. Anything else is a real fault and is left
+ * to throw.
+ */
+const readRoute = async (
+  routeId: number,
+  revalidateSeconds?: number,
+): Promise<RouteOutcome> => {
+  try {
+    const { details, fetchedAt } = await fetchRouteDetails(
+      routeId,
+      revalidateSeconds,
+    );
+
+    return { ok: true, details, fetchedAt };
+  } catch (error) {
+    if (error instanceof TrafficError)
+      return { ok: false, routeId, error: error.message };
+
+    throw error;
+  }
 };

@@ -166,3 +166,23 @@ model TrafficSnapshot {
   @@index([routeId, recordedAt])
   @@map("traffic_snapshot")
 }
+
+/// One row per segment per hourly run, written by the cron route. `recordedAt`
+/// is the run's UTC hour, not the read time, and is part of the key: a
+/// duplicated or retried trigger collides and is skipped instead of
+/// double-counted. Time-first so each run appends at the index's right edge;
+/// add a (routeId, segmentIdStr) index together with the first per-segment read.
+/// No relation to TrafficRoute or TrafficSegment: an append-only log must never
+/// be cascade-deleted with them.
+model TrafficHistory {
+  recordedAt    DateTime
+  routeId       Int
+  segmentIdStr  String
+  currentSpeed  Int
+  averageSpeed  Int
+  relativeSpeed Int
+  typicalSpeed  Int
+
+  @@id([recordedAt, routeId, segmentIdStr])
+  @@map("traffic_history")
+}

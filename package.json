@@ -20,6 +20,7 @@
     "db:seed": "dotenv -e .env -- tsx prisma/seed.ts",
     "build-prod": "prisma generate && next build --turbopack",
     "start-prod": "prisma migrate deploy && node server.js",
+    "build-vercel": "prisma generate && prisma migrate deploy && next build",
     "preinstall": "npx only-allow pnpm",
     "postinstall": "prisma generate",
     "prepare": "husky"

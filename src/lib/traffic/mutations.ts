@@ -55,4 +55,25 @@ export const trafficMutations = {
         select: { id: true },
       });
     }),
+
+  /**
+   * One INSERT for every segment of every route that answered. `skipDuplicates`
+   * plus the `(recordedAt, routeId, segmentIdStr)` key make a repeat run in the
+   * same hour a no-op rather than a second set of rows.
+   */
+  recordHistory: (routes: readonly TomTomRouteDetails[], recordedAt: Date) =>
+    prisma.trafficHistory.createMany({
+      data: routes.flatMap((details) =>
+        details.detailedSegments.map((segment) => ({
+          recordedAt,
+          routeId: details.routeId,
+          segmentIdStr: segment.segmentIdStr,
+          currentSpeed: segment.currentSpeed,
+          averageSpeed: segment.averageSpeed,
+          relativeSpeed: segment.relativeSpeed,
+          typicalSpeed: segment.typicalSpeed,
+        })),
+      ),
+      skipDuplicates: true,
+    }),
 };
