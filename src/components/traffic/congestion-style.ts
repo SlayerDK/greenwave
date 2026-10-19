@@ -26,6 +26,8 @@ export const CONGESTION_STYLE = [
   color: string;
 }[];
 
+export type CongestionStyle = (typeof CONGESTION_STYLE)[number];
+
 /** Only reachable if `classifyCongestion` gains a level this file has not. */
 const UNKNOWN_COLOR = "#94a3b8";
 
@@ -50,6 +52,10 @@ export const trafficLineLayer: LayerProps = {
       UNKNOWN_COLOR,
     ],
     "line-width": ["interpolate", ["linear"], ["zoom"], 10, 2, 15, 6],
+    // Positive offsets sit right of the drawing direction — the side Danish
+    // traffic drives on — so a road monitored both ways shows two lines
+    // instead of one direction painting over the other.
+    "line-offset": ["interpolate", ["linear"], ["zoom"], 10, 1, 15, 3],
     "line-opacity": 0.9,
   },
 };

@@ -1,0 +1,2290 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "jobName": "AU-projekt, Christian Winther - 1 år",
+        "creationTime": "2026-09-23T12:16:21.892983787Z",
+        "userPreference": {
+          "distanceUnit": "KILOMETERS",
+          "includedSpeedLimits": "ALL"
+        },
+        "dateRanges": [
+          {
+            "@id": 1,
+            "name": "Hverdage uge 39 2025 - uge 38 2026",
+            "from": "2025-09-22",
+            "to": "2026-09-20",
+            "exclusions": [
+              "2025-10-13",
+              "2025-10-14",
+              "2025-10-15",
+              "2025-10-16",
+              "2025-10-17",
+              "2025-12-22",
+              "2025-12-23",
+              "2025-12-24",
+              "2025-12-25",
+              "2025-12-26",
+              "2025-12-29",
+              "2025-12-30",
+              "2025-12-31",
+              "2026-01-01",
+              "2026-01-02",
+              "2026-02-09",
+              "2026-02-10",
+              "2026-02-11",
+              "2026-02-12",
+              "2026-02-13",
+              "2026-03-30",
+              "2026-03-31",
+              "2026-04-01",
+              "2026-04-02",
+              "2026-04-03",
+              "2026-04-06",
+              "2026-05-01",
+              "2026-05-14",
+              "2026-05-15",
+              "2026-05-25",
+              "2026-06-05",
+              "2026-06-29",
+              "2026-06-30",
+              "2026-07-01",
+              "2026-07-02",
+              "2026-07-03",
+              "2026-07-06",
+              "2026-07-07",
+              "2026-07-08",
+              "2026-07-09",
+              "2026-07-10",
+              "2026-07-13",
+              "2026-07-14",
+              "2026-07-15",
+              "2026-07-16",
+              "2026-07-17",
+              "2026-07-20",
+              "2026-07-21",
+              "2026-07-22",
+              "2026-07-23",
+              "2026-07-24",
+              "2026-07-27",
+              "2026-07-28",
+              "2026-07-29",
+              "2026-07-30",
+              "2026-07-31",
+              "2026-08-03",
+              "2026-08-04",
+              "2026-08-05",
+              "2026-08-06",
+              "2026-08-07"
+            ],
+            "excludedDaysOfWeek": ["SATURDAY", "SUNDAY"]
+          }
+        ],
+        "timeSets": [
+          {
+            "@id": 2,
+            "name": "6:00-6:30",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["06:00-06:30"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["06:00-06:30"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["06:00-06:30"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["06:00-06:30"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["06:00-06:30"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["06:00-06:30"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["06:00-06:30"] }
+            ]
+          },
+          {
+            "@id": 3,
+            "name": "6:30-7:00",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["06:30-07:00"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["06:30-07:00"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["06:30-07:00"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["06:30-07:00"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["06:30-07:00"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["06:30-07:00"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["06:30-07:00"] }
+            ]
+          },
+          {
+            "@id": 4,
+            "name": "7:00-7:15",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["07:00-07:15"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["07:00-07:15"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["07:00-07:15"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["07:00-07:15"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["07:00-07:15"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["07:00-07:15"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["07:00-07:15"] }
+            ]
+          },
+          {
+            "@id": 5,
+            "name": "7:15-7:30",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["07:15-07:30"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["07:15-07:30"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["07:15-07:30"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["07:15-07:30"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["07:15-07:30"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["07:15-07:30"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["07:15-07:30"] }
+            ]
+          },
+          {
+            "@id": 6,
+            "name": "7:30-7:45",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["07:30-07:45"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["07:30-07:45"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["07:30-07:45"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["07:30-07:45"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["07:30-07:45"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["07:30-07:45"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["07:30-07:45"] }
+            ]
+          },
+          {
+            "@id": 7,
+            "name": "7:45-8:00",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["07:45-08:00"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["07:45-08:00"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["07:45-08:00"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["07:45-08:00"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["07:45-08:00"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["07:45-08:00"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["07:45-08:00"] }
+            ]
+          },
+          {
+            "@id": 8,
+            "name": "8:00-8:15",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["08:00-08:15"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["08:00-08:15"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["08:00-08:15"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["08:00-08:15"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["08:00-08:15"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["08:00-08:15"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["08:00-08:15"] }
+            ]
+          },
+          {
+            "@id": 9,
+            "name": "8:15-8:30",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["08:15-08:30"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["08:15-08:30"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["08:15-08:30"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["08:15-08:30"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["08:15-08:30"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["08:15-08:30"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["08:15-08:30"] }
+            ]
+          },
+          {
+            "@id": 10,
+            "name": "8:30-8:45",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["08:30-08:45"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["08:30-08:45"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["08:30-08:45"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["08:30-08:45"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["08:30-08:45"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["08:30-08:45"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["08:30-08:45"] }
+            ]
+          },
+          {
+            "@id": 11,
+            "name": "8:45-9:00",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["08:45-09:00"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["08:45-09:00"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["08:45-09:00"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["08:45-09:00"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["08:45-09:00"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["08:45-09:00"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["08:45-09:00"] }
+            ]
+          },
+          {
+            "@id": 12,
+            "name": "9:00-9:30",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["09:00-09:30"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["09:00-09:30"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["09:00-09:30"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["09:00-09:30"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["09:00-09:30"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["09:00-09:30"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["09:00-09:30"] }
+            ]
+          },
+          {
+            "@id": 13,
+            "name": "9:30-14:00",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["09:30-14:00"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["09:30-14:00"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["09:30-14:00"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["09:30-14:00"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["09:30-14:00"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["09:30-14:00"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["09:30-14:00"] }
+            ]
+          },
+          {
+            "@id": 14,
+            "name": "14:00-14:30",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["14:00-14:30"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["14:00-14:30"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["14:00-14:30"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["14:00-14:30"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["14:00-14:30"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["14:00-14:30"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["14:00-14:30"] }
+            ]
+          },
+          {
+            "@id": 15,
+            "name": "14:30-15:00",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["14:30-15:00"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["14:30-15:00"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["14:30-15:00"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["14:30-15:00"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["14:30-15:00"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["14:30-15:00"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["14:30-15:00"] }
+            ]
+          },
+          {
+            "@id": 16,
+            "name": "15:00-15:15",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["15:00-15:15"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["15:00-15:15"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["15:00-15:15"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["15:00-15:15"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["15:00-15:15"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["15:00-15:15"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["15:00-15:15"] }
+            ]
+          },
+          {
+            "@id": 17,
+            "name": "15:15-15:30",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["15:15-15:30"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["15:15-15:30"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["15:15-15:30"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["15:15-15:30"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["15:15-15:30"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["15:15-15:30"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["15:15-15:30"] }
+            ]
+          },
+          {
+            "@id": 18,
+            "name": "15:30-15:45",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["15:30-15:45"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["15:30-15:45"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["15:30-15:45"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["15:30-15:45"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["15:30-15:45"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["15:30-15:45"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["15:30-15:45"] }
+            ]
+          },
+          {
+            "@id": 19,
+            "name": "15:45-16:00",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["15:45-16:00"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["15:45-16:00"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["15:45-16:00"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["15:45-16:00"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["15:45-16:00"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["15:45-16:00"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["15:45-16:00"] }
+            ]
+          },
+          {
+            "@id": 20,
+            "name": "16:00-16:15",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["16:00-16:15"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["16:00-16:15"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["16:00-16:15"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["16:00-16:15"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["16:00-16:15"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["16:00-16:15"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["16:00-16:15"] }
+            ]
+          },
+          {
+            "@id": 21,
+            "name": "16:15-16:30",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["16:15-16:30"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["16:15-16:30"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["16:15-16:30"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["16:15-16:30"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["16:15-16:30"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["16:15-16:30"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["16:15-16:30"] }
+            ]
+          },
+          {
+            "@id": 22,
+            "name": "16:30-16:45",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["16:30-16:45"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["16:30-16:45"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["16:30-16:45"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["16:30-16:45"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["16:30-16:45"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["16:30-16:45"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["16:30-16:45"] }
+            ]
+          },
+          {
+            "@id": 23,
+            "name": "16:45-17:00",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["16:45-17:00"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["16:45-17:00"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["16:45-17:00"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["16:45-17:00"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["16:45-17:00"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["16:45-17:00"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["16:45-17:00"] }
+            ]
+          },
+          {
+            "@id": 24,
+            "name": "17:00-17:30",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["17:00-17:30"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["17:00-17:30"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["17:00-17:30"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["17:00-17:30"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["17:00-17:30"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["17:00-17:30"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["17:00-17:30"] }
+            ]
+          },
+          {
+            "@id": 25,
+            "name": "17:30-18:00",
+            "dayToTimeRanges": [
+              { "dayOfWeek": "MONDAY", "timeRanges": ["17:30-18:00"] },
+              { "dayOfWeek": "TUESDAY", "timeRanges": ["17:30-18:00"] },
+              { "dayOfWeek": "WEDNESDAY", "timeRanges": ["17:30-18:00"] },
+              { "dayOfWeek": "THURSDAY", "timeRanges": ["17:30-18:00"] },
+              { "dayOfWeek": "FRIDAY", "timeRanges": ["17:30-18:00"] },
+              { "dayOfWeek": "SATURDAY", "timeRanges": ["17:30-18:00"] },
+              { "dayOfWeek": "SUNDAY", "timeRanges": ["17:30-18:00"] }
+            ]
+          }
+        ],
+        "routeName": "Herredsvej nordgående",
+        "zoneId": "Europe/Copenhagen",
+        "probeSource": "ALL",
+        "fullTraversal": false,
+        "mapsVersions": ["BalticStates_eur2025.12.000-22.395-0 DSEG_NOSPLIT"],
+        "summaries": [
+          {
+            "dateRange": 1,
+            "timeSet": 2,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 2706.46,
+            "harmonicAverageSpeed": 38.95,
+            "averageTravelTime": 93.73,
+            "medianTravelTime": 71.66,
+            "averageTravelTimeRatio": 1.0,
+            "planningTimeIndex": 2.13,
+            "travelTimePercentiles": [
+              53.76, 56.99, 59.19, 61.04, 62.8, 64.37, 65.99, 67.69, 69.73,
+              71.66, 74.67, 79.43, 85.7, 94.11, 103.28, 113.98, 128.78, 153.12,
+              199.91
+            ],
+            "speedPercentiles": [
+              18.26, 23.84, 28.35, 32.03, 35.35, 38.79, 42.6, 45.96, 48.89,
+              50.95, 52.36, 53.93, 55.32, 56.71, 58.13, 59.81, 61.68, 64.06,
+              67.91
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 3,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 4925.25,
+            "harmonicAverageSpeed": 32.07,
+            "averageTravelTime": 113.84,
+            "medianTravelTime": 75.76,
+            "averageTravelTimeRatio": 1.21,
+            "planningTimeIndex": 3.6,
+            "travelTimePercentiles": [
+              57.1, 60.14, 62.46, 64.3, 66.16, 67.92, 69.74, 71.47, 73.54,
+              75.76, 78.59, 82.28, 87.19, 98.23, 112.83, 133.34, 165.2, 220.31,
+              337.81
+            ],
+            "speedPercentiles": [
+              10.81, 16.57, 22.1, 27.38, 32.36, 37.17, 41.87, 44.37, 46.45,
+              48.19, 49.64, 51.08, 52.35, 53.75, 55.18, 56.77, 58.45, 60.7,
+              63.93
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 4,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 2742.17,
+            "harmonicAverageSpeed": 28.88,
+            "averageTravelTime": 126.39,
+            "medianTravelTime": 78.79,
+            "averageTravelTimeRatio": 1.35,
+            "planningTimeIndex": 4.16,
+            "travelTimePercentiles": [
+              58.54, 62.15, 64.47, 66.29, 68.22, 70.03, 71.88, 73.84, 76.15,
+              78.79, 81.74, 85.72, 92.3, 105.83, 124.71, 154.51, 197.17, 271.73,
+              390.07
+            ],
+            "speedPercentiles": [
+              9.36, 13.44, 18.52, 23.63, 29.27, 34.5, 39.55, 42.59, 44.66,
+              46.33, 47.94, 49.44, 50.79, 52.13, 53.52, 55.07, 56.62, 58.75,
+              62.36
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 5,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 2743.08,
+            "harmonicAverageSpeed": 26.65,
+            "averageTravelTime": 136.98,
+            "medianTravelTime": 79.69,
+            "averageTravelTimeRatio": 1.46,
+            "planningTimeIndex": 4.67,
+            "travelTimePercentiles": [
+              58.95, 62.27, 64.76, 66.7, 68.71, 70.47, 72.54, 74.52, 76.93,
+              79.69, 83.13, 87.5, 95.82, 110.07, 134.75, 171.7, 220.2, 299.01,
+              437.49
+            ],
+            "speedPercentiles": [
+              8.34, 12.21, 16.58, 21.26, 27.09, 33.17, 38.1, 41.72, 43.92,
+              45.81, 47.46, 48.99, 50.32, 51.8, 53.14, 54.74, 56.38, 58.63,
+              61.93
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 6,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 2520.75,
+            "harmonicAverageSpeed": 29.29,
+            "averageTravelTime": 124.66,
+            "medianTravelTime": 78.44,
+            "averageTravelTimeRatio": 1.33,
+            "planningTimeIndex": 3.98,
+            "travelTimePercentiles": [
+              58.7, 62.15, 64.64, 66.69, 68.55, 70.29, 72.09, 74.01, 75.99,
+              78.44, 81.27, 84.7, 90.57, 101.49, 116.92, 141.33, 178.4, 238.83,
+              372.94
+            ],
+            "speedPercentiles": [
+              9.79, 15.29, 20.46, 25.83, 31.22, 35.97, 40.31, 43.1, 44.92,
+              46.54, 48.04, 49.33, 50.64, 51.94, 53.26, 54.75, 56.48, 58.74,
+              62.19
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 7,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 2351.46,
+            "harmonicAverageSpeed": 32.23,
+            "averageTravelTime": 113.28,
+            "medianTravelTime": 76.65,
+            "averageTravelTimeRatio": 1.21,
+            "planningTimeIndex": 3.25,
+            "travelTimePercentiles": [
+              57.03, 60.44, 62.93, 64.95, 66.92, 68.57, 70.47, 72.3, 74.34,
+              76.65, 79.11, 82.48, 88.45, 98.92, 112.3, 130.28, 159.66, 200.39,
+              305.1
+            ],
+            "speedPercentiles": [
+              11.97, 18.22, 22.87, 28.02, 32.51, 36.91, 41.27, 44.26, 46.15,
+              47.63, 49.11, 50.5, 51.8, 53.24, 54.55, 56.21, 58.01, 60.4, 64.02
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 8,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 2747.63,
+            "harmonicAverageSpeed": 33.49,
+            "averageTravelTime": 109.0,
+            "medianTravelTime": 76.32,
+            "averageTravelTimeRatio": 1.16,
+            "planningTimeIndex": 2.91,
+            "travelTimePercentiles": [
+              57.22, 60.65, 63.19, 65.15, 66.96, 68.61, 70.43, 72.38, 74.14,
+              76.32, 78.86, 82.0, 87.76, 98.56, 112.94, 132.13, 154.66, 190.4,
+              272.42
+            ],
+            "speedPercentiles": [
+              13.4, 19.17, 23.6, 27.63, 32.32, 37.04, 41.6, 44.52, 46.29, 47.83,
+              49.24, 50.44, 51.84, 53.21, 54.52, 56.04, 57.78, 60.19, 63.8
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 9,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 2883.92,
+            "harmonicAverageSpeed": 33.72,
+            "averageTravelTime": 108.26,
+            "medianTravelTime": 75.87,
+            "averageTravelTimeRatio": 1.15,
+            "planningTimeIndex": 2.95,
+            "travelTimePercentiles": [
+              57.12, 60.66, 63.02, 65.06, 66.85, 68.58, 70.46, 72.25, 74.0,
+              75.87, 78.41, 81.55, 86.28, 96.4, 111.46, 130.61, 155.41, 191.21,
+              276.84
+            ],
+            "speedPercentiles": [
+              13.19, 19.09, 23.49, 27.95, 32.75, 37.87, 42.31, 44.77, 46.56,
+              48.12, 49.33, 50.53, 51.81, 53.24, 54.61, 56.12, 57.93, 60.19,
+              63.92
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 10,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 2929.75,
+            "harmonicAverageSpeed": 32.33,
+            "averageTravelTime": 112.92,
+            "medianTravelTime": 76.98,
+            "averageTravelTimeRatio": 1.2,
+            "planningTimeIndex": 3.32,
+            "travelTimePercentiles": [
+              57.97, 61.56, 63.81, 65.97, 67.77, 69.36, 71.11, 73.03, 74.92,
+              76.98, 79.61, 82.85, 87.36, 96.36, 111.04, 133.63, 163.07, 211.27,
+              311.35
+            ],
+            "speedPercentiles": [
+              11.73, 17.28, 22.39, 27.32, 32.88, 37.89, 41.79, 44.06, 45.86,
+              47.43, 48.73, 49.99, 51.34, 52.63, 53.87, 55.34, 57.21, 59.3,
+              62.98
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 11,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 2862.0,
+            "harmonicAverageSpeed": 31.66,
+            "averageTravelTime": 115.32,
+            "medianTravelTime": 77.13,
+            "averageTravelTimeRatio": 1.23,
+            "planningTimeIndex": 3.43,
+            "travelTimePercentiles": [
+              57.41, 60.94, 63.38, 65.28, 67.11, 68.85, 70.88, 72.77, 74.92,
+              77.13, 79.92, 83.65, 88.84, 98.78, 112.83, 133.68, 164.96, 215.54,
+              321.9
+            ],
+            "speedPercentiles": [
+              11.34, 16.94, 22.13, 27.31, 32.36, 36.96, 41.09, 43.64, 45.68,
+              47.33, 48.73, 50.17, 51.5, 53.03, 54.4, 55.92, 57.6, 59.91, 63.59
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 12,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 4692.96,
+            "harmonicAverageSpeed": 35.35,
+            "averageTravelTime": 103.27,
+            "medianTravelTime": 75.01,
+            "averageTravelTimeRatio": 1.1,
+            "planningTimeIndex": 2.59,
+            "travelTimePercentiles": [
+              56.15, 59.76, 62.01, 64.2, 65.95, 67.71, 69.4, 71.04, 73.0, 75.01,
+              77.13, 80.49, 86.6, 96.48, 108.88, 124.04, 145.99, 176.7, 242.64
+            ],
+            "speedPercentiles": [
+              15.05, 20.66, 25.01, 29.43, 33.53, 37.84, 42.16, 45.36, 47.33,
+              48.67, 50.01, 51.39, 52.6, 53.92, 55.35, 56.86, 58.87, 61.09,
+              65.02
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 13,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 34881.58,
+            "harmonicAverageSpeed": 37.15,
+            "averageTravelTime": 98.28,
+            "medianTravelTime": 74.25,
+            "averageTravelTimeRatio": 1.05,
+            "planningTimeIndex": 2.27,
+            "travelTimePercentiles": [
+              55.53, 59.04, 61.35, 63.5, 65.12, 66.87, 68.6, 70.37, 72.09,
+              74.25, 76.93, 81.77, 88.85, 97.7, 108.27, 120.58, 138.41, 164.09,
+              212.71
+            ],
+            "speedPercentiles": [
+              17.16, 22.25, 26.38, 30.28, 33.72, 37.37, 41.09, 44.65, 47.45,
+              49.17, 50.64, 51.88, 53.22, 54.59, 56.06, 57.49, 59.5, 61.83,
+              65.74
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 14,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 3194.96,
+            "harmonicAverageSpeed": 34.24,
+            "averageTravelTime": 106.63,
+            "medianTravelTime": 74.21,
+            "averageTravelTimeRatio": 1.14,
+            "planningTimeIndex": 2.72,
+            "travelTimePercentiles": [
+              55.34, 58.71, 61.15, 63.2, 65.16, 66.99, 68.64, 70.3, 72.24,
+              74.21, 77.17, 82.73, 92.21, 102.57, 117.27, 136.78, 158.08,
+              190.54, 255.08
+            ],
+            "speedPercentiles": [
+              14.31, 19.16, 23.09, 26.69, 31.13, 35.59, 39.59, 44.13, 47.31,
+              49.19, 50.54, 51.93, 53.19, 54.5, 56.03, 57.76, 59.7, 62.19, 65.97
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 15,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 3229.63,
+            "harmonicAverageSpeed": 33.82,
+            "averageTravelTime": 107.94,
+            "medianTravelTime": 74.77,
+            "averageTravelTimeRatio": 1.15,
+            "planningTimeIndex": 2.73,
+            "travelTimePercentiles": [
+              55.33, 58.64, 60.97, 63.1, 64.95, 66.64, 68.55, 70.35, 72.32,
+              74.77, 77.67, 82.74, 92.88, 104.41, 121.24, 140.03, 162.91,
+              198.14, 256.19
+            ],
+            "speedPercentiles": [
+              14.25, 18.42, 22.41, 26.07, 30.11, 34.97, 39.31, 44.13, 47.0,
+              48.82, 50.48, 51.89, 53.26, 54.78, 56.2, 57.85, 59.87, 62.26,
+              65.98
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 16,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 1600.38,
+            "harmonicAverageSpeed": 33.38,
+            "averageTravelTime": 109.38,
+            "medianTravelTime": 74.86,
+            "averageTravelTimeRatio": 1.17,
+            "planningTimeIndex": 2.84,
+            "travelTimePercentiles": [
+              55.29, 58.31, 60.74, 62.87, 64.71, 66.57, 68.36, 70.16, 72.38,
+              74.86, 78.92, 87.68, 97.01, 109.67, 123.06, 142.32, 165.55,
+              201.74, 266.22
+            ],
+            "speedPercentiles": [
+              13.71, 18.1, 22.05, 25.65, 29.67, 33.29, 37.63, 41.64, 46.26,
+              48.76, 50.43, 52.03, 53.41, 54.84, 56.42, 58.07, 60.1, 62.61,
+              66.03
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 17,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 1665.25,
+            "harmonicAverageSpeed": 33.03,
+            "averageTravelTime": 110.54,
+            "medianTravelTime": 74.88,
+            "averageTravelTimeRatio": 1.18,
+            "planningTimeIndex": 2.92,
+            "travelTimePercentiles": [
+              55.12, 58.57, 61.12, 63.45, 65.36, 67.24, 69.07, 70.97, 72.89,
+              74.88, 78.32, 84.5, 94.5, 107.3, 121.73, 142.96, 168.34, 202.51,
+              273.89
+            ],
+            "speedPercentiles": [
+              13.33, 18.03, 21.69, 25.54, 29.99, 34.02, 38.63, 43.2, 46.61,
+              48.75, 50.09, 51.44, 52.85, 54.29, 55.86, 57.54, 59.73, 62.33,
+              66.23
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 18,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 1735.83,
+            "harmonicAverageSpeed": 33.13,
+            "averageTravelTime": 110.2,
+            "medianTravelTime": 74.85,
+            "averageTravelTimeRatio": 1.18,
+            "planningTimeIndex": 2.87,
+            "travelTimePercentiles": [
+              55.66, 58.87, 61.34, 63.52, 65.45, 67.06, 68.69, 70.49, 72.28,
+              74.85, 78.58, 86.22, 96.86, 108.22, 124.17, 144.13, 171.54,
+              202.09, 269.24
+            ],
+            "speedPercentiles": [
+              13.56, 18.07, 21.28, 25.33, 29.4, 33.74, 37.69, 42.34, 46.46,
+              48.77, 50.51, 51.79, 53.14, 54.44, 55.78, 57.48, 59.51, 62.01,
+              65.59
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 19,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 1721.54,
+            "harmonicAverageSpeed": 33.04,
+            "averageTravelTime": 110.49,
+            "medianTravelTime": 74.17,
+            "averageTravelTimeRatio": 1.18,
+            "planningTimeIndex": 2.89,
+            "travelTimePercentiles": [
+              55.34, 58.42, 60.98, 63.09, 64.74, 66.58, 68.27, 70.14, 72.02,
+              74.17, 77.74, 85.24, 96.34, 107.8, 124.81, 144.88, 170.26, 205.57,
+              271.13
+            ],
+            "speedPercentiles": [
+              13.46, 17.76, 21.44, 25.2, 29.25, 33.87, 37.89, 42.83, 46.96,
+              49.22, 50.69, 52.05, 53.47, 54.84, 56.39, 57.87, 59.87, 62.49,
+              65.97
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 20,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 1788.71,
+            "harmonicAverageSpeed": 33.79,
+            "averageTravelTime": 108.03,
+            "medianTravelTime": 74.24,
+            "averageTravelTimeRatio": 1.15,
+            "planningTimeIndex": 2.77,
+            "travelTimePercentiles": [
+              55.02, 58.32, 60.7, 62.87, 64.77, 66.49, 68.27, 70.15, 72.26,
+              74.24, 77.49, 85.24, 95.14, 106.73, 121.74, 142.41, 167.59,
+              198.75, 259.61
+            ],
+            "speedPercentiles": [
+              14.06, 18.37, 21.78, 25.64, 29.99, 34.21, 38.37, 42.83, 47.11,
+              49.17, 50.52, 52.04, 53.48, 54.91, 56.36, 58.07, 60.15, 62.59,
+              66.35
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 21,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 1823.92,
+            "harmonicAverageSpeed": 33.48,
+            "averageTravelTime": 109.05,
+            "medianTravelTime": 74.27,
+            "averageTravelTimeRatio": 1.16,
+            "planningTimeIndex": 2.87,
+            "travelTimePercentiles": [
+              55.27, 58.59, 61.21, 63.33, 65.09, 66.94, 68.56, 70.32, 72.12,
+              74.27, 76.85, 81.17, 90.39, 104.35, 119.44, 140.82, 170.28, 200.7,
+              269.2
+            ],
+            "speedPercentiles": [
+              13.56, 18.19, 21.44, 25.93, 30.57, 34.99, 40.39, 44.97, 47.51,
+              49.16, 50.62, 51.91, 53.25, 54.54, 56.09, 57.64, 59.64, 62.31,
+              66.06
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 22,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 1853.92,
+            "harmonicAverageSpeed": 33.56,
+            "averageTravelTime": 108.79,
+            "medianTravelTime": 74.77,
+            "averageTravelTimeRatio": 1.16,
+            "planningTimeIndex": 2.78,
+            "travelTimePercentiles": [
+              55.41, 58.65, 61.41, 63.36, 65.18, 67.08, 68.71, 70.46, 72.32,
+              74.77, 77.95, 83.53, 94.25, 107.46, 122.54, 141.3, 164.94, 200.69,
+              260.78
+            ],
+            "speedPercentiles": [
+              14.0, 18.19, 22.13, 25.84, 29.79, 33.97, 38.73, 43.7, 46.83,
+              48.83, 50.48, 51.81, 53.13, 54.43, 56.01, 57.62, 59.45, 62.24,
+              65.89
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 23,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 1738.67,
+            "harmonicAverageSpeed": 33.94,
+            "averageTravelTime": 107.56,
+            "medianTravelTime": 75.18,
+            "averageTravelTimeRatio": 1.15,
+            "planningTimeIndex": 2.76,
+            "travelTimePercentiles": [
+              55.61, 58.9, 61.47, 63.43, 65.51, 67.3, 68.98, 70.79, 72.91,
+              75.18, 78.97, 85.41, 94.82, 105.9, 120.56, 137.5, 162.13, 192.84,
+              259.09
+            ],
+            "speedPercentiles": [
+              14.09, 18.93, 22.52, 26.55, 30.28, 34.47, 38.5, 42.75, 46.23,
+              48.56, 50.07, 51.57, 52.92, 54.25, 55.73, 57.55, 59.39, 61.98,
+              65.65
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 24,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 3117.67,
+            "harmonicAverageSpeed": 37.25,
+            "averageTravelTime": 98.0,
+            "medianTravelTime": 75.0,
+            "averageTravelTimeRatio": 1.05,
+            "planningTimeIndex": 2.18,
+            "travelTimePercentiles": [
+              54.6, 57.84, 60.21, 62.38, 64.34, 66.13, 67.96, 69.72, 71.93,
+              75.0, 79.55, 86.85, 95.11, 102.96, 112.57, 125.22, 140.45, 162.18,
+              204.29
+            ],
+            "speedPercentiles": [
+              17.87, 22.51, 25.99, 29.15, 32.43, 35.46, 38.39, 42.03, 45.89,
+              48.68, 50.76, 52.37, 53.72, 55.21, 56.74, 58.52, 60.63, 63.12,
+              66.86
+            ]
+          },
+          {
+            "dateRange": 1,
+            "timeSet": 25,
+            "distance": 1014.09,
+            "coveredDistance": 1014.09,
+            "averageSampleSize": 2463.83,
+            "harmonicAverageSpeed": 37.58,
+            "averageTravelTime": 97.14,
+            "medianTravelTime": 76.87,
+            "averageTravelTimeRatio": 1.04,
+            "planningTimeIndex": 2.1,
+            "travelTimePercentiles": [
+              54.19, 57.39, 59.91, 62.24, 64.18, 66.03, 68.0, 70.18, 72.49,
+              76.87, 82.56, 89.35, 96.89, 104.84, 113.2, 122.48, 136.35, 156.66,
+              196.87
+            ],
+            "speedPercentiles": [
+              18.54, 23.3, 26.77, 29.81, 32.25, 34.82, 37.68, 40.86, 44.22,
+              47.5, 50.36, 52.02, 53.68, 55.29, 56.89, 58.66, 60.94, 63.62,
+              67.38
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [10.16591, 56.17395],
+          [10.16596, 56.17407]
+        ]
+      },
+      "properties": {
+        "segmentId": -12080000639929,
+        "newSegmentId": "-0000444e-4b00-0400-0000-0000000287ec",
+        "speedLimit": 50,
+        "frc": 4,
+        "streetName": "Herredsvej",
+        "distance": 13.92,
+        "segmentTimeResults": [
+          {
+            "timeSet": 2,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 35.2,
+            "medianSpeed": 39.3,
+            "averageSpeed": 38.8,
+            "standardDeviationSpeed": 8.9,
+            "travelTimeStandardDeviation": 1.33,
+            "sampleSize": 2792,
+            "normalizedSampleSize": 0.0286,
+            "averageTravelTime": 1.42,
+            "medianTravelTime": 1.28,
+            "travelTimeRatio": 1.0,
+            "speedPercentiles": [
+              24, 28, 30, 32, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 46,
+              47, 49, 52
+            ]
+          },
+          {
+            "timeSet": 3,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 36.5,
+            "medianSpeed": 40.0,
+            "averageSpeed": 39.2,
+            "standardDeviationSpeed": 7.8,
+            "travelTimeStandardDeviation": 0.68,
+            "sampleSize": 4998,
+            "normalizedSampleSize": 0.0512,
+            "averageTravelTime": 1.37,
+            "medianTravelTime": 1.25,
+            "travelTimeRatio": 0.97,
+            "speedPercentiles": [
+              25, 30, 33, 34, 36, 37, 37, 38, 39, 40, 41, 41, 42, 43, 44, 45,
+              46, 48, 51
+            ]
+          },
+          {
+            "timeSet": 4,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 35.0,
+            "medianSpeed": 39.8,
+            "averageSpeed": 38.8,
+            "standardDeviationSpeed": 8.3,
+            "travelTimeStandardDeviation": 1.15,
+            "sampleSize": 2774,
+            "normalizedSampleSize": 0.0284,
+            "averageTravelTime": 1.43,
+            "medianTravelTime": 1.26,
+            "travelTimeRatio": 1.01,
+            "speedPercentiles": [
+              23, 29, 32, 34, 35, 36, 37, 38, 39, 40, 40, 41, 42, 43, 44, 45,
+              46, 48, 51
+            ]
+          },
+          {
+            "timeSet": 5,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 35.9,
+            "medianSpeed": 39.0,
+            "averageSpeed": 38.5,
+            "standardDeviationSpeed": 7.8,
+            "travelTimeStandardDeviation": 0.63,
+            "sampleSize": 2947,
+            "normalizedSampleSize": 0.0302,
+            "averageTravelTime": 1.4,
+            "medianTravelTime": 1.28,
+            "travelTimeRatio": 0.98,
+            "speedPercentiles": [
+              26, 29, 32, 33, 35, 36, 37, 37, 38, 39, 40, 40, 41, 42, 43, 44,
+              46, 47, 50
+            ]
+          },
+          {
+            "timeSet": 6,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 34.0,
+            "medianSpeed": 38.0,
+            "averageSpeed": 37.7,
+            "standardDeviationSpeed": 8.4,
+            "travelTimeStandardDeviation": 1.01,
+            "sampleSize": 2555,
+            "normalizedSampleSize": 0.0262,
+            "averageTravelTime": 1.48,
+            "medianTravelTime": 1.32,
+            "travelTimeRatio": 1.04,
+            "speedPercentiles": [
+              24, 28, 31, 32, 34, 35, 36, 37, 37, 38, 39, 40, 40, 41, 42, 44,
+              45, 47, 50
+            ]
+          },
+          {
+            "timeSet": 7,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 34.0,
+            "medianSpeed": 38.0,
+            "averageSpeed": 37.6,
+            "standardDeviationSpeed": 8.9,
+            "travelTimeStandardDeviation": 0.8,
+            "sampleSize": 2441,
+            "normalizedSampleSize": 0.025,
+            "averageTravelTime": 1.47,
+            "medianTravelTime": 1.32,
+            "travelTimeRatio": 1.04,
+            "speedPercentiles": [
+              22, 27, 30, 32, 34, 35, 36, 36, 37, 38, 39, 40, 41, 42, 43, 44,
+              46, 47, 51
+            ]
+          },
+          {
+            "timeSet": 8,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 34.1,
+            "medianSpeed": 38.0,
+            "averageSpeed": 37.8,
+            "standardDeviationSpeed": 8.6,
+            "travelTimeStandardDeviation": 0.93,
+            "sampleSize": 2851,
+            "normalizedSampleSize": 0.0292,
+            "averageTravelTime": 1.47,
+            "medianTravelTime": 1.32,
+            "travelTimeRatio": 1.03,
+            "speedPercentiles": [
+              23, 28, 31, 33, 34, 35, 36, 37, 38, 38, 39, 40, 41, 42, 43, 44,
+              45, 47, 50
+            ]
+          },
+          {
+            "timeSet": 9,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 34.0,
+            "medianSpeed": 38.0,
+            "averageSpeed": 37.3,
+            "standardDeviationSpeed": 8.2,
+            "travelTimeStandardDeviation": 0.84,
+            "sampleSize": 2970,
+            "normalizedSampleSize": 0.0304,
+            "averageTravelTime": 1.47,
+            "medianTravelTime": 1.32,
+            "travelTimeRatio": 1.04,
+            "speedPercentiles": [
+              23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 39, 40, 41, 42, 43,
+              45, 46, 50
+            ]
+          },
+          {
+            "timeSet": 10,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 34.1,
+            "medianSpeed": 38.0,
+            "averageSpeed": 37.2,
+            "standardDeviationSpeed": 8.5,
+            "travelTimeStandardDeviation": 0.74,
+            "sampleSize": 2976,
+            "normalizedSampleSize": 0.0305,
+            "averageTravelTime": 1.47,
+            "medianTravelTime": 1.32,
+            "travelTimeRatio": 1.03,
+            "speedPercentiles": [
+              22, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 39, 40, 41, 42, 43,
+              44, 47, 49
+            ]
+          },
+          {
+            "timeSet": 11,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 34.5,
+            "medianSpeed": 38.0,
+            "averageSpeed": 37.5,
+            "standardDeviationSpeed": 8.7,
+            "travelTimeStandardDeviation": 0.73,
+            "sampleSize": 3019,
+            "normalizedSampleSize": 0.0309,
+            "averageTravelTime": 1.45,
+            "medianTravelTime": 1.32,
+            "travelTimeRatio": 1.02,
+            "speedPercentiles": [
+              23, 27, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 41, 43, 44,
+              45, 47, 50
+            ]
+          },
+          {
+            "timeSet": 12,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 33.8,
+            "medianSpeed": 37.7,
+            "averageSpeed": 37.3,
+            "standardDeviationSpeed": 9.4,
+            "travelTimeStandardDeviation": 0.77,
+            "sampleSize": 4873,
+            "normalizedSampleSize": 0.05,
+            "averageTravelTime": 1.48,
+            "medianTravelTime": 1.33,
+            "travelTimeRatio": 1.04,
+            "speedPercentiles": [
+              22, 26, 29, 31, 33, 34, 35, 36, 37, 38, 38, 39, 40, 41, 42, 44,
+              45, 47, 51
+            ]
+          },
+          {
+            "timeSet": 13,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 33.3,
+            "medianSpeed": 37.0,
+            "averageSpeed": 36.8,
+            "standardDeviationSpeed": 9.0,
+            "travelTimeStandardDeviation": 0.84,
+            "sampleSize": 35973,
+            "normalizedSampleSize": 0.3688,
+            "averageTravelTime": 1.5,
+            "medianTravelTime": 1.35,
+            "travelTimeRatio": 1.06,
+            "speedPercentiles": [
+              22, 26, 29, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43,
+              45, 47, 51
+            ]
+          },
+          {
+            "timeSet": 14,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 32.7,
+            "medianSpeed": 37.6,
+            "averageSpeed": 37.2,
+            "standardDeviationSpeed": 9.3,
+            "travelTimeStandardDeviation": 1.21,
+            "sampleSize": 3332,
+            "normalizedSampleSize": 0.0342,
+            "averageTravelTime": 1.53,
+            "medianTravelTime": 1.33,
+            "travelTimeRatio": 1.08,
+            "speedPercentiles": [
+              22, 27, 29, 31, 33, 34, 35, 36, 37, 38, 38, 39, 40, 41, 42, 44,
+              45, 48, 51
+            ]
+          },
+          {
+            "timeSet": 15,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 31.8,
+            "medianSpeed": 38.0,
+            "averageSpeed": 37.3,
+            "standardDeviationSpeed": 9.9,
+            "travelTimeStandardDeviation": 1.36,
+            "sampleSize": 3407,
+            "normalizedSampleSize": 0.0349,
+            "averageTravelTime": 1.57,
+            "medianTravelTime": 1.32,
+            "travelTimeRatio": 1.11,
+            "speedPercentiles": [
+              21, 26, 29, 31, 33, 34, 35, 36, 37, 38, 39, 40, 40, 42, 43, 44,
+              45, 48, 52
+            ]
+          },
+          {
+            "timeSet": 16,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 33.3,
+            "medianSpeed": 38.0,
+            "averageSpeed": 37.9,
+            "standardDeviationSpeed": 9.3,
+            "travelTimeStandardDeviation": 1.18,
+            "sampleSize": 1585,
+            "normalizedSampleSize": 0.0162,
+            "averageTravelTime": 1.51,
+            "medianTravelTime": 1.32,
+            "travelTimeRatio": 1.06,
+            "speedPercentiles": [
+              22, 27, 30, 32, 33, 35, 36, 37, 38, 38, 39, 40, 41, 42, 43, 44,
+              46, 48, 51
+            ]
+          },
+          {
+            "timeSet": 17,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 32.6,
+            "medianSpeed": 38.0,
+            "averageSpeed": 37.7,
+            "standardDeviationSpeed": 10.1,
+            "travelTimeStandardDeviation": 1.38,
+            "sampleSize": 1709,
+            "normalizedSampleSize": 0.0175,
+            "averageTravelTime": 1.54,
+            "medianTravelTime": 1.32,
+            "travelTimeRatio": 1.08,
+            "speedPercentiles": [
+              22, 27, 29, 31, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44,
+              46, 49, 53
+            ]
+          },
+          {
+            "timeSet": 18,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 32.2,
+            "medianSpeed": 38.0,
+            "averageSpeed": 37.7,
+            "standardDeviationSpeed": 9.5,
+            "travelTimeStandardDeviation": 1.4,
+            "sampleSize": 1772,
+            "normalizedSampleSize": 0.0182,
+            "averageTravelTime": 1.56,
+            "medianTravelTime": 1.32,
+            "travelTimeRatio": 1.09,
+            "speedPercentiles": [
+              22, 27, 30, 32, 33, 34, 36, 37, 37, 38, 39, 40, 41, 42, 43, 44,
+              46, 48, 52
+            ]
+          },
+          {
+            "timeSet": 19,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 33.3,
+            "medianSpeed": 38.0,
+            "averageSpeed": 37.9,
+            "standardDeviationSpeed": 9.6,
+            "travelTimeStandardDeviation": 1.11,
+            "sampleSize": 1812,
+            "normalizedSampleSize": 0.0186,
+            "averageTravelTime": 1.51,
+            "medianTravelTime": 1.32,
+            "travelTimeRatio": 1.06,
+            "speedPercentiles": [
+              22, 27, 30, 32, 34, 35, 36, 36, 37, 38, 39, 40, 41, 42, 43, 44,
+              46, 48, 52
+            ]
+          },
+          {
+            "timeSet": 20,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 33.8,
+            "medianSpeed": 38.0,
+            "averageSpeed": 37.8,
+            "standardDeviationSpeed": 9.2,
+            "travelTimeStandardDeviation": 1.01,
+            "sampleSize": 1859,
+            "normalizedSampleSize": 0.0191,
+            "averageTravelTime": 1.48,
+            "medianTravelTime": 1.32,
+            "travelTimeRatio": 1.04,
+            "speedPercentiles": [
+              22, 28, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44,
+              46, 48, 52
+            ]
+          },
+          {
+            "timeSet": 21,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 32.5,
+            "medianSpeed": 38.0,
+            "averageSpeed": 37.2,
+            "standardDeviationSpeed": 9.3,
+            "travelTimeStandardDeviation": 1.26,
+            "sampleSize": 1949,
+            "normalizedSampleSize": 0.02,
+            "averageTravelTime": 1.54,
+            "medianTravelTime": 1.32,
+            "travelTimeRatio": 1.08,
+            "speedPercentiles": [
+              21, 26, 29, 31, 32, 34, 35, 36, 37, 38, 38, 39, 40, 41, 42, 44,
+              45, 48, 51
+            ]
+          },
+          {
+            "timeSet": 22,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 34.2,
+            "medianSpeed": 38.0,
+            "averageSpeed": 37.5,
+            "standardDeviationSpeed": 9.0,
+            "travelTimeStandardDeviation": 0.78,
+            "sampleSize": 1955,
+            "normalizedSampleSize": 0.02,
+            "averageTravelTime": 1.47,
+            "medianTravelTime": 1.32,
+            "travelTimeRatio": 1.03,
+            "speedPercentiles": [
+              23, 27, 29, 31, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44,
+              45, 47, 51
+            ]
+          },
+          {
+            "timeSet": 23,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 33.4,
+            "medianSpeed": 38.0,
+            "averageSpeed": 37.3,
+            "standardDeviationSpeed": 9.1,
+            "travelTimeStandardDeviation": 0.97,
+            "sampleSize": 1834,
+            "normalizedSampleSize": 0.0188,
+            "averageTravelTime": 1.5,
+            "medianTravelTime": 1.32,
+            "travelTimeRatio": 1.06,
+            "speedPercentiles": [
+              22, 26, 30, 32, 33, 34, 35, 36, 37, 38, 38, 39, 40, 41, 42, 44,
+              45, 47, 51
+            ]
+          },
+          {
+            "timeSet": 24,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 34.2,
+            "medianSpeed": 38.0,
+            "averageSpeed": 37.8,
+            "standardDeviationSpeed": 9.4,
+            "travelTimeStandardDeviation": 0.82,
+            "sampleSize": 3357,
+            "normalizedSampleSize": 0.0344,
+            "averageTravelTime": 1.47,
+            "medianTravelTime": 1.32,
+            "travelTimeRatio": 1.03,
+            "speedPercentiles": [
+              22, 27, 30, 31, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 45,
+              46, 49, 53
+            ]
+          },
+          {
+            "timeSet": 25,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 33.9,
+            "medianSpeed": 37.0,
+            "averageSpeed": 37.1,
+            "standardDeviationSpeed": 9.2,
+            "travelTimeStandardDeviation": 0.75,
+            "sampleSize": 2744,
+            "normalizedSampleSize": 0.0281,
+            "averageTravelTime": 1.48,
+            "medianTravelTime": 1.35,
+            "travelTimeRatio": 1.04,
+            "speedPercentiles": [
+              22, 26, 29, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 44,
+              45, 48, 52
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [10.16596, 56.17407],
+          [10.16601, 56.17417],
+          [10.16605, 56.17426]
+        ]
+      },
+      "properties": {
+        "segmentId": -12080002050967,
+        "newSegmentId": "-8dcdc139-8a79-4241-b3c3-99dd92ece0f8",
+        "speedLimit": 50,
+        "frc": 4,
+        "streetName": "Herredsvej",
+        "distance": 22.13,
+        "segmentTimeResults": [
+          {
+            "timeSet": 2,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 39.9,
+            "medianSpeed": 42.2,
+            "averageSpeed": 41.9,
+            "standardDeviationSpeed": 7.9,
+            "travelTimeStandardDeviation": 0.65,
+            "sampleSize": 2787,
+            "normalizedSampleSize": 0.0286,
+            "averageTravelTime": 2.0,
+            "medianTravelTime": 1.89,
+            "travelTimeRatio": 1.0,
+            "speedPercentiles": [
+              28, 33, 35, 37, 38, 39, 40, 41, 42, 42, 43, 44, 45, 46, 47, 48,
+              49, 50, 53
+            ]
+          },
+          {
+            "timeSet": 3,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 38.8,
+            "medianSpeed": 42.0,
+            "averageSpeed": 41.1,
+            "standardDeviationSpeed": 7.4,
+            "travelTimeStandardDeviation": 0.82,
+            "sampleSize": 4990,
+            "normalizedSampleSize": 0.0512,
+            "averageTravelTime": 2.05,
+            "medianTravelTime": 1.9,
+            "travelTimeRatio": 1.03,
+            "speedPercentiles": [
+              28, 33, 35, 37, 38, 39, 40, 40, 41, 42, 42, 43, 44, 44, 45, 46,
+              48, 49, 51
+            ]
+          },
+          {
+            "timeSet": 4,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 38.1,
+            "medianSpeed": 41.0,
+            "averageSpeed": 40.9,
+            "standardDeviationSpeed": 7.9,
+            "travelTimeStandardDeviation": 0.92,
+            "sampleSize": 2770,
+            "normalizedSampleSize": 0.0284,
+            "averageTravelTime": 2.09,
+            "medianTravelTime": 1.94,
+            "travelTimeRatio": 1.05,
+            "speedPercentiles": [
+              26, 33, 35, 37, 38, 38, 39, 40, 41, 41, 42, 43, 44, 44, 45, 46,
+              48, 49, 52
+            ]
+          },
+          {
+            "timeSet": 5,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 38.1,
+            "medianSpeed": 41.0,
+            "averageSpeed": 40.4,
+            "standardDeviationSpeed": 7.6,
+            "travelTimeStandardDeviation": 0.77,
+            "sampleSize": 2938,
+            "normalizedSampleSize": 0.0301,
+            "averageTravelTime": 2.09,
+            "medianTravelTime": 1.94,
+            "travelTimeRatio": 1.05,
+            "speedPercentiles": [
+              27, 32, 34, 36, 37, 38, 39, 39, 40, 41, 42, 42, 43, 44, 45, 46,
+              47, 49, 52
+            ]
+          },
+          {
+            "timeSet": 6,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 36.2,
+            "medianSpeed": 40.0,
+            "averageSpeed": 39.5,
+            "standardDeviationSpeed": 8.3,
+            "travelTimeStandardDeviation": 1.33,
+            "sampleSize": 2544,
+            "normalizedSampleSize": 0.0261,
+            "averageTravelTime": 2.2,
+            "medianTravelTime": 1.99,
+            "travelTimeRatio": 1.1,
+            "speedPercentiles": [
+              24, 30, 33, 34, 36, 37, 38, 38, 39, 40, 41, 42, 42, 43, 44, 45,
+              47, 49, 52
+            ]
+          },
+          {
+            "timeSet": 7,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 36.6,
+            "medianSpeed": 40.0,
+            "averageSpeed": 39.6,
+            "standardDeviationSpeed": 8.6,
+            "travelTimeStandardDeviation": 0.97,
+            "sampleSize": 2432,
+            "normalizedSampleSize": 0.0249,
+            "averageTravelTime": 2.18,
+            "medianTravelTime": 1.99,
+            "travelTimeRatio": 1.09,
+            "speedPercentiles": [
+              23, 30, 33, 35, 36, 37, 38, 39, 39, 40, 41, 42, 43, 44, 45, 46,
+              47, 49, 52
+            ]
+          },
+          {
+            "timeSet": 8,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 36.9,
+            "medianSpeed": 40.3,
+            "averageSpeed": 39.9,
+            "standardDeviationSpeed": 8.3,
+            "travelTimeStandardDeviation": 1.01,
+            "sampleSize": 2842,
+            "normalizedSampleSize": 0.0291,
+            "averageTravelTime": 2.16,
+            "medianTravelTime": 1.98,
+            "travelTimeRatio": 1.08,
+            "speedPercentiles": [
+              25, 31, 34, 35, 36, 37, 38, 39, 39, 40, 41, 42, 43, 43, 44, 45,
+              47, 49, 52
+            ]
+          },
+          {
+            "timeSet": 9,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 36.5,
+            "medianSpeed": 40.0,
+            "averageSpeed": 39.3,
+            "standardDeviationSpeed": 8.3,
+            "travelTimeStandardDeviation": 0.99,
+            "sampleSize": 2963,
+            "normalizedSampleSize": 0.0304,
+            "averageTravelTime": 2.19,
+            "medianTravelTime": 1.99,
+            "travelTimeRatio": 1.09,
+            "speedPercentiles": [
+              24, 30, 33, 34, 36, 37, 38, 38, 39, 40, 41, 41, 42, 43, 44, 45,
+              46, 48, 52
+            ]
+          },
+          {
+            "timeSet": 10,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 36.8,
+            "medianSpeed": 40.0,
+            "averageSpeed": 39.4,
+            "standardDeviationSpeed": 8.3,
+            "travelTimeStandardDeviation": 0.83,
+            "sampleSize": 2971,
+            "normalizedSampleSize": 0.0305,
+            "averageTravelTime": 2.17,
+            "medianTravelTime": 1.99,
+            "travelTimeRatio": 1.08,
+            "speedPercentiles": [
+              24, 30, 32, 34, 36, 37, 38, 38, 39, 40, 41, 41, 42, 43, 44, 45,
+              47, 48, 52
+            ]
+          },
+          {
+            "timeSet": 11,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 37.3,
+            "medianSpeed": 40.0,
+            "averageSpeed": 39.8,
+            "standardDeviationSpeed": 8.2,
+            "travelTimeStandardDeviation": 0.86,
+            "sampleSize": 3015,
+            "normalizedSampleSize": 0.0309,
+            "averageTravelTime": 2.14,
+            "medianTravelTime": 1.99,
+            "travelTimeRatio": 1.07,
+            "speedPercentiles": [
+              25, 31, 33, 35, 36, 37, 38, 39, 39, 40, 41, 42, 43, 43, 44, 46,
+              47, 49, 52
+            ]
+          },
+          {
+            "timeSet": 12,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 37.0,
+            "medianSpeed": 40.0,
+            "averageSpeed": 39.8,
+            "standardDeviationSpeed": 8.6,
+            "travelTimeStandardDeviation": 0.95,
+            "sampleSize": 4861,
+            "normalizedSampleSize": 0.0498,
+            "averageTravelTime": 2.16,
+            "medianTravelTime": 1.99,
+            "travelTimeRatio": 1.08,
+            "speedPercentiles": [
+              25, 30, 33, 35, 36, 37, 38, 38, 39, 40, 41, 42, 42, 43, 44, 45,
+              47, 49, 52
+            ]
+          },
+          {
+            "timeSet": 13,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 36.7,
+            "medianSpeed": 40.0,
+            "averageSpeed": 39.7,
+            "standardDeviationSpeed": 8.5,
+            "travelTimeStandardDeviation": 1.17,
+            "sampleSize": 35907,
+            "normalizedSampleSize": 0.3681,
+            "averageTravelTime": 2.17,
+            "medianTravelTime": 1.99,
+            "travelTimeRatio": 1.09,
+            "speedPercentiles": [
+              25, 31, 33, 35, 36, 37, 38, 38, 39, 40, 41, 41, 42, 43, 44, 45,
+              47, 49, 52
+            ]
+          },
+          {
+            "timeSet": 14,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 36.3,
+            "medianSpeed": 40.0,
+            "averageSpeed": 39.9,
+            "standardDeviationSpeed": 8.7,
+            "travelTimeStandardDeviation": 1.41,
+            "sampleSize": 3343,
+            "normalizedSampleSize": 0.0343,
+            "averageTravelTime": 2.19,
+            "medianTravelTime": 1.99,
+            "travelTimeRatio": 1.1,
+            "speedPercentiles": [
+              24, 30, 33, 35, 36, 37, 38, 39, 39, 40, 41, 42, 43, 44, 45, 46,
+              47, 50, 53
+            ]
+          },
+          {
+            "timeSet": 15,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 35.4,
+            "medianSpeed": 40.3,
+            "averageSpeed": 40.1,
+            "standardDeviationSpeed": 9.3,
+            "travelTimeStandardDeviation": 1.64,
+            "sampleSize": 3393,
+            "normalizedSampleSize": 0.0348,
+            "averageTravelTime": 2.25,
+            "medianTravelTime": 1.98,
+            "travelTimeRatio": 1.13,
+            "speedPercentiles": [
+              23, 30, 33, 35, 36, 37, 38, 39, 40, 40, 41, 42, 43, 44, 45, 46,
+              48, 50, 54
+            ]
+          },
+          {
+            "timeSet": 16,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 36.8,
+            "medianSpeed": 41.0,
+            "averageSpeed": 40.8,
+            "standardDeviationSpeed": 8.8,
+            "travelTimeStandardDeviation": 1.57,
+            "sampleSize": 1578,
+            "normalizedSampleSize": 0.0162,
+            "averageTravelTime": 2.17,
+            "medianTravelTime": 1.94,
+            "travelTimeRatio": 1.08,
+            "speedPercentiles": [
+              26, 32, 34, 36, 37, 38, 38, 39, 40, 41, 42, 43, 43, 44, 46, 47,
+              48, 51, 54
+            ]
+          },
+          {
+            "timeSet": 17,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 36.7,
+            "medianSpeed": 41.0,
+            "averageSpeed": 40.6,
+            "standardDeviationSpeed": 9.7,
+            "travelTimeStandardDeviation": 1.29,
+            "sampleSize": 1704,
+            "normalizedSampleSize": 0.0175,
+            "averageTravelTime": 2.17,
+            "medianTravelTime": 1.94,
+            "travelTimeRatio": 1.09,
+            "speedPercentiles": [
+              25, 30, 33, 35, 36, 37, 38, 39, 40, 41, 42, 42, 43, 44, 46, 47,
+              49, 51, 55
+            ]
+          },
+          {
+            "timeSet": 18,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 36.1,
+            "medianSpeed": 41.0,
+            "averageSpeed": 40.6,
+            "standardDeviationSpeed": 9.1,
+            "travelTimeStandardDeviation": 1.57,
+            "sampleSize": 1777,
+            "normalizedSampleSize": 0.0182,
+            "averageTravelTime": 2.21,
+            "medianTravelTime": 1.94,
+            "travelTimeRatio": 1.1,
+            "speedPercentiles": [
+              25, 31, 34, 36, 37, 38, 39, 40, 40, 41, 42, 43, 43, 44, 45, 47,
+              48, 51, 54
+            ]
+          },
+          {
+            "timeSet": 19,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 36.0,
+            "medianSpeed": 41.0,
+            "averageSpeed": 40.4,
+            "standardDeviationSpeed": 9.4,
+            "travelTimeStandardDeviation": 1.51,
+            "sampleSize": 1805,
+            "normalizedSampleSize": 0.0185,
+            "averageTravelTime": 2.21,
+            "medianTravelTime": 1.94,
+            "travelTimeRatio": 1.11,
+            "speedPercentiles": [
+              23, 31, 34, 35, 37, 38, 38, 39, 40, 41, 42, 42, 43, 44, 45, 46,
+              48, 50, 53
+            ]
+          },
+          {
+            "timeSet": 20,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 36.9,
+            "medianSpeed": 41.0,
+            "averageSpeed": 40.6,
+            "standardDeviationSpeed": 9.0,
+            "travelTimeStandardDeviation": 1.35,
+            "sampleSize": 1857,
+            "normalizedSampleSize": 0.019,
+            "averageTravelTime": 2.16,
+            "medianTravelTime": 1.94,
+            "travelTimeRatio": 1.08,
+            "speedPercentiles": [
+              25, 31, 34, 35, 37, 37, 38, 39, 40, 41, 42, 42, 43, 44, 45, 47,
+              48, 51, 54
+            ]
+          },
+          {
+            "timeSet": 21,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 36.1,
+            "medianSpeed": 40.3,
+            "averageSpeed": 39.8,
+            "standardDeviationSpeed": 9.1,
+            "travelTimeStandardDeviation": 1.28,
+            "sampleSize": 1944,
+            "normalizedSampleSize": 0.0199,
+            "averageTravelTime": 2.21,
+            "medianTravelTime": 1.98,
+            "travelTimeRatio": 1.11,
+            "speedPercentiles": [
+              22, 29, 33, 35, 36, 37, 38, 39, 39, 40, 41, 42, 43, 44, 45, 46,
+              48, 50, 53
+            ]
+          },
+          {
+            "timeSet": 22,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 37.4,
+            "medianSpeed": 40.3,
+            "averageSpeed": 40.1,
+            "standardDeviationSpeed": 8.8,
+            "travelTimeStandardDeviation": 0.81,
+            "sampleSize": 1949,
+            "normalizedSampleSize": 0.02,
+            "averageTravelTime": 2.13,
+            "medianTravelTime": 1.98,
+            "travelTimeRatio": 1.07,
+            "speedPercentiles": [
+              24, 30, 33, 34, 36, 37, 38, 39, 40, 40, 41, 42, 43, 44, 45, 46,
+              48, 50, 53
+            ]
+          },
+          {
+            "timeSet": 23,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 36.8,
+            "medianSpeed": 40.0,
+            "averageSpeed": 39.9,
+            "standardDeviationSpeed": 8.7,
+            "travelTimeStandardDeviation": 1.05,
+            "sampleSize": 1823,
+            "normalizedSampleSize": 0.0187,
+            "averageTravelTime": 2.16,
+            "medianTravelTime": 1.99,
+            "travelTimeRatio": 1.08,
+            "speedPercentiles": [
+              24, 31, 33, 35, 36, 37, 38, 39, 39, 40, 41, 42, 43, 44, 45, 46,
+              47, 49, 52
+            ]
+          },
+          {
+            "timeSet": 24,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 37.8,
+            "medianSpeed": 41.0,
+            "averageSpeed": 40.7,
+            "standardDeviationSpeed": 8.9,
+            "travelTimeStandardDeviation": 0.9,
+            "sampleSize": 3346,
+            "normalizedSampleSize": 0.0343,
+            "averageTravelTime": 2.11,
+            "medianTravelTime": 1.94,
+            "travelTimeRatio": 1.06,
+            "speedPercentiles": [
+              25, 31, 34, 35, 37, 38, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47,
+              48, 51, 55
+            ]
+          },
+          {
+            "timeSet": 25,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 37.8,
+            "medianSpeed": 41.0,
+            "averageSpeed": 40.5,
+            "standardDeviationSpeed": 8.4,
+            "travelTimeStandardDeviation": 1.04,
+            "sampleSize": 2734,
+            "normalizedSampleSize": 0.028,
+            "averageTravelTime": 2.11,
+            "medianTravelTime": 1.94,
+            "travelTimeRatio": 1.05,
+            "speedPercentiles": [
+              26, 31, 34, 35, 36, 37, 38, 39, 40, 41, 41, 42, 43, 44, 45, 46,
+              48, 50, 54
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [10.16605, 56.17426],
+          [10.16628, 56.1748]
+        ]
+      },
+      "properties": {
+        "segmentId": -12080002050968,
+        "newSegmentId": "-a9a96c81-f9ac-4c80-8d54-fe5700736824",
+        "speedLimit": 50,
+        "frc": 4,
+        "streetName": "Herredsvej",
+        "distance": 61.67,
+        "segmentTimeResults": [
+          {
+            "timeSet": 2,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 45.9,
+            "medianSpeed": 48.0,
+            "averageSpeed": 47.3,
+            "standardDeviationSpeed": 7.3,
+            "travelTimeStandardDeviation": 1.13,
+            "sampleSize": 2776,
+            "normalizedSampleSize": 0.0285,
+            "averageTravelTime": 4.84,
+            "medianTravelTime": 4.63,
+            "travelTimeRatio": 1.0,
+            "speedPercentiles": [
+              34, 39, 41, 43, 44, 45, 46, 46, 47, 48, 48, 49, 50, 51, 52, 53,
+              54, 55, 57
+            ]
+          },
+          {
+            "timeSet": 3,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 43.6,
+            "medianSpeed": 46.0,
+            "averageSpeed": 45.4,
+            "standardDeviationSpeed": 7.3,
+            "travelTimeStandardDeviation": 1.46,
+            "sampleSize": 4999,
+            "normalizedSampleSize": 0.0512,
+            "averageTravelTime": 5.09,
+            "medianTravelTime": 4.83,
+            "travelTimeRatio": 1.05,
+            "speedPercentiles": [
+              32, 37, 40, 41, 42, 43, 44, 45, 45, 46, 47, 47, 48, 49, 50, 51,
+              52, 53, 56
+            ]
+          },
+          {
+            "timeSet": 4,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 43.0,
+            "medianSpeed": 45.2,
+            "averageSpeed": 44.9,
+            "standardDeviationSpeed": 7.5,
+            "travelTimeStandardDeviation": 1.52,
+            "sampleSize": 2763,
+            "normalizedSampleSize": 0.0283,
+            "averageTravelTime": 5.16,
+            "medianTravelTime": 4.91,
+            "travelTimeRatio": 1.07,
+            "speedPercentiles": [
+              31, 36, 39, 40, 41, 42, 43, 44, 45, 45, 46, 47, 48, 48, 49, 50,
+              51, 53, 56
+            ]
+          },
+          {
+            "timeSet": 5,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 42.4,
+            "medianSpeed": 45.0,
+            "averageSpeed": 44.1,
+            "standardDeviationSpeed": 7.3,
+            "travelTimeStandardDeviation": 1.58,
+            "sampleSize": 2922,
+            "normalizedSampleSize": 0.03,
+            "averageTravelTime": 5.24,
+            "medianTravelTime": 4.93,
+            "travelTimeRatio": 1.08,
+            "speedPercentiles": [
+              32, 36, 38, 39, 41, 41, 42, 43, 44, 45, 45, 46, 47, 48, 48, 49,
+              51, 52, 55
+            ]
+          },
+          {
+            "timeSet": 6,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 41.0,
+            "medianSpeed": 44.0,
+            "averageSpeed": 43.3,
+            "standardDeviationSpeed": 7.9,
+            "travelTimeStandardDeviation": 2.06,
+            "sampleSize": 2540,
+            "normalizedSampleSize": 0.026,
+            "averageTravelTime": 5.41,
+            "medianTravelTime": 5.05,
+            "travelTimeRatio": 1.12,
+            "speedPercentiles": [
+              29, 34, 37, 38, 40, 41, 42, 42, 43, 44, 45, 45, 46, 47, 48, 49,
+              50, 52, 55
+            ]
+          },
+          {
+            "timeSet": 7,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 41.4,
+            "medianSpeed": 44.0,
+            "averageSpeed": 43.8,
+            "standardDeviationSpeed": 8.2,
+            "travelTimeStandardDeviation": 2.05,
+            "sampleSize": 2417,
+            "normalizedSampleSize": 0.0248,
+            "averageTravelTime": 5.37,
+            "medianTravelTime": 5.05,
+            "travelTimeRatio": 1.11,
+            "speedPercentiles": [
+              28, 34, 37, 39, 40, 41, 42, 43, 44, 44, 45, 46, 47, 48, 49, 50,
+              51, 53, 55
+            ]
+          },
+          {
+            "timeSet": 8,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 41.5,
+            "medianSpeed": 44.7,
+            "averageSpeed": 43.9,
+            "standardDeviationSpeed": 8.1,
+            "travelTimeStandardDeviation": 2.12,
+            "sampleSize": 2827,
+            "normalizedSampleSize": 0.029,
+            "averageTravelTime": 5.35,
+            "medianTravelTime": 4.97,
+            "travelTimeRatio": 1.1,
+            "speedPercentiles": [
+              29, 35, 38, 39, 40, 41, 42, 43, 44, 45, 45, 46, 47, 48, 49, 50,
+              51, 53, 55
+            ]
+          },
+          {
+            "timeSet": 9,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 41.1,
+            "medianSpeed": 44.0,
+            "averageSpeed": 43.4,
+            "standardDeviationSpeed": 8.1,
+            "travelTimeStandardDeviation": 1.95,
+            "sampleSize": 2957,
+            "normalizedSampleSize": 0.0303,
+            "averageTravelTime": 5.4,
+            "medianTravelTime": 5.05,
+            "travelTimeRatio": 1.12,
+            "speedPercentiles": [
+              29, 34, 37, 38, 39, 41, 41, 42, 43, 44, 45, 46, 46, 47, 48, 49,
+              51, 53, 56
+            ]
+          },
+          {
+            "timeSet": 10,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 41.4,
+            "medianSpeed": 44.0,
+            "averageSpeed": 43.4,
+            "standardDeviationSpeed": 7.9,
+            "travelTimeStandardDeviation": 1.65,
+            "sampleSize": 2964,
+            "normalizedSampleSize": 0.0304,
+            "averageTravelTime": 5.36,
+            "medianTravelTime": 5.05,
+            "travelTimeRatio": 1.11,
+            "speedPercentiles": [
+              29, 34, 37, 38, 40, 41, 42, 42, 43, 44, 45, 46, 46, 47, 48, 49,
+              51, 52, 55
+            ]
+          },
+          {
+            "timeSet": 11,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 42.3,
+            "medianSpeed": 44.8,
+            "averageSpeed": 44.2,
+            "standardDeviationSpeed": 7.9,
+            "travelTimeStandardDeviation": 1.72,
+            "sampleSize": 3006,
+            "normalizedSampleSize": 0.0308,
+            "averageTravelTime": 5.25,
+            "medianTravelTime": 4.96,
+            "travelTimeRatio": 1.08,
+            "speedPercentiles": [
+              30, 35, 38, 39, 40, 41, 42, 43, 44, 45, 45, 46, 47, 48, 49, 50,
+              51, 53, 55
+            ]
+          },
+          {
+            "timeSet": 12,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 42.7,
+            "medianSpeed": 45.0,
+            "averageSpeed": 44.7,
+            "standardDeviationSpeed": 7.9,
+            "travelTimeStandardDeviation": 1.79,
+            "sampleSize": 4846,
+            "normalizedSampleSize": 0.0497,
+            "averageTravelTime": 5.2,
+            "medianTravelTime": 4.93,
+            "travelTimeRatio": 1.07,
+            "speedPercentiles": [
+              31, 36, 38, 40, 41, 42, 43, 44, 44, 45, 46, 46, 47, 48, 49, 50,
+              52, 53, 56
+            ]
+          },
+          {
+            "timeSet": 13,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 42.8,
+            "medianSpeed": 45.0,
+            "averageSpeed": 44.8,
+            "standardDeviationSpeed": 7.8,
+            "travelTimeStandardDeviation": 1.8,
+            "sampleSize": 35824,
+            "normalizedSampleSize": 0.3672,
+            "averageTravelTime": 5.19,
+            "medianTravelTime": 4.93,
+            "travelTimeRatio": 1.07,
+            "speedPercentiles": [
+              32, 37, 39, 40, 41, 42, 43, 44, 44, 45, 46, 46, 47, 48, 49, 50,
+              52, 53, 56
+            ]
+          },
+          {
+            "timeSet": 14,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 41.7,
+            "medianSpeed": 45.0,
+            "averageSpeed": 44.7,
+            "standardDeviationSpeed": 8.3,
+            "travelTimeStandardDeviation": 3.36,
+            "sampleSize": 3346,
+            "normalizedSampleSize": 0.0343,
+            "averageTravelTime": 5.33,
+            "medianTravelTime": 4.93,
+            "travelTimeRatio": 1.1,
+            "speedPercentiles": [
+              30, 36, 39, 40, 41, 42, 43, 43, 44, 45, 46, 46, 47, 48, 50, 51,
+              52, 54, 57
+            ]
+          },
+          {
+            "timeSet": 15,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 41.0,
+            "medianSpeed": 45.0,
+            "averageSpeed": 44.6,
+            "standardDeviationSpeed": 8.9,
+            "travelTimeStandardDeviation": 2.98,
+            "sampleSize": 3378,
+            "normalizedSampleSize": 0.0346,
+            "averageTravelTime": 5.41,
+            "medianTravelTime": 4.93,
+            "travelTimeRatio": 1.12,
+            "speedPercentiles": [
+              28, 35, 38, 40, 41, 42, 43, 44, 44, 45, 46, 47, 48, 49, 49, 51,
+              53, 55, 57
+            ]
+          },
+          {
+            "timeSet": 16,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 43.2,
+            "medianSpeed": 45.6,
+            "averageSpeed": 45.4,
+            "standardDeviationSpeed": 7.9,
+            "travelTimeStandardDeviation": 2.06,
+            "sampleSize": 1586,
+            "normalizedSampleSize": 0.0163,
+            "averageTravelTime": 5.14,
+            "medianTravelTime": 4.87,
+            "travelTimeRatio": 1.06,
+            "speedPercentiles": [
+              32, 37, 39, 40, 41, 42, 43, 44, 45, 46, 46, 47, 48, 49, 50, 51,
+              53, 54, 57
+            ]
+          },
+          {
+            "timeSet": 17,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 42.7,
+            "medianSpeed": 45.7,
+            "averageSpeed": 45.4,
+            "standardDeviationSpeed": 8.6,
+            "travelTimeStandardDeviation": 2.11,
+            "sampleSize": 1704,
+            "normalizedSampleSize": 0.0175,
+            "averageTravelTime": 5.2,
+            "medianTravelTime": 4.86,
+            "travelTimeRatio": 1.07,
+            "speedPercentiles": [
+              30, 36, 39, 40, 41, 42, 43, 44, 45, 46, 46, 47, 48, 49, 50, 51,
+              53, 55, 58
+            ]
+          },
+          {
+            "timeSet": 18,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 41.9,
+            "medianSpeed": 45.9,
+            "averageSpeed": 45.2,
+            "standardDeviationSpeed": 8.4,
+            "travelTimeStandardDeviation": 2.8,
+            "sampleSize": 1770,
+            "normalizedSampleSize": 0.0181,
+            "averageTravelTime": 5.29,
+            "medianTravelTime": 4.84,
+            "travelTimeRatio": 1.09,
+            "speedPercentiles": [
+              31, 36, 39, 41, 42, 43, 43, 44, 45, 46, 46, 47, 48, 49, 50, 51,
+              53, 55, 57
+            ]
+          },
+          {
+            "timeSet": 19,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 42.1,
+            "medianSpeed": 45.6,
+            "averageSpeed": 45.2,
+            "standardDeviationSpeed": 8.7,
+            "travelTimeStandardDeviation": 2.62,
+            "sampleSize": 1807,
+            "normalizedSampleSize": 0.0185,
+            "averageTravelTime": 5.27,
+            "medianTravelTime": 4.87,
+            "travelTimeRatio": 1.09,
+            "speedPercentiles": [
+              29, 37, 39, 41, 42, 43, 43, 44, 45, 46, 46, 47, 48, 49, 50, 51,
+              53, 54, 57
+            ]
+          },
+          {
+            "timeSet": 20,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 42.8,
+            "medianSpeed": 45.8,
+            "averageSpeed": 45.2,
+            "standardDeviationSpeed": 8.3,
+            "travelTimeStandardDeviation": 2.09,
+            "sampleSize": 1853,
+            "normalizedSampleSize": 0.019,
+            "averageTravelTime": 5.19,
+            "medianTravelTime": 4.85,
+            "travelTimeRatio": 1.07,
+            "speedPercentiles": [
+              30, 36, 38, 40, 41, 42, 43, 44, 45, 46, 46, 47, 48, 49, 50, 51,
+              53, 55, 57
+            ]
+          },
+          {
+            "timeSet": 21,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 42.0,
+            "medianSpeed": 45.0,
+            "averageSpeed": 44.6,
+            "standardDeviationSpeed": 8.6,
+            "travelTimeStandardDeviation": 2.05,
+            "sampleSize": 1935,
+            "normalizedSampleSize": 0.0198,
+            "averageTravelTime": 5.29,
+            "medianTravelTime": 4.93,
+            "travelTimeRatio": 1.09,
+            "speedPercentiles": [
+              28, 35, 38, 40, 41, 42, 43, 44, 44, 45, 46, 47, 48, 49, 50, 51,
+              52, 54, 57
+            ]
+          },
+          {
+            "timeSet": 22,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 42.5,
+            "medianSpeed": 45.0,
+            "averageSpeed": 44.7,
+            "standardDeviationSpeed": 8.6,
+            "travelTimeStandardDeviation": 1.61,
+            "sampleSize": 1948,
+            "normalizedSampleSize": 0.02,
+            "averageTravelTime": 5.22,
+            "medianTravelTime": 4.93,
+            "travelTimeRatio": 1.08,
+            "speedPercentiles": [
+              30, 34, 37, 39, 40, 42, 43, 43, 44, 45, 46, 47, 47, 49, 50, 51,
+              53, 55, 57
+            ]
+          },
+          {
+            "timeSet": 23,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 42.1,
+            "medianSpeed": 45.0,
+            "averageSpeed": 44.7,
+            "standardDeviationSpeed": 8.3,
+            "travelTimeStandardDeviation": 2.87,
+            "sampleSize": 1818,
+            "normalizedSampleSize": 0.0186,
+            "averageTravelTime": 5.28,
+            "medianTravelTime": 4.93,
+            "travelTimeRatio": 1.09,
+            "speedPercentiles": [
+              29, 35, 38, 40, 41, 42, 43, 44, 44, 45, 46, 47, 47, 48, 49, 51,
+              52, 54, 57
+            ]
+          },
+          {
+            "timeSet": 24,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 43.0,
+            "medianSpeed": 46.0,
+            "averageSpeed": 45.5,
+            "standardDeviationSpeed": 8.3,
+            "travelTimeStandardDeviation": 2.27,
+            "sampleSize": 3340,
+            "normalizedSampleSize": 0.0342,
+            "averageTravelTime": 5.16,
+            "medianTravelTime": 4.83,
+            "travelTimeRatio": 1.07,
+            "speedPercentiles": [
+              31, 37, 39, 40, 41, 43, 44, 44, 45, 46, 47, 47, 48, 49, 50, 51,
+              53, 55, 57
+            ]
+          },
+          {
+            "timeSet": 25,
+            "dateRange": 1,
+            "harmonicAverageSpeed": 43.7,
+            "medianSpeed": 46.0,
+            "averageSpeed": 45.9,
+            "standardDeviationSpeed": 7.9,
+            "travelTimeStandardDeviation": 2.02,
+            "sampleSize": 2722,
+            "normalizedSampleSize": 0.0279,
+            "averageTravelTime": 5.08,
+            "medianTravelTime": 4.83,
+            "travelTimeRatio": 1.05,
+            "speedPercentiles": [
+              33, 37, 40, 41, 42, 43, 44, 44, 45, 46, 47, 48, 48, 49, 50, 51,
+              53, 55, 57
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

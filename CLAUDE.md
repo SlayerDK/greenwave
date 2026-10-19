@@ -6,17 +6,18 @@ IoT device + sensor-reading dashboard. Built from `NEXTJS_FULLSTACK_TEMPLATE.md`
 
 ## Commands
 
-| Command                       | Purpose                                  |
-| ----------------------------- | ---------------------------------------- |
-| `pnpm dev`                    | Dev server                               |
-| `pnpm typecheck`              | `next typegen && tsc --noEmit`           |
-| `pnpm lint`                   | ESLint                                   |
-| `pnpm test`                   | Vitest                                   |
-| `pnpm analyze`                | fallow full sweep                        |
-| `pnpm analyze:ci`             | fallow changed-file gate (pre-push + CI) |
-| `pnpm db:up` / `db:down`      | Local Postgres container                 |
-| `pnpm db:migrate` / `db:seed` | Prisma migrate / seed                    |
-| `pnpm build-vercel`           | Vercel build: generate, migrate, build   |
+| Command                        | Purpose                                  |
+| ------------------------------ | ---------------------------------------- |
+| `pnpm dev`                     | Dev server                               |
+| `pnpm typecheck`               | `next typegen && tsc --noEmit`           |
+| `pnpm lint`                    | ESLint                                   |
+| `pnpm test`                    | Vitest                                   |
+| `pnpm analyze`                 | fallow full sweep                        |
+| `pnpm analyze:ci`              | fallow changed-file gate (pre-push + CI) |
+| `pnpm db:up` / `db:down`       | Local Postgres container                 |
+| `pnpm db:migrate` / `db:seed`  | Prisma migrate / seed                    |
+| `pnpm db:import-traffic-stats` | Load the Traffic Stats export            |
+| `pnpm build-vercel`            | Vercel build: generate, migrate, build   |
 
 pnpm only (`only-allow` preinstall hook). Husky runs lint-staged on `pre-commit` and `ls-lint` + `fallow audit` on `pre-push`.
 
@@ -243,6 +244,43 @@ to whoever last edited the cron line. On Vercel Pro, replace the workflow with
 `"crons": [{ "path": "/api/cron/traffic-history", "schedule": "0 * * * *" }]` in `vercel.json` —
 Vercel sends the same bearer header automatically.
 
+## Traffic stats (historical)
+
+`/history` shows a year of TomTom **Traffic Stats** route-analysis exports, one GeoJSON file per
+route in the git-ignored `traffic-history.geojson/`. The domain is `src/lib/traffic-stats/`, not
+`traffic-history` — that name already belongs to the hourly cron log above.
+
+**What the data is.** Not a day-by-day series: every file averages one date range (199 school-term
+weekdays) into one typical weekday of 24 uneven slots, 06:00–18:00 local time — 30 min early, 15 min
+through both peaks, one 09:30–14:00 block. So the timeline is time of day, and every slot is drawn
+as an equal-width cell.
+
+- **TomTom's `travelTimeRatio` is against the first slot (06:00–06:30), not free flow.** It is 1.0
+  for every segment there. The map colours `100 / ratio` through the live map's
+  `classifyCongestion` thresholds, so the cut-offs have one home, but the UI says "of 06:00 speed",
+  never "free flow" — over 1,500 segment-slots are faster than 06:00. Store TomTom's ratio rather
+  than recomputing it from speeds; that drifts by up to 3%.
+- **Per-slot values are Postgres scalar lists aligned with `slotStartMinutes`.** Index _i_ of every
+  `Float[]`/`Int[]` is the same slot. `alignBySlot` in `serialization.ts` is the only place that
+  establishes the order — sorted by start minute, exactly one result per slot — so never write a
+  list that did not pass through it. About 1,700 rows, read in one uncached query.
+- **Import, don't seed.** `pnpm db:import-traffic-stats [folder]` (`scripts/import-traffic-stats.ts`)
+  validates every file, then replaces the single dataset in one transaction. It builds its own
+  Prisma client like `prisma/seed.ts`, which is why `traffic-stats/schema.ts` and
+  `serialization.ts` carry no `server-only`: tsx cannot load it. Production: run it locally with
+  `DATABASE_URL=<neon url>`; dotenv does not override a variable already set. The transaction
+  timeout is raised to 60 s because Neon exceeds Prisma's 5 s default.
+- **Route names come from `properties.routeName`, never the filename.** macOS stores filenames
+  decomposed (NFD); only the `_N` route index is read from the name.
+- **Shared map pieces live in `src/components/traffic/`**: the layer style, the legend, the
+  `TrafficLineMap` shell and `SegmentPopupFrame`. Both pages match clicks on properties — mapbox
+  drops non-numeric feature ids. The line layer has a `line-offset`, so the two directions of a road
+  sit side by side; that applies to `/map` too.
+- The page embeds about 1 MB of serialized segments. Fine for one authenticated page; move the
+  geometry to an endpoint before reusing it anywhere hot.
+- Recharts needs `react-is` matching React 19; it is a peer only, hence in fallow's
+  `ignoreDependencies`.
+
 ## Deployment (Vercel)
 
 - `vercel.json` builds **production only** (`ignoreCommand`): Preview would share production's env
@@ -260,6 +298,6 @@ Vercel sends the same bearer header automatically.
 
 - **Prisma 7** requires `prisma.config.ts`; the datasource URL lives there, not in `schema.prisma`. Client is generated to `src/generated/prisma` (git-ignored).
 - **shadcn/ui 4** dropped the `new-york` style name and the `form` component. The project uses the `radix-nova` preset (neutral base, Lucide, CSS variables) and the `field` primitives with React Hook Form. New components are generated importing `cn` from the `cn` package — rewrite that to `@/lib/utils/cn` to match the alias in `components.json`.
-- **TanStack Table and Recharts are not installed.** Add them when a table or chart actually lands; `fallow` fails on unused dependencies.
-- Vendored `src/components/ui/**` is exempt from fallow's unused-export rule (`ignoreExports` in `.fallowrc.json`). Its advisory CSS-token-drift warnings are expected.
+- **TanStack Table is not installed.** Add it when a table actually lands; `fallow` fails on unused dependencies. Recharts arrived with `/history`'s chart.
+- Vendored `src/components/ui/**` is exempt from fallow's unused-export rule (`ignoreExports`) and its complexity gate (`health.ignore`), and from the `no-unsafe-*` ESLint rules that shadcn's `chart.tsx` trips. Its advisory CSS-token-drift warnings are expected.
 - `pg` and `@ls-lint/ls-lint` are in `ignoreDependencies` — one is a Prisma adapter peer, the other is CLI-only.

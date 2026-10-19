@@ -43,8 +43,17 @@ export const toRouteLabel = (routeName: string): string =>
 /**
  * `relativeSpeed` is current speed as a percentage of free flow. A segment
  * closed to traffic reports `currentSpeed: 0`, which TomTom documents explicitly.
+ *
+ * Structural rather than `TomTomSegment` so the historical page can colour by
+ * the same thresholds against its own baseline — one home for the cut-offs.
  */
-const classifyCongestion = ({ currentSpeed, relativeSpeed }: TomTomSegment) => {
+export const classifyCongestion = ({
+  currentSpeed,
+  relativeSpeed,
+}: {
+  currentSpeed: number;
+  relativeSpeed: number;
+}) => {
   if (currentSpeed === 0) return "closed";
   if (relativeSpeed < 50) return "heavy";
   if (relativeSpeed < 75) return "moderate";
@@ -85,10 +94,13 @@ export type TrafficBbox = [
   north: number,
 ];
 
-export type TrafficFeatureCollection = Omit<
-  FeatureCollection<LineString, TrafficSegmentProperties>,
+export type LineFeatureCollection<Properties> = Omit<
+  FeatureCollection<LineString, Properties>,
   "bbox"
 > & { bbox?: TrafficBbox };
+
+export type TrafficFeatureCollection =
+  LineFeatureCollection<TrafficSegmentProperties>;
 
 type TrafficSegmentFeature = Feature<LineString, TrafficSegmentProperties>;
 
@@ -117,10 +129,10 @@ const toSegmentFeature = (
 });
 
 /** RFC 7946 §5 order: [west, south, east, north]. */
-const computeBbox = (
-  features: TrafficSegmentFeature[],
+export const computeBbox = (
+  lines: readonly Position[][],
 ): TrafficBbox | undefined => {
-  const positions = features.flatMap((feature) => feature.geometry.coordinates);
+  const positions = lines.flat();
   if (positions.length === 0) return undefined;
 
   const longitudes = positions.map(([longitude]) => longitude);
@@ -149,7 +161,7 @@ export const serializeRouteTraffic = (
   );
   const featureCollection: TrafficFeatureCollection = {
     type: "FeatureCollection",
-    bbox: computeBbox(features),
+    bbox: computeBbox(features.map((feature) => feature.geometry.coordinates)),
     features,
   };
 

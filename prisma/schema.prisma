@@ -186,3 +186,64 @@ model TrafficHistory {
   @@id([recordedAt, routeId, segmentIdStr])
   @@map("traffic_history")
 }
+
+/// One TomTom Traffic Stats export: a typical weekday averaged over `dayCount`
+/// days. Per-slot values everywhere below are scalar lists aligned with
+/// `slotStartMinutes` — index i of every list is the same time slot. The
+/// importer replaces the single row wholesale, cascading to its routes.
+model TrafficStatsDataset {
+  id               String   @id @default(cuid())
+  jobName          String
+  dateFrom         DateTime @db.Date
+  dateTo           DateTime @db.Date
+  dayCount         Int
+  /// Local (Europe/Copenhagen) minutes after midnight, sorted and contiguous.
+  slotStartMinutes Int[]
+  slotEndMinutes   Int[]
+  /// TomTom's `creationTime`, not the import time.
+  exportedAt       DateTime
+  importedAt       DateTime @default(now())
+
+  routes TrafficStatsRoute[]
+
+  @@map("traffic_stats_dataset")
+}
+
+/// `id` is the export's route index (the `_N` file suffix), a different id
+/// space from the live TrafficRoute. Travel times are in seconds, per slot.
+model TrafficStatsRoute {
+  id                Int     @id
+  name              String
+  lengthMeters      Int
+  medianTravelTimes Float[]
+  p10TravelTimes    Float[]
+  p90TravelTimes    Float[]
+
+  datasetId String
+  dataset   TrafficStatsDataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  segments TrafficStatsSegment[]
+
+  @@index([datasetId])
+  @@map("traffic_stats_route")
+}
+
+/// `id` is TomTom's `newSegmentId`. `travelTimeRatios` is TomTom's own ratio
+/// against the first slot (06:00–06:30), not against free flow.
+model TrafficStatsSegment {
+  id                    String  @id
+  ordinal               Int
+  streetName            String
+  speedLimit            Int
+  lengthMeters          Float
+  shape                 Json
+  harmonicAverageSpeeds Float[]
+  travelTimeRatios      Float[]
+  sampleSizes           Int[]
+
+  routeId Int
+  route   TrafficStatsRoute @relation(fields: [routeId], references: [id], onDelete: Cascade)
+
+  @@index([routeId, ordinal])
+  @@map("traffic_stats_segment")
+}

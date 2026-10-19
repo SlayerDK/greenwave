@@ -7,7 +7,10 @@
       "exports": ["*"]
     }
   ],
-  "ignoreDependencies": ["pg", "@ls-lint/ls-lint"],
+  "health": {
+    "ignore": ["src/components/ui/**"]
+  },
+  "ignoreDependencies": ["pg", "@ls-lint/ls-lint", "react-is"],
   "ignoreExportsUsedInFile": true,
   "boundaries": {
     "zones": [

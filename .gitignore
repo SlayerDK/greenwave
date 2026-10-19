@@ -46,3 +46,6 @@ next-env.d.ts
 
 # fallow cache
 .fallow
+
+# TomTom Traffic Stats export (imported with pnpm db:import-traffic-stats)
+/traffic-history.geojson/

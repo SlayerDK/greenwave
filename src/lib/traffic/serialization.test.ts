@@ -2,6 +2,7 @@ import edwinRahrsFixture from "@/lib/traffic/fixtures/route-details-313727.json"
 import routeDetailsFixture from "@/lib/traffic/fixtures/route-details.json";
 import { tomtomRouteDetailsSchema } from "@/lib/traffic/schema";
 import {
+  classifyCongestion,
   mergeFeatureCollections,
   serializeNetworkTraffic,
   serializeRouteTraffic,
@@ -102,6 +103,28 @@ describe("serializeRouteTraffic", () => {
       fetchedAt: FETCHED_AT,
     });
     expect(featureCollection).not.toHaveProperty("summary");
+  });
+});
+
+describe("classifyCongestion", () => {
+  it("places each threshold in the less congested band", () => {
+    const at = (relativeSpeed: number) =>
+      classifyCongestion({ currentSpeed: 30, relativeSpeed });
+
+    expect([49, 50, 74, 75, 89, 90].map(at)).toEqual([
+      "heavy",
+      "moderate",
+      "moderate",
+      "light",
+      "light",
+      "free",
+    ]);
+  });
+
+  it("reports a stationary segment as closed whatever its ratio", () => {
+    expect(classifyCongestion({ currentSpeed: 0, relativeSpeed: 100 })).toBe(
+      "closed",
+    );
   });
 });
 

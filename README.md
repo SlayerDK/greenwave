@@ -10,6 +10,7 @@ cp .env.example .env        # a .env with a generated BETTER_AUTH_SECRET is alre
 pnpm db:up                  # Postgres via Docker Compose
 pnpm db:migrate             # create the schema
 pnpm db:seed                # optional demo data
+pnpm db:import-traffic-stats # optional: load traffic-history.geojson/ for /history
 pnpm dev
 ```
 
@@ -17,7 +18,7 @@ Then sign up at http://localhost:3000/signup.
 
 ## Scripts
 
-`dev` · `build` · `start` · `lint` · `format` · `typecheck` · `test` · `analyze` · `analyze:ci` · `db:up` · `db:down` · `db:migrate` · `db:push` · `db:generate` · `db:seed` · `build-prod` · `start-prod` · `build-vercel`
+`dev` · `build` · `start` · `lint` · `format` · `typecheck` · `test` · `analyze` · `analyze:ci` · `db:up` · `db:down` · `db:migrate` · `db:push` · `db:generate` · `db:seed` · `db:import-traffic-stats` · `build-prod` · `start-prod` · `build-vercel`
 
 ## Deployment
 
@@ -36,6 +37,7 @@ Production deploys from `main`; preview builds are skipped (`vercel.json`). Traf
 4. Redeploy — existing deployments don't pick up new variables. The build applies migrations. Then sign up at `/signup` (the new database has no users). If your Mapbox token is URL-restricted, allow the Vercel domain.
 5. In GitHub → Settings → Secrets and variables → Actions, add secret `CRON_SECRET` (same value) and variable `APP_URL` = the production domain.
 6. Actions → **Traffic history** → **Run workflow** to check it; afterwards it runs at minute 7 of every hour (UTC). A second run in the same hour reports `inserted: 0` by design.
+7. Load the historical Traffic Stats export (git-ignored, so not in the deploy) from your machine once the migration has deployed: `DATABASE_URL="<Neon URL>" pnpm db:import-traffic-stats`. It prints the target host before writing and replaces any earlier import.
 
 ### Docker
 

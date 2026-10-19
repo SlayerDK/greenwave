@@ -1,15 +1,18 @@
 "use client";
 
-import { congestionLabel } from "@/app/(app)/map/_lib/congestion-style";
 import {
   findSegment,
   type Selection,
 } from "@/app/(app)/map/_lib/segment-lookup";
+import { congestionLabel } from "@/components/traffic/congestion-style";
+import {
+  PopupRow,
+  SegmentPopupFrame,
+} from "@/components/traffic/segment-popup-frame";
 import {
   type SerializedRouteTraffic,
   type TrafficFeatureCollection,
 } from "@/lib/traffic/serialization";
-import { Popup } from "react-map-gl/mapbox";
 
 /**
  * The feature is looked up from the live collection on every render rather than
@@ -39,33 +42,18 @@ export const SegmentPopup = ({
   )?.summary.routeName;
 
   return (
-    <Popup
-      anchor="bottom"
+    <SegmentPopupFrame
       longitude={selection.longitude}
       latitude={selection.latitude}
+      title={congestionLabel(segment.congestion)}
+      subtitle={routeName}
       onClose={onClose}
-      closeOnClick={false}
-      maxWidth="280px"
     >
-      <div className="flex flex-col gap-1">
-        <p className="font-medium">{congestionLabel(segment.congestion)}</p>
-        {routeName && (
-          <p className="text-xs text-muted-foreground">{routeName}</p>
-        )}
-
-        <dl className="grid grid-cols-2 gap-x-3 gap-y-0.5 text-xs">
-          <dt className="text-muted-foreground">Current</dt>
-          <dd>{segment.currentSpeed} km/h</dd>
-          <dt className="text-muted-foreground">Typical</dt>
-          <dd>{segment.typicalSpeed} km/h</dd>
-          <dt className="text-muted-foreground">Of free flow</dt>
-          <dd>{segment.relativeSpeed}%</dd>
-          <dt className="text-muted-foreground">Length</dt>
-          <dd>{segment.segmentLength} m</dd>
-          <dt className="text-muted-foreground">Confidence</dt>
-          <dd>{segment.confidence}%</dd>
-        </dl>
-      </div>
-    </Popup>
+      <PopupRow label="Current">{segment.currentSpeed} km/h</PopupRow>
+      <PopupRow label="Typical">{segment.typicalSpeed} km/h</PopupRow>
+      <PopupRow label="Of free flow">{segment.relativeSpeed}%</PopupRow>
+      <PopupRow label="Length">{segment.segmentLength} m</PopupRow>
+      <PopupRow label="Confidence">{segment.confidence}%</PopupRow>
+    </SegmentPopupFrame>
   );
 };

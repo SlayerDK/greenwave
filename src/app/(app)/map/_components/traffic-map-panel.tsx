@@ -1,9 +1,9 @@
 "use client";
 
-import { CongestionLegend } from "@/app/(app)/map/_components/congestion-legend";
 import { RecordSnapshotButton } from "@/app/(app)/map/_components/record-snapshot-button";
 import { RefreshTrafficButton } from "@/app/(app)/map/_components/refresh-traffic-button";
 import { RouteSummaryList } from "@/app/(app)/map/_components/route-summary-list";
+import { CongestionLegend } from "@/components/traffic/congestion-legend";
 import { useNetworkTraffic } from "@/hooks/traffic/use-traffic";
 import {
   mergeFeatureCollections,

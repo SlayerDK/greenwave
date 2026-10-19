@@ -10,6 +10,7 @@ export const AppHeader = ({ userName }: { userName: string }) => (
 
       <nav className="flex items-center gap-4 text-sm">
         <Link href="/map">Map</Link>
+        <Link href="/history">History</Link>
         <Link href="/devices">Devices</Link>
         <span className="text-muted-foreground">{userName}</span>
         <SignOutButton />
