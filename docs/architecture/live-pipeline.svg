@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="560" viewBox="0 0 680 560" role="img" aria-labelledby="title desc">
+  <title id="title">GreenWave live pipeline</title>
+  <desc id="desc">Each city's adapter polls that city's HTTP traffic API and publishes normalized observations over MQTT to one Mosquitto broker. The backend, which can run as several copies, subscribes, applies the business rules, writes to Postgres and publishes processed state back to the broker. The Next.js frontend renders the map from Postgres and receives live state from the broker over a WebSocket.</desc>
+  <style>
+    .bg { fill: #ffffff; }
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
+    .th { font-size: 14px; font-weight: 600; }
+    .ts { font-size: 12px; }
+    .muted { fill: #5f5e5a; }
+    .arr { fill: none; stroke: #5f5e5a; stroke-width: 1.5; }
+    .head { fill: none; stroke: #5f5e5a; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .ext rect, .svc rect, .infra rect { stroke-width: 1; }
+    .ext rect { fill: #f1efe8; stroke: #5f5e5a; }
+    .ext .th { fill: #2c2c2a; }
+    .ext .ts { fill: #5f5e5a; }
+    .svc rect { fill: #eeedfe; stroke: #534ab7; }
+    .svc .th { fill: #3c3489; }
+    .svc .ts { fill: #534ab7; }
+    .infra rect { fill: #e1f5ee; stroke: #0f6e56; }
+    .infra .th { fill: #085041; }
+    .infra .ts { fill: #0f6e56; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #1f1f1e; }
+      .muted { fill: #b4b2a9; }
+      .arr, .head { stroke: #b4b2a9; }
+      .ext rect { fill: #444441; stroke: #b4b2a9; }
+      .ext .th { fill: #f1efe8; }
+      .ext .ts { fill: #d3d1c7; }
+      .svc rect { fill: #3c3489; stroke: #afa9ec; }
+      .svc .th { fill: #eeedfe; }
+      .svc .ts { fill: #cecbf6; }
+      .infra rect { fill: #085041; stroke: #5dcaa5; }
+      .infra .th { fill: #e1f5ee; }
+      .infra .ts { fill: #9fe1cb; }
+    }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path class="head" d="M2 1L8 5L2 9"/>
+    </marker>
+  </defs>
+  <rect class="bg" x="0" y="0" width="680" height="560" rx="12"/>
+
+  <g class="ext">
+    <rect x="130" y="40" width="180" height="56" rx="8"/>
+    <text class="th" x="220" y="58" text-anchor="middle" dominant-baseline="central">Aarhus traffic API</text>
+    <text class="ts" x="220" y="76" text-anchor="middle" dominant-baseline="central">TomTom, HTTP JSON</text>
+  </g>
+  <g class="ext">
+    <rect x="370" y="40" width="180" height="56" rx="8" stroke-dasharray="4 3"/>
+    <text class="th" x="460" y="58" text-anchor="middle" dominant-baseline="central">Next city's API</text>
+    <text class="ts" x="460" y="76" text-anchor="middle" dominant-baseline="central">own format, own key</text>
+  </g>
+  <line class="arr" x1="220" y1="98" x2="220" y2="134" marker-end="url(#arrow)"/>
+  <line class="arr" x1="460" y1="98" x2="460" y2="134" marker-end="url(#arrow)" stroke-dasharray="4 3"/>
+  <text class="ts muted" x="230" y="116" dominant-baseline="central">HTTP poll, 60 s</text>
+
+  <g class="svc">
+    <rect x="130" y="136" width="180" height="56" rx="8"/>
+    <text class="th" x="220" y="154" text-anchor="middle" dominant-baseline="central">Aarhus adapter</text>
+    <text class="ts" x="220" y="172" text-anchor="middle" dominant-baseline="central">normalize to contract</text>
+  </g>
+  <g class="svc">
+    <rect x="370" y="136" width="180" height="56" rx="8" stroke-dasharray="4 3"/>
+    <text class="th" x="460" y="154" text-anchor="middle" dominant-baseline="central">City N adapter</text>
+    <text class="ts" x="460" y="172" text-anchor="middle" dominant-baseline="central">same contract</text>
+  </g>
+  <line class="arr" x1="220" y1="194" x2="220" y2="230" marker-end="url(#arrow)"/>
+  <line class="arr" x1="460" y1="194" x2="460" y2="230" marker-end="url(#arrow)" stroke-dasharray="4 3"/>
+  <text class="ts muted" x="230" y="212" dominant-baseline="central">MQTT publish, QoS 1</text>
+
+  <g class="infra">
+    <rect x="40" y="232" width="600" height="56" rx="8"/>
+    <text class="th" x="340" y="250" text-anchor="middle" dominant-baseline="central">MQTT broker (Mosquitto)</text>
+    <text class="ts" x="340" y="268" text-anchor="middle" dominant-baseline="central">one topic tree: greenwave/v1/{city}/…</text>
+  </g>
+  <line class="arr" x1="220" y1="292" x2="220" y2="344" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+  <text class="ts muted" x="230" y="318" dominant-baseline="central">observations in, state out</text>
+  <line class="arr" x1="460" y1="290" x2="460" y2="346" marker-end="url(#arrow)"/>
+  <text class="ts muted" x="470" y="318" dominant-baseline="central">live state, WebSocket</text>
+
+  <g class="svc">
+    <rect x="130" y="348" width="180" height="56" rx="8"/>
+    <text class="th" x="220" y="366" text-anchor="middle" dominant-baseline="central">Backend ×N</text>
+    <text class="ts" x="220" y="384" text-anchor="middle" dominant-baseline="central">rules, state, history</text>
+  </g>
+  <g class="svc">
+    <rect x="370" y="348" width="180" height="56" rx="8"/>
+    <text class="th" x="460" y="366" text-anchor="middle" dominant-baseline="central">Frontend</text>
+    <text class="ts" x="460" y="384" text-anchor="middle" dominant-baseline="central">Next.js + Mapbox</text>
+  </g>
+  <path class="arr" d="M220 406 L220 472 L248 472" marker-end="url(#arrow)"/>
+  <text class="ts muted" x="210" y="440" text-anchor="end" dominant-baseline="central">writes, newer wins</text>
+  <path class="arr" d="M432 472 L460 472 L460 406" marker-end="url(#arrow)"/>
+  <text class="ts muted" x="470" y="440" dominant-baseline="central">reads for SSR</text>
+
+  <g class="infra">
+    <rect x="250" y="444" width="180" height="56" rx="8"/>
+    <text class="th" x="340" y="462" text-anchor="middle" dominant-baseline="central">Postgres</text>
+    <text class="ts" x="340" y="480" text-anchor="middle" dominant-baseline="central">geometry, state, history</text>
+  </g>
+
+  <g class="svc"><rect x="40" y="524" width="14" height="14" rx="3"/></g>
+  <text class="ts muted" x="60" y="531" dominant-baseline="central">our services</text>
+  <g class="infra"><rect x="160" y="524" width="14" height="14" rx="3"/></g>
+  <text class="ts muted" x="180" y="531" dominant-baseline="central">infrastructure</text>
+  <g class="ext"><rect x="290" y="524" width="14" height="14" rx="3"/></g>
+  <text class="ts muted" x="310" y="531" dominant-baseline="central">external source</text>
+  <g class="ext"><rect x="430" y="524" width="14" height="14" rx="3" stroke-dasharray="3 2"/></g>
+  <text class="ts muted" x="450" y="531" dominant-baseline="central">future city</text>
+</svg>
