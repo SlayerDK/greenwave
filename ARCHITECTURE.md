@@ -1,11 +1,14 @@
 # GreenWave architecture
 
-Live traffic for Aarhus's main roads on a Mapbox map, with every road segment coloured by its current speed. This is the target architecture for the SWIoT course project.
+Live traffic for Aarhus's main roads on a Mapbox map, with every road segment coloured by its current speed, and a forecast of where the traffic is heading. This is the target architecture for the SWIoT course project.
 
-> **Status (2026-10-21):** agreed design, not implemented yet. Today the app is a single Next.js proof of concept that calls TomTom's API directly over HTTP (see `README.md`).
+The project started as adaptive traffic-light control (presentation 1). With real TomTom data from Aarhus Kommune it works with real-time data instead: it shows the current traffic state and predicts the future state.
+
+> **Status (2026-10-25):** agreed design, not implemented yet. Prediction is part of the goal, but its method isn't chosen. Today the app is a single Next.js proof of concept that calls TomTom's API directly over HTTP (see `README.md`).
 
 At a glance:
 
+- **Goal:** show the current traffic state live, and predict the future state.
 - **Protocols:** HTTP from each city's API into our adapter, MQTT 5 between our services, MQTT over WebSocket to the browser.
 - **Broker:** one Mosquitto instance, one topic tree per city.
 - **Runs on:** Docker Compose on one machine.
@@ -13,15 +16,16 @@ At a glance:
 
 ## Overview
 
-Each city's adapter polls its traffic API and publishes the readings over MQTT. The backend turns them into processed state, stores it in Postgres and publishes it back to the broker, and the frontend draws the map from Postgres and receives live updates over a WebSocket.
+Each city's adapter polls its traffic API and publishes the readings over MQTT. The backend turns them into processed state, stores it in Postgres and publishes it back to the broker, and the frontend draws the map from Postgres and receives live updates over a WebSocket. A prediction job learns from the stored history and writes forecasts that the frontend shows beside the live state.
 
-| Component              | Responsibility                                                                                              | Built with                                     |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| Adapter (one per city) | Polls the city's API, converts the data into our message format, publishes it                               | Node.js, TypeScript, MQTT.js, Zod              |
-| MQTT broker            | Routes messages by topic; keeps retained state, Last Will messages and sessions                             | Mosquitto 2                                    |
-| Backend                | Classifies congestion, stores state and history, publishes processed state. The only writer of traffic data | Node.js, TypeScript, MQTT.js, Prisma           |
-| Postgres               | Geometry, latest state, history, the Traffic Stats import, user accounts                                    | PostgreSQL 18                                  |
-| Frontend               | The existing Next.js app: renders the map, handles login, reads Postgres, subscribes to live state          | Next.js 16, Mapbox GL, TanStack Query, MQTT.js |
+| Component              | Responsibility                                                                                                   | Built with                                     |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| Adapter (one per city) | Polls the city's API, converts the data into our message format, publishes it                                    | Node.js, TypeScript, MQTT.js, Zod              |
+| MQTT broker            | Routes messages by topic; keeps retained state, Last Will messages and sessions                                  | Mosquitto 2                                    |
+| Backend                | Classifies congestion, stores state and history, publishes processed state. The only writer of traffic data      | Node.js, TypeScript, MQTT.js, Prisma           |
+| Postgres               | Geometry, latest state, history, forecasts, the Traffic Stats import, user accounts                              | PostgreSQL 18                                  |
+| Frontend               | The existing Next.js app: renders the map and forecasts, handles login, reads Postgres, subscribes to live state | Next.js 16, Mapbox GL, TanStack Query, MQTT.js |
+| Prediction job         | Learns from the recorded history and the Traffic Stats import, writes forecasts for the frontend                 | A batch job; method not chosen yet             |
 
 ## Decisions
 
@@ -59,7 +63,7 @@ There are four deployable parts, each split off for a reason: the adapter scales
 
 ### Historical data kept separate
 
-Historical analysis meets the live pipeline only in Postgres. See [Historical data and prediction](#historical-data-and-prediction-future-work).
+Historical analysis and prediction meet the live pipeline only in Postgres: the prediction job reads the history and writes forecasts back, without touching MQTT. See [Historical data and prediction](#historical-data-and-prediction).
 
 ## MQTT design
 
@@ -237,18 +241,19 @@ Cons:
 | Azure IoT Hub or AWS IoT Core      | Cloud-only, while we run locally                                                 | Real devices needing identity and fleet management (L7 slides 33–37) |
 | Microservices                      | More contracts and tracing for no gain                                           | Large teams, very different scaling needs                            |
 
-## Historical data and prediction (future work)
+## Historical data and prediction
 
-Kept apart from the live pipeline; the two sides meet only in Postgres.
+Prediction is part of the goal: the map should show where traffic is heading, not only where it is now. It stays apart from the live pipeline; the two sides meet only in Postgres.
 
 - The Traffic Stats export (20 routes, about 1,700 segments) averages 199 school-term weekdays into one typical weekday of 24 time slots, 06:00–18:00. It's imported once with `pnpm db:import-traffic-stats` and shown on `/history`.
-- The history the backend records grows every day and is what predictions would learn from. 5-minute averages would suit forecasting better than hourly ones.
+- The history the backend records grows every day and is what predictions learn from. Hourly averages keep it small (about 26,000 rows a day for Aarhus); 5-minute averages would suit forecasting better (about 310,000). Which one to record is still open.
 - Live data and Traffic Stats don't share ids, so comparing them needs a table mapping each live route to its Traffic Stats route.
-- Prediction fits a batch job that writes forecasts to a table the frontend reads.
+- Prediction runs as a batch job that reads the history and writes forecasts to a table the frontend reads, so the map can show them beside the live state.
+- The method isn't chosen. We start from what we have, the typical weekday from Traffic Stats and our own recorded history, and pick a method from there.
 
 ## Out of scope
 
-A CoAP gateway and traffic signs, prediction, production deployment (TLS, broker login for browsers, backups) and broker clustering.
+A CoAP gateway and traffic signs, production deployment (TLS, broker login for browsers, backups) and broker clustering.
 
 ## Implementation overview
 
@@ -258,7 +263,7 @@ A CoAP gateway and traffic signs, prediction, production deployment (TLS, broker
 
 - [ ] **Adapter:** move `src/lib/traffic/tomtom-service.ts` into it, poll each route every minute, and publish observations and the Last Will status.
 
-- [ ] **Database:** city ids, a latest-state table, and hourly averages instead of hourly samples.
+- [ ] **Database:** city ids, a latest-state table, and averaged history instead of hourly samples, at the resolution prediction needs.
 
 - [ ] **Backend:** shared subscription, validation, deduplication, classification, congestion status, Postgres writes and retained state.
 
@@ -267,3 +272,5 @@ A CoAP gateway and traffic signs, prediction, production deployment (TLS, broker
 - [ ] **Clean-up:** remove the direct TomTom calls, `/api/traffic`, the Refresh and snapshot buttons, `TrafficSnapshot`, the cron route and workflow, `vercel.json` and `build-vercel`; update `README.md` and `CLAUDE.md`.
 
 - [ ] **Load test:** a load generator under a `loadtest` profile, and measurements for the report.
+
+- [ ] **Prediction:** a forecasts table, a first forecast job on the recorded history and Traffic Stats, and forecasts on the map.
