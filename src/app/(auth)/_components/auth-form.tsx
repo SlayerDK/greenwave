@@ -55,7 +55,11 @@ export const AuthForm = ({ mode, redirectTo }: AuthFormProps) => {
 
   const form = useForm<Credentials>({
     resolver: zodResolver(credentialsSchema),
-    defaultValues: { name: "", email: "", password: "" },
+    defaultValues: {
+      name: mode === "signup" ? "" : undefined,
+      email: "",
+      password: "",
+    },
   });
 
   const submit = async (values: Credentials) => {
