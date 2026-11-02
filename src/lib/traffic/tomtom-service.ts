@@ -108,7 +108,7 @@ export const fetchRouteDetails = async (
 
 /**
  * Reads every monitored route, shared by the map (`getNetworkTraffic`) and the
- * hourly history job. Read in parallel, not in sequence: `fetchRouteDetails`
+ * 15-minute history job. Read in parallel, not in sequence: `fetchRouteDetails`
  * allows itself eight seconds per call, so thirteen awaits in a row would take
  * up to two minutes.
  *

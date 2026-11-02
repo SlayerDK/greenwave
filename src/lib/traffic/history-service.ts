@@ -5,16 +5,17 @@ import { type RouteFailure } from "@/lib/traffic/serialization";
 import { readMonitoredRoutes } from "@/lib/traffic/tomtom-service";
 
 export type TrafficHistoryRun = {
-  /** The UTC hour this run's rows are keyed under. */
+  /** The UTC quarter hour this run's rows are keyed under. */
   recordedAt: string;
-  /** Rows actually written — 0 when the hour was already recorded. */
+  /** Rows actually written — 0 when the quarter hour was already recorded. */
   inserted: number;
   recorded: { routeId: number; segmentCount: number }[];
   failed: RouteFailure[];
 };
 
 /**
- * Records one hourly observation of every segment on every monitored route.
+ * Records one observation of every segment on every monitored route, keyed
+ * by the run's 15-minute slot.
  *
  * No `requireAuth()`: this runs from the cron route, which has no session and
  * checks `CRON_SECRET` instead. Never wrap it in an action — `"use server"`
@@ -25,7 +26,7 @@ export type TrafficHistoryRun = {
  * this write — the map's 60s read cache simply ages out.
  */
 export const recordTrafficHistory = async (): Promise<TrafficHistoryRun> => {
-  const recordedAt = toHourSlot(new Date());
+  const recordedAt = toQuarterHourSlot(new Date());
   const outcomes = await readMonitoredRoutes(0);
   const answered = outcomes.flatMap((outcome) =>
     outcome.ok ? [outcome.details] : [],
@@ -51,12 +52,13 @@ export const recordTrafficHistory = async (): Promise<TrafficHistoryRun> => {
 
 /**
  * Taken once from the run's own clock rather than TomTom's `date` header:
- * thirteen reads can land on both sides of an hour boundary, and the slot is
- * what keys the rows.
+ * thirteen reads can land on both sides of a slot boundary, and the slot is
+ * what keys the rows. Quarter hours, because every Traffic Stats slot starts
+ * and ends on one.
  */
-const toHourSlot = (date: Date) => {
+const toQuarterHourSlot = (date: Date) => {
   const slot = new Date(date);
-  slot.setUTCMinutes(0, 0, 0);
+  slot.setUTCMinutes(Math.floor(slot.getUTCMinutes() / 15) * 15, 0, 0);
 
   return slot;
 };

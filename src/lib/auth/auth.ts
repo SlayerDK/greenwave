@@ -8,6 +8,13 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
+  // Vercel also serves each build from its own deployment URL; accept those
+  // alongside BETTER_AUTH_URL so signing in works from either.
+  trustedOrigins: [
+    process.env.VERCEL_URL,
+    process.env.VERCEL_BRANCH_URL,
+    process.env.VERCEL_PROJECT_PRODUCTION_URL,
+  ].flatMap((host) => (host ? [`https://${host}`] : [])),
   emailAndPassword: {
     enabled: true,
     autoSignIn: true,
