@@ -217,16 +217,19 @@ stale-while-revalidate and would serve the superseded payload to the very refres
 ## Traffic history (scheduled)
 
 `GET /api/cron/traffic-history` → `recordTrafficHistory()` in `history-service.ts` → one
-`trafficMutations.recordHistory` `createMany`. It writes one `traffic_history` row per segment per
-run: route, `segmentIdStr`, current/average/relative/typical speed. About 1,100 rows a run, four runs
-an hour, so roughly 450 MB a month. Neon's free 1 GB blocks writes once full; export and prune
-before then (see `docs/WORK-PLAN.md`).
+`trafficMutations.recordHistory`: two `createMany`s in one transaction. It writes one `traffic_history`
+row per segment per run (route, `segmentIdStr`, current/average/relative/typical speed, `confidence`)
+and one `traffic_route_history` row per route (travel and typical time, delay, completeness,
+`routeConfidence`, passable). The route rows are what `slowerThanUsualSince` is tuned and backtested
+against; the segment rows alone cannot reconstruct a route's travel time. `confidence` is null on rows
+from before 2 Nov 2026. About 1,100 rows a run, four runs an hour, so roughly 450 MB a month. Neon's
+free 1 GB blocks writes once full; export and prune before then (see `docs/WORK-PLAN.md`).
 
-- **Rows are keyed by `(recordedAt, routeId, segmentIdStr)`, and `recordedAt` is the run's UTC
-  quarter hour**, taken once from the run's own clock, not TomTom's `date` header: thirteen reads can
-  straddle a slot boundary. Quarter hours because every Traffic Stats slot starts and ends on one.
-  With `skipDuplicates`, a duplicated, retried or manual run in the same slot inserts
-  nothing (`inserted: 0`), which is what makes the scheduler's retries safe. No foreign keys: an
+- **Rows are keyed by `(recordedAt, routeId, segmentIdStr)`, route rows by `(recordedAt, routeId)`,
+  and `recordedAt` is the run's UTC quarter hour**, taken once from the run's own clock, not TomTom's
+  `date` header: thirteen reads can straddle a slot boundary. Quarter hours because every Traffic
+  Stats slot starts and ends on one. With `skipDuplicates`, a duplicated, retried or manual run in the
+  same slot inserts nothing (`inserted: 0`), which is what makes the scheduler's retries safe. No foreign keys: an
   append-only log must not be cascade-deleted with `traffic_route`.
 - **Reads uncached and calls no `updateTag`.** That is Server-Action-only, and nothing re-renders off
   this write; the map's 60s cache just ages out. Unlike the snapshot action, this is correct.

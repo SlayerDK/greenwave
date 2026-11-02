@@ -7,15 +7,15 @@ import { readMonitoredRoutes } from "@/lib/traffic/tomtom-service";
 export type TrafficHistoryRun = {
   /** The UTC quarter hour this run's rows are keyed under. */
   recordedAt: string;
-  /** Rows actually written — 0 when the quarter hour was already recorded. */
+  /** Segment rows actually written — 0 when the quarter hour was already recorded. */
   inserted: number;
   recorded: { routeId: number; segmentCount: number }[];
   failed: RouteFailure[];
 };
 
 /**
- * Records one observation of every segment on every monitored route, keyed
- * by the run's 15-minute slot.
+ * Records one observation of every monitored route and each of its segments,
+ * keyed by the run's 15-minute slot.
  *
  * No `requireAuth()`: this runs from the cron route, which has no session and
  * checks `CRON_SECRET` instead. Never wrap it in an action — `"use server"`
