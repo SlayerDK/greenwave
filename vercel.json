@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "pnpm build-vercel",
-  "ignoreCommand": "echo \"VERCEL_ENV=${VERCEL_ENV:-unset}\"; [ \"$VERCEL_ENV\" = preview ]",
+  "ignoreCommand": "exit 0",
   "regions": ["fra1"]
 }

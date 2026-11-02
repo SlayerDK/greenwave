@@ -288,9 +288,10 @@ as an equal-width cell.
 
 ## Deployment (Vercel)
 
-- `vercel.json` builds **production only** (`ignoreCommand`): Preview would share production's env
-  vars, and with them its database and migrations. To enable previews, first give Preview its own
-  database (e.g. Neon preview branching).
+- **Frozen until after the hand-in.** `vercel.json`'s `"ignoreCommand": "exit 0"` skips every build,
+  so production keeps the history recorder while `main` is rebuilt around the new pipeline. Removed
+  in WP8 part 2 (`docs/work-plan/wp8-clean-up.md`). Never unfreeze it with previews enabled: Preview
+  would share production's env vars, and with them its database and migrations.
 - `pnpm build-vercel` runs `prisma generate && prisma migrate deploy && next build`. Generate is
   explicit because `src/generated` is git-ignored and must not depend on `postinstall`.
 - `prisma.config.ts` prefers `DATABASE_URL_UNPOOLED`: Migrate's advisory lock cannot be held
