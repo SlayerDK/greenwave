@@ -52,7 +52,7 @@ describe("recordTrafficHistory", () => {
     expect(mockedRead).toHaveBeenCalledWith(0);
   });
 
-  it("writes every answered route in one call, keyed by the run's hour", async () => {
+  it("writes every answered route in one call, keyed by the run's quarter hour", async () => {
     mockedRead.mockResolvedValue(MONITORED_ROUTE_IDS.map(answered));
     recordHistory.mockResolvedValue({ count: 2145 });
 
@@ -61,10 +61,10 @@ describe("recordTrafficHistory", () => {
     expect(recordHistory).toHaveBeenCalledTimes(1);
     expect(recordHistory).toHaveBeenCalledWith(
       MONITORED_ROUTE_IDS.map(() => details),
-      new Date("2026-10-07T12:00:00.000Z"),
+      new Date("2026-10-07T12:30:00.000Z"),
     );
     expect(run).toEqual({
-      recordedAt: "2026-10-07T12:00:00.000Z",
+      recordedAt: "2026-10-07T12:30:00.000Z",
       inserted: 2145,
       recorded: MONITORED_ROUTE_IDS.map(() => ({
         routeId: details.routeId,
@@ -74,7 +74,22 @@ describe("recordTrafficHistory", () => {
     });
   });
 
-  it("reports nothing inserted when the hour was already recorded", async () => {
+  it.each([
+    ["2026-10-07T12:00:00.000Z", "2026-10-07T12:00:00.000Z"],
+    ["2026-10-07T12:14:59.999Z", "2026-10-07T12:00:00.000Z"],
+    ["2026-10-07T12:15:00.000Z", "2026-10-07T12:15:00.000Z"],
+    ["2026-10-07T12:59:59.999Z", "2026-10-07T12:45:00.000Z"],
+  ])("keys a run at %s under %s", async (now, slot) => {
+    vi.setSystemTime(new Date(now));
+    mockedRead.mockResolvedValue(MONITORED_ROUTE_IDS.map(answered));
+    recordHistory.mockResolvedValue({ count: 0 });
+
+    const run = await recordTrafficHistory();
+
+    expect(run.recordedAt).toBe(slot);
+  });
+
+  it("reports nothing inserted when the quarter hour was already recorded", async () => {
     mockedRead.mockResolvedValue(MONITORED_ROUTE_IDS.map(answered));
     recordHistory.mockResolvedValue({ count: 0 });
 

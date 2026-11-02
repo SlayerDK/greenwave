@@ -6,8 +6,8 @@ import { NextResponse, type NextRequest } from "next/server";
 export const maxDuration = 60;
 
 /**
- * Called hourly by `.github/workflows/traffic-history.yml` (or Vercel Cron on
- * Pro), both sending `Authorization: Bearer $CRON_SECRET`. There is no session,
+ * Called every 15 minutes by `.github/workflows/traffic-history.yml` (or
+ * Vercel Cron on Pro), both sending `Authorization: Bearer $CRON_SECRET`. There is no session,
  * which is why `src/proxy.ts` must not match `api/cron`.
  *
  * 502 when no route answered, so the scheduler's run fails visibly; a partial

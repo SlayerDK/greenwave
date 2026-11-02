@@ -48,7 +48,7 @@ describe("GET /api/cron/traffic-history", () => {
     expect(mockedRecord).not.toHaveBeenCalled();
   });
 
-  it("records the hour and returns the run", async () => {
+  it("records the slot and returns the run", async () => {
     mockedRecord.mockResolvedValue(run);
 
     const response = await GET(request(`Bearer ${SECRET}`));

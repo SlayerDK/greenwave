@@ -208,7 +208,7 @@ stale-while-revalidate and would serve the superseded payload to the very refres
 `updateTag` whenever a mutation's own `router.refresh()` has to observe the write.
 
 > Snapshots are write-only today. They are recorded when something calls `useRecordNetworkSnapshot`
-> — there is no scheduled collection of snapshots (the hourly job writes `traffic_history`, below) —
+> — there is no scheduled collection of snapshots (the 15-minute job writes `traffic_history`, below) —
 > and nothing reads them back yet. The read path
 > (`queries.ts`, a history endpoint, a `serializeTrafficSnapshot`) was deleted rather than left
 > unused; add it together with whatever renders it, and give the query an explicit `select` so a
@@ -218,12 +218,14 @@ stale-while-revalidate and would serve the superseded payload to the very refres
 
 `GET /api/cron/traffic-history` → `recordTrafficHistory()` in `history-service.ts` → one
 `trafficMutations.recordHistory` `createMany`. It writes one `traffic_history` row per segment per
-run: route, `segmentIdStr`, current/average/relative/typical speed. About 1,100 rows an hour, so
-roughly 110–120 MB a month. Neon's free 1 GB blocks writes once full; prune or upgrade before then.
+run: route, `segmentIdStr`, current/average/relative/typical speed. About 1,100 rows a run, four runs
+an hour, so roughly 450 MB a month. Neon's free 1 GB blocks writes once full; export and prune
+before then (see `docs/WORK-PLAN.md`).
 
-- **Rows are keyed by `(recordedAt, routeId, segmentIdStr)`, and `recordedAt` is the run's UTC hour**,
-  taken once from the run's own clock, not TomTom's `date` header: thirteen reads can straddle an
-  hour boundary. With `skipDuplicates`, a duplicated, retried or manual run in the same hour inserts
+- **Rows are keyed by `(recordedAt, routeId, segmentIdStr)`, and `recordedAt` is the run's UTC
+  quarter hour**, taken once from the run's own clock, not TomTom's `date` header: thirteen reads can
+  straddle a slot boundary. Quarter hours because every Traffic Stats slot starts and ends on one.
+  With `skipDuplicates`, a duplicated, retried or manual run in the same slot inserts
   nothing (`inserted: 0`), which is what makes the scheduler's retries safe. No foreign keys: an
   append-only log must not be cascade-deleted with `traffic_route`.
 - **Reads uncached and calls no `updateTag`.** That is Server-Action-only, and nothing re-renders off
@@ -235,20 +237,20 @@ roughly 110–120 MB a month. Neon's free 1 GB blocks writes once full; prune or
   recorded nothing. `src/proxy.test.ts` guards it.
 - **The route returns 502 when no route answered**, so the scheduled run fails and notifies.
 
-**Scheduler.** Vercel Hobby rejects hourly crons at deploy time, so
-`.github/workflows/traffic-history.yml` calls the endpoint at minute 7 of every hour (UTC), using
+**Scheduler.** Vercel Hobby rejects sub-daily crons at deploy time, so
+`.github/workflows/traffic-history.yml` calls the endpoint at minutes 7, 22, 37 and 52 (UTC), using
 repo secret `CRON_SECRET` and repo variable `APP_URL` (the production domain — per-deployment URLs
 sit behind Vercel's deployment protection). GitHub delays or occasionally drops scheduled runs,
 disables schedules in a public repo after 60 days without repository activity, and emails failures
 to whoever last edited the cron line. On Vercel Pro, replace the workflow with
-`"crons": [{ "path": "/api/cron/traffic-history", "schedule": "0 * * * *" }]` in `vercel.json` —
+`"crons": [{ "path": "/api/cron/traffic-history", "schedule": "*/15 * * * *" }]` in `vercel.json` —
 Vercel sends the same bearer header automatically.
 
 ## Traffic stats (historical)
 
 `/history` shows a year of TomTom **Traffic Stats** route-analysis exports, one GeoJSON file per
 route in the git-ignored `traffic-history.geojson/`. The domain is `src/lib/traffic-stats/`, not
-`traffic-history` — that name already belongs to the hourly cron log above.
+`traffic-history` — that name already belongs to the 15-minute cron log above.
 
 **What the data is.** Not a day-by-day series: every file averages one date range (199 school-term
 weekdays) into one typical weekday of 24 uneven slots, 06:00–18:00 local time — 30 min early, 15 min

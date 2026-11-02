@@ -24,7 +24,7 @@ Then sign up at http://localhost:3000/signup.
 
 ### Vercel
 
-Production deploys from `main`; preview builds are skipped (`vercel.json`). Traffic history is recorded hourly by a GitHub Actions schedule calling `/api/cron/traffic-history`, because Vercel's Hobby plan does not allow hourly crons.
+Production deploys from `main`; preview builds are skipped (`vercel.json`). Traffic history is recorded every 15 minutes by a GitHub Actions schedule calling `/api/cron/traffic-history`, because Vercel's Hobby plan only allows daily crons.
 
 1. In Vercel, add a new project and import this repo. Build, ignore and region settings come from `vercel.json`. The first build fails until steps 3–4 are done; that is expected.
 2. In the project's **Storage** tab, create a **Neon** database in AWS Frankfurt (`eu-central-1`), Free plan, connected to **Production**. This sets `DATABASE_URL` and `DATABASE_URL_UNPOOLED`.
@@ -36,12 +36,12 @@ Production deploys from `main`; preview builds are skipped (`vercel.json`). Traf
    - `ENABLE_EXPERIMENTAL_COREPACK` = `1` (lets Vercel use the pinned pnpm 12)
 4. Redeploy — existing deployments don't pick up new variables. The build applies migrations. Then sign up at `/signup` (the new database has no users). If your Mapbox token is URL-restricted, allow the Vercel domain.
 5. In GitHub → Settings → Secrets and variables → Actions, add secret `CRON_SECRET` (same value) and variable `APP_URL` = the production domain.
-6. Actions → **Traffic history** → **Run workflow** to check it; afterwards it runs at minute 7 of every hour (UTC). A second run in the same hour reports `inserted: 0` by design.
+6. Actions → **Traffic history** → **Run workflow** to check it; afterwards it runs at minutes 7, 22, 37 and 52 (UTC). A second run in the same 15-minute slot reports `inserted: 0` by design.
 7. Load the historical Traffic Stats export (git-ignored, so not in the deploy) from your machine once the migration has deployed: `DATABASE_URL="<Neon URL>" pnpm db:import-traffic-stats`. It prints the target host before writing and replaces any earlier import.
 
 ### Docker
 
-`Dockerfile` builds a standalone Next.js image (`STANDALONE_BUILD=1`). `start-prod` applies migrations before booting the server. `CRON_SECRET` is required here too, and something must call the cron endpoint hourly.
+`Dockerfile` builds a standalone Next.js image (`STANDALONE_BUILD=1`). `start-prod` applies migrations before booting the server. `CRON_SECRET` is required here too, and something must call the cron endpoint every 15 minutes.
 
 ## Conventions
 
