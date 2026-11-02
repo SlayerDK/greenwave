@@ -1,6 +1,5 @@
-import { env } from "@/lib/config/env";
 import { createAuthClient } from "better-auth/react";
 
-export const authClient = createAuthClient({
-  baseURL: env.NEXT_PUBLIC_APP_URL,
-});
+// No baseURL: the client calls the origin the page was served from, so any of
+// the deployment's URLs works without a cross-origin request.
+export const authClient = createAuthClient();

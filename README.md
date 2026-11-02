@@ -30,7 +30,7 @@ Production deploys from `main`; preview builds are skipped (`vercel.json`). Traf
 2. In the project's **Storage** tab, create a **Neon** database in AWS Frankfurt (`eu-central-1`), Free plan, connected to **Production**. This sets `DATABASE_URL` and `DATABASE_URL_UNPOOLED`.
 3. Set these **Production** environment variables:
    - `BETTER_AUTH_SECRET` — `openssl rand -base64 32`
-   - `BETTER_AUTH_URL` and `NEXT_PUBLIC_APP_URL` — `https://<project>.vercel.app`
+   - `BETTER_AUTH_URL` — `https://<project>.vercel.app`
    - `TOMTOM_API_KEY`, `MAPBOX_PUBLIC_TOKEN`
    - `CRON_SECRET` — `openssl rand -hex 32`
    - `ENABLE_EXPERIMENTAL_COREPACK` = `1` (lets Vercel use the pinned pnpm 12)

@@ -13,9 +13,7 @@ export const env = createEnv({
       .enum(["development", "test", "production"])
       .default("development"),
   },
-  client: {
-    NEXT_PUBLIC_APP_URL: z.url(),
-  },
+  client: {},
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
@@ -24,7 +22,6 @@ export const env = createEnv({
     MAPBOX_PUBLIC_TOKEN: process.env.MAPBOX_PUBLIC_TOKEN,
     CRON_SECRET: process.env.CRON_SECRET,
     NODE_ENV: process.env.NODE_ENV,
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   },
   emptyStringAsUndefined: true,
 });
