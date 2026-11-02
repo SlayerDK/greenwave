@@ -51,7 +51,7 @@ One migration. Fields camelCase, tables `@@map`ped to snake_case.
 | `TrafficSegmentForecast`    | `runId`, `cityId`, `routeId`, `segmentId`       | `relativeSpeedPcts Int[]`, `speedsKmh Int[]`, aligned with `slotStarts`        | predictor         |
 
 - The old route and segment tables are recreated; geometry returns with the first observation.
-- `TrafficSnapshot` and the `TrafficRouteStatus` enum go. `traffic_history` stays as the backfill source.
+- `TrafficSnapshot` and the `TrafficRouteStatus` enum go. `traffic_history` and `traffic_route_history` stay as the backfill source. New tables use `@db.Timestamptz`, so local-time queries need no double conversion.
 - History stores sums, not averages: adding to a sum is exact, and the average is `sum / sampleCount`.
 - bd-nis adds the last three models in a PR on top.
 
