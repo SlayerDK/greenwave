@@ -4,19 +4,15 @@
 
 The hourly cron has never run on schedule: all 57 runs failed because `APP_URL` and `CRON_SECRET` were empty until 19 Oct, and then the workflow was disabled. Neon holds about one hour of history. Restart it at 15-minute resolution before anything restructures `main`.
 
-The code is in [SlayerDK/greenwave#2](https://github.com/SlayerDK/greenwave/pull/2) (merged) and [SlayerDK/greenwave#4](https://github.com/SlayerDK/greenwave/pull/4).
+The code is in [SlayerDK/greenwave#2](https://github.com/SlayerDK/greenwave/pull/2) and [SlayerDK/greenwave#4](https://github.com/SlayerDK/greenwave/pull/4); [#5](https://github.com/SlayerDK/greenwave/pull/5) deployed it and [#6](https://github.com/SlayerDK/greenwave/pull/6) froze Vercel, all merged on 2 Nov.
 
 - [x] `src/lib/traffic/history-service.ts` keys rows by the UTC quarter hour instead of the hour. Update its test.
 - [x] `.github/workflows/traffic-history.yml` runs at `7,22,37,52 * * * *`.
 - [x] Replace "hourly" in `CLAUDE.md`, `README.md` and the `TrafficHistory` comment in `prisma/schema.prisma`.
 - [x] `gh workflow enable traffic-history.yml`.
-- [ ] Also record one `traffic_route_history` row per route per run (travel and typical time, delay, completeness, confidence, passable) and each segment's `confidence`. Without the route rows, `slowerThanUsualSince` can't be tuned on recorded data.
-- [ ] Get production deploying again. Vercel has skipped every push to `main` since 24 Oct ("Canceled by Ignored Build Step"), so production still runs the hourly code from `54d8673`. Check the production branch in the Vercel project's Git settings, then deploy `main` once. That deploy also migrates Neon. Check with:
-
-  ```bash
-  gh workflow run traffic-history.yml   # expect a recordedAt on the quarter hour, about 1,080 rows inserted
-  ```
-
-- [ ] In a separate commit, freeze Vercel with `"ignoreCommand": "exit 0"` in `vercel.json`. Vercel then skips every later build, so production keeps this recorder while `main` is rebuilt. It can't go in the same commit, or that deploy is skipped too.
+- [x] Also record one `traffic_route_history` row per route per run (travel and typical time, delay, completeness, confidence, passable) and each segment's `confidence`. Without the route rows, `slowerThanUsualSince` can't be tuned on recorded data.
+- [x] Get production deploying again. Every Git-triggered build since 19 Oct had been canceled without a build log, so production still ran the hourly code from `54d8673`. Vercel seems to evaluate a plain `[ "$VERCEL_ENV" != production ]` itself and skip production; with an `echo` in front the command ran in the build, saw `VERCEL_ENV=production` and built. The run at 15:15 UTC keyed 1,081 rows under 15:15.
+- [x] Freeze Vercel with `"ignoreCommand": "exit 0"` in `vercel.json`, in its own commit after the deploy. Vercel now skips every build, so production keeps this recorder while `main` is rebuilt.
+- [ ] Confirm the schedule: GitHub fires runs at :07, :22, :37 and :52 on its own.
 
 **Done when** a scheduled run inserts rows under its quarter hour, with route rows beside them, and the next push shows as a skipped build on Vercel.
