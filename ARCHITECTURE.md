@@ -4,7 +4,7 @@ Live traffic for Aarhus's main roads on a Mapbox map, with every road segment co
 
 The project started as adaptive traffic-light control (presentation 1). With real TomTom data from Aarhus Kommune it works with real-time data instead: it shows the current traffic state and predicts the future state.
 
-> **Status (2026-10-25):** agreed design, not implemented yet. Prediction is part of the goal, but its method isn't chosen. Today the app is a single Next.js proof of concept that calls TomTom's API directly over HTTP (see `README.md`).
+> **Status (2026-11-02):** agreed design, not implemented yet. [`docs/WORK-PLAN.md`](docs/WORK-PLAN.md) says who builds what before the hand-in on 4 December 2026. Today the app is a single Next.js proof of concept that calls TomTom's API directly over HTTP (see `README.md`). Its Vercel cron records the traffic history until the hand-in.
 
 At a glance:
 
@@ -25,7 +25,7 @@ Each city's adapter polls its traffic API and publishes the readings over MQTT. 
 | Backend                | Classifies congestion, stores state and history, publishes processed state. The only writer of traffic data      | Node.js, TypeScript, MQTT.js, Prisma           |
 | Postgres               | Geometry, latest state, history, forecasts, the Traffic Stats import, user accounts                              | PostgreSQL 18                                  |
 | Frontend               | The existing Next.js app: renders the map and forecasts, handles login, reads Postgres, subscribes to live state | Next.js 16, Mapbox GL, TanStack Query, MQTT.js |
-| Prediction job         | Learns from the recorded history and the Traffic Stats import, writes forecasts for the frontend                 | A batch job; method not chosen yet             |
+| Prediction job         | Learns from the recorded history and the Traffic Stats import, writes forecasts for the frontend                 | Node.js, TypeScript, Prisma, croner            |
 
 ## Decisions
 
@@ -87,6 +87,7 @@ One message per route per poll. This is the real Ringvejen fixture, cut down to 
 {
   "eventId": "aarhus:56634:2026-10-19T09:41:00Z",
   "schemaVersion": 1,
+  "source": "live",
   "cityId": "aarhus",
   "routeId": "56634",
   "observedAt": "2026-10-19T09:41:00Z",
@@ -116,19 +117,26 @@ One message per route per poll. This is the real Ringvejen fixture, cut down to 
 }
 ```
 
-| Field                      | Meaning                                                                                                          |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `eventId`                  | `{cityId}:{routeId}:{observedAt}`, so a repeated reading gets the same id and is dropped                         |
-| `schemaVersion`            | Version of the message format                                                                                    |
-| `cityId`, `routeId`        | Which route. All ids are strings                                                                                 |
-| `observedAt`               | When TomTom produced the data (its `date` response header), not when we received it (L8 slide 9)                 |
-| `route`                    | Name without TomTom's `CW_AU_` prefix, length, current and typical travel time, delay, and whether it's passable |
-| `segments[].id`            | TomTom's segment id, a string because the number exceeds JavaScript's safe integer range                         |
-| `segments[]` speeds        | Current, average and typical speed in km/h, and current speed as a percentage of free-flow speed                 |
-| `segments[].confidencePct` | TomTom's confidence in the reading, 0–100                                                                        |
-| `segments[].coordinates`   | GeoJSON `[longitude, latitude]` pairs, converted from TomTom's `{latitude, longitude}` objects                   |
+| Field                      | Meaning                                                                                                                |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `eventId`                  | `{cityId}:{routeId}:{observedAt}`, so a repeated reading gets the same id and is dropped                               |
+| `schemaVersion`            | Version of the message format                                                                                          |
+| `source`                   | `live`, `fixture` (recorded responses replayed in development) or `loadtest`. Fixture readings stay out of the history |
+| `cityId`, `routeId`        | Which route. All ids are strings                                                                                       |
+| `observedAt`               | When TomTom produced the data (its `date` response header), not when we received it (L8 slide 9)                       |
+| `route`                    | Name without TomTom's `CW_AU_` prefix, length, current and typical travel time, delay, and whether it's passable       |
+| `segments[].id`            | TomTom's segment id, a string because the number exceeds JavaScript's safe integer range                               |
+| `segments[]` speeds        | Current, average and typical speed in km/h, and current speed as a percentage of free-flow speed                       |
+| `segments[].confidencePct` | TomTom's confidence in the reading, 0–100                                                                              |
+| `segments[].coordinates`   | GeoJSON `[longitude, latitude]` pairs, converted from TomTom's `{latitude, longitude}` objects                         |
 
-The state message is the observation plus what the backend derives: a congestion level per segment (free, light, moderate, heavy or closed) and `route.congestedSince`, which is when the route became congested, or `null`.
+The state message is the observation plus what the backend derives:
+
+- a congestion level per segment: free, light, moderate, heavy or closed
+- `route.congestedSince`: when at least a fifth of the route's length became moderate or worse
+- `route.slowerThanUsualSince`: when its travel time first ran 30% above TomTom's typical travel time for that time of day
+
+Both route fields are `null` when they don't apply. The first matches the map's colours, while the second shows whether today is worse than usual.
 
 ## Backend
 
@@ -136,8 +144,8 @@ For each observation, the backend:
 
 1. Validates it and drops duplicates by `eventId`.
 2. Classifies each segment with today's `classifyCongestion` thresholds.
-3. Marks the route congested after several congested readings in a row, and clears it the same way, so the status doesn't flap.
-4. Saves the geometry if it changed, the latest state if it's newer than what's stored, and the reading in the hourly history.
+3. Sets the route's two flags, congested and slower than usual, after three readings in a row, and clears them the same way, so the status doesn't flap.
+4. Saves the geometry of new segments, the latest state if it's newer than what's stored, and the reading in its 15-minute history bucket (except replayed fixtures).
 5. Publishes the route's state, retained.
 
 | Problem (L8 slide 35)                              | Fix                                                                         |
@@ -212,7 +220,7 @@ The system grows by adding instances where the load is (L7 slides 40–43):
 
 It holds up because every part under load is either stateless (adapters, frontend) or partitioned by a key it already has (city, route), and every part speaks one protocol and one message format.
 
-In numbers: Aarhus produces 13 messages and about 250 KB a minute, which is trivial for Mosquitto. The real limits are TomTom's quota and Postgres. Per-minute history would be about 1.6 million rows a day for Aarhus alone, hence hourly aggregates (about 26,000 rows a day). Mosquitto tops out at one CPU core, but the backend and database hit their limits first (L7 slide 42). A load generator under a `loadtest` Compose profile can show this with measurements: messages per second, backend lag (now minus `observedAt`) and database write rate.
+In numbers: Aarhus produces 13 messages and about 250 KB a minute, which is trivial for Mosquitto. The real limits are TomTom's quota and Postgres. Per-minute history would be about 1.6 million rows a day for Aarhus alone, hence 15-minute aggregates (about 100,000 rows a day). Mosquitto tops out at one CPU core, but the backend and database hit their limits first (L7 slide 42). A load generator under a `loadtest` Compose profile can show this with measurements: messages per second, backend lag (now minus `observedAt`) and database write rate.
 
 ## Pros and cons
 
@@ -246,10 +254,11 @@ Cons:
 Prediction is part of the goal: the map should show where traffic is heading, not only where it is now. It stays apart from the live pipeline; the two sides meet only in Postgres.
 
 - The Traffic Stats export (20 routes, about 1,700 segments) averages 199 school-term weekdays into one typical weekday of 24 time slots, 06:00–18:00. It's imported once with `pnpm db:import-traffic-stats` and shown on `/history`.
-- The history the backend records grows every day and is what predictions learn from. Hourly averages keep it small (about 26,000 rows a day for Aarhus); 5-minute averages would suit forecasting better (about 310,000). Which one to record is still open.
+- The history the backend records grows every day and is what predictions learn from. It is kept as 15-minute averages, about 100,000 rows a day for Aarhus. Every Traffic Stats slot starts and ends on a quarter hour, so the two line up.
+- Until the hand-in, the proof of concept's Vercel cron also records a 15-minute sample into Neon, which is imported into the same table. It started on 2 November, before the pipeline exists.
 - Live data and Traffic Stats don't share ids, so comparing them needs a table mapping each live route to its Traffic Stats route.
-- Prediction runs as a batch job that reads the history and writes forecasts to a table the frontend reads, so the map can show them beside the live state.
-- The method isn't chosen. We start from what we have, the typical weekday from Traffic Stats and our own recorded history, and pick a method from there.
+- Prediction runs as a batch job every 15 minutes. It reads the history and writes a forecast for every 15-minute slot until midnight to a table the frontend reads. A slider on the map shows them beside the live state.
+- The method starts from a typical speed per segment, day type (weekday or weekend) and 15-minute slot, taken from our own history. Where our data is thin, Traffic Stats' weekday shape fills in. To that profile it adds today's deviation from it, which fades the further ahead the forecast looks. A backtest compares this with two baselines: the current speed, and the profile alone.
 
 ## Out of scope
 
@@ -257,20 +266,22 @@ A CoAP gateway and traffic signs, production deployment (TLS, broker login for b
 
 ## Implementation overview
 
+Owners, dates and implementation details for each item are in [`docs/WORK-PLAN.md`](docs/WORK-PLAN.md).
+
 - [ ] **Workspace:** a pnpm workspace with `services/adapter`, `services/backend`, `packages/contracts` (message schemas, topics, and the congestion thresholds from `src/lib/traffic/serialization.ts`) and `packages/db` (Prisma).
 
 - [ ] **Compose:** `mosquitto` with its config and access rules, `migrate`, `adapter-aarhus`, `backend` and `frontend`, with healthchecks.
 
 - [ ] **Adapter:** move `src/lib/traffic/tomtom-service.ts` into it, poll each route every minute, and publish observations and the Last Will status.
 
-- [ ] **Database:** city ids, a latest-state table, and averaged history instead of hourly samples, at the resolution prediction needs.
+- [ ] **Database:** city ids, a latest-state table, and 15-minute averaged history instead of hourly samples.
 
 - [ ] **Backend:** shared subscription, validation, deduplication, classification, congestion status, Postgres writes and retained state.
 
 - [ ] **Frontend:** first paint from Postgres, plus a hook that merges live state into the TanStack Query cache.
 
-- [ ] **Clean-up:** remove the direct TomTom calls, `/api/traffic`, the Refresh and snapshot buttons, `TrafficSnapshot`, the cron route and workflow, `vercel.json` and `build-vercel`; update `README.md` and `CLAUDE.md`.
+- [ ] **Clean-up:** remove the direct TomTom calls, `/api/traffic`, the Refresh and snapshot buttons, `TrafficSnapshot`, the cron route and workflow, `vercel.json` and `build-vercel`; update `README.md` and `CLAUDE.md`. The workflow and `vercel.json` go last, after the hand-in, because until then they keep the frozen Vercel deployment recording history.
 
 - [ ] **Load test:** a load generator under a `loadtest` profile, and measurements for the report.
 
-- [ ] **Prediction:** a forecasts table, a first forecast job on the recorded history and Traffic Stats, and forecasts on the map.
+- [ ] **Prediction:** a forecasts table, a first forecast job on the recorded history and Traffic Stats, a backtest against two baselines, and a forecast slider on the map.
