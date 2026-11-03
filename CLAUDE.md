@@ -241,11 +241,17 @@ free 1 GB blocks writes once full; export and prune before then (see `docs/WORK-
 - **The route returns 502 when no route answered**, so the scheduled run fails and notifies.
 
 **Scheduler.** Vercel Hobby rejects sub-daily crons at deploy time, so
-`.github/workflows/traffic-history.yml` calls the endpoint at minutes 7, 22, 37 and 52 (UTC), using
-repo secret `CRON_SECRET` and repo variable `APP_URL` (the production domain — per-deployment URLs
-sit behind Vercel's deployment protection). GitHub delays or occasionally drops scheduled runs,
-disables schedules in a public repo after 60 days without repository activity, and emails failures
-to whoever last edited the cron line. On Vercel Pro, replace the workflow with
+`.github/workflows/traffic-history.yml` calls the endpoint, using repo secret `CRON_SECRET` and repo
+variable `APP_URL` (the production domain — per-deployment URLs sit behind Vercel's deployment
+protection). GitHub drops most scheduled runs — 2 of about 50 quarter-hour slots fired overnight on
+2–3 Nov 2026 — so a run is a loop, not one call: it calls once per slot, a minute into it, for
+340 minutes, then starts its successor with `gh workflow run` (the one event a `GITHUB_TOKEN` may
+trigger). The cron at minutes 7, 22, 37 and 52 is only the fallback that restarts a broken chain;
+the `traffic-history` concurrency group queues it behind the running loop, and the successor
+replaces it, so the run list shows cancelled scheduled runs by design. A failed call fails the run
+but still starts the successor; a cancelled run starts none. GitHub disables schedules in a public
+repo after 60 days without repository activity, and emails failures to whoever started the run. On
+Vercel Pro, replace the workflow with
 `"crons": [{ "path": "/api/cron/traffic-history", "schedule": "*/15 * * * *" }]` in `vercel.json` —
 Vercel sends the same bearer header automatically.
 

@@ -1,8 +1,17 @@
-# Records one 15-minute slot of traffic history by calling the deployed cron
-# endpoint. Vercel Hobby rejects sub-daily crons, so GitHub schedules it
-# instead. On Vercel Pro this can be replaced by a `crons` entry in
-# vercel.json — the endpoint already accepts Vercel Cron's
-# `Authorization: Bearer $CRON_SECRET`.
+# Records traffic history every 15 minutes by calling the deployed cron
+# endpoint. Vercel Hobby rejects sub-daily crons, so GitHub runs it instead.
+# On Vercel Pro this can be replaced by a `crons` entry in vercel.json — the
+# endpoint already accepts Vercel Cron's `Authorization: Bearer $CRON_SECRET`.
+#
+# GitHub drops most scheduled runs (2 of about 50 slots fired overnight on
+# 2–3 Nov 2026), so one run does not record one slot: it stays up for almost
+# six hours, calling the endpoint once per slot, and then starts its successor
+# with `gh workflow run`. The schedule only restarts the loop if that chain
+# ever breaks; the concurrency group queues it behind the running loop instead
+# of starting a second one.
+#
+# To stop recording, disable the workflow, then cancel the running and the
+# queued run. A cancelled run does not start a successor.
 #
 # Needs repository secret CRON_SECRET (same value as on Vercel) and repository
 # variable APP_URL (the production domain, e.g. https://greenwave.vercel.app).
@@ -17,18 +26,56 @@ on:
 
 permissions: {}
 
+concurrency:
+  group: traffic-history
+  cancel-in-progress: false
+
 jobs:
   record:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    # GitHub-hosted jobs are killed at 360 minutes; the loop stops calling
+    # after 340, and the last call plus its retries takes at most 5 more.
+    timeout-minutes: 355
+    permissions:
+      actions: write
     steps:
-      - name: Call the cron endpoint
+      - name: Call the cron endpoint once per slot
         env:
           APP_URL: ${{ vars.APP_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
-        # Retries are safe: a repeat within the same slot inserts nothing.
-        run: >-
-          curl --fail-with-body --silent --show-error
-          --retry 2 --retry-delay 30 --max-time 90
-          --header "Authorization: Bearer $CRON_SECRET"
-          "$APP_URL/api/cron/traffic-history"
+        # Retries and overlaps are safe: a repeat within the same slot inserts
+        # nothing. A failed call does not end the loop; the step fails at the
+        # end instead, so GitHub still emails about it.
+        run: |
+          deadline=$(( $(date +%s) + 340 * 60 ))
+          failures=0
+          while :; do
+            if ! curl --fail-with-body --silent --show-error \
+              --retry 2 --retry-delay 30 --max-time 90 \
+              --header "Authorization: Bearer $CRON_SECRET" \
+              "$APP_URL/api/cron/traffic-history"; then
+              failures=$(( failures + 1 ))
+              echo "::warning::Call at $(date -u +%H:%M:%S) failed"
+            fi
+            echo
+            # One minute into the next slot, so clock skew between the runner
+            # and Vercel cannot land the call in the slot just recorded.
+            now=$(date +%s)
+            next=$(( (now / 900 + 1) * 900 + 60 ))
+            if (( next >= deadline )); then break; fi
+            sleep $(( next - now ))
+          done
+          if (( failures > 0 )); then
+            echo "::error::$failures call(s) failed"
+            exit 1
+          fi
+
+      - name: Start the next loop
+        # Also after a failed call, so one bad slot does not end recording.
+        if: ${{ !cancelled() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        # Same ref as this run: `main` for scheduled runs. A scheduled run
+        # already queued is replaced by this one, and shows as cancelled.
+        run: gh workflow run traffic-history.yml --ref "$GITHUB_REF_NAME"
