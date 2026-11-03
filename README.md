@@ -24,7 +24,7 @@ Then sign up at http://localhost:3000/signup.
 
 ### Vercel
 
-Production is frozen until after the hand-in: `vercel.json` skips every build, so the deployed recorder keeps running while `main` changes. Traffic history is recorded every 15 minutes by a GitHub Actions schedule calling `/api/cron/traffic-history`, because Vercel's Hobby plan only allows daily crons.
+Production is frozen until after the hand-in: `vercel.json` skips every build, so the deployed recorder keeps running while `main` changes. Traffic history is recorded every 15 minutes by a long-running GitHub Actions workflow calling `/api/cron/traffic-history`, because Vercel's Hobby plan only allows daily crons.
 
 1. In Vercel, add a new project and import this repo. Build, ignore and region settings come from `vercel.json`. The first build fails until steps 3–4 are done; that is expected.
 2. In the project's **Storage** tab, create a **Neon** database in AWS Frankfurt (`eu-central-1`), Free plan, connected to **Production**. This sets `DATABASE_URL` and `DATABASE_URL_UNPOOLED`.
@@ -36,7 +36,7 @@ Production is frozen until after the hand-in: `vercel.json` skips every build, s
    - `ENABLE_EXPERIMENTAL_COREPACK` = `1` (lets Vercel use the pinned pnpm 12)
 4. Redeploy — existing deployments don't pick up new variables. The build applies migrations. Then sign up at `/signup` (the new database has no users). If your Mapbox token is URL-restricted, allow the Vercel domain.
 5. In GitHub → Settings → Secrets and variables → Actions, add secret `CRON_SECRET` (same value) and variable `APP_URL` = the production domain.
-6. Actions → **Traffic history** → **Run workflow** to check it; afterwards it runs at minutes 7, 22, 37 and 52 (UTC). A second run in the same 15-minute slot reports `inserted: 0` by design.
+6. Actions → **Traffic history** → **Run workflow** to start it. Each run calls once per 15-minute slot for almost six hours, then starts the next run; the schedule at minutes 7, 22, 37 and 52 (UTC) restarts it if that chain breaks. A second run in the same 15-minute slot reports `inserted: 0` by design.
 7. Load the historical Traffic Stats export (git-ignored, so not in the deploy) from your machine once the migration has deployed: `DATABASE_URL="<Neon URL>" pnpm db:import-traffic-stats`. It prints the target host before writing and replaces any earlier import.
 
 ### Docker
