@@ -2,7 +2,9 @@
 
 **Christian · Mon 9 – Fri 13 Nov; row lock Tue 17 – Wed 18 Nov.** Needs WP1 and WP2. · [← Work plan](../WORK-PLAN.md)
 
-- [ ] `services/backend` (_new_): connect, subscribe, process one observation per transaction, publish the state.
+> **Implementation plan:** [04 · Backend](../implementation-plans/04-backend.md). It has the step-by-step detail for handing this off; this file keeps the owner, dates and summary.
+
+- [ ] `backend/` (_new_): connect, subscribe, process one observation per transaction, publish the state.
 - [ ] Pure, unit-tested rules:
   - `routeIsCongested`: ≥ `CONGESTED_LENGTH_SHARE` of the length is moderate, heavy or closed
   - `routeIsSlowerThanUsual`: `travelTimeSec ≥ SLOWER_THAN_USUAL_RATIO × typicalTravelTimeSec`

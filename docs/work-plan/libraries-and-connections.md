@@ -8,8 +8,8 @@ Reference for every work package. · [← Work plan](../WORK-PLAN.md)
 | --------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------- |
 | MQTT.js (`mqtt`)                                    | 5.16    | `pnpm add mqtt --filter <package>` · [docs](https://github.com/mqttjs/MQTT.js)                               | adapter, backend, loadgen, frontend |
 | Eclipse Mosquitto                                   | 2.1.2   | image `eclipse-mosquitto:2.1.2-alpine` · [config reference](https://mosquitto.org/man/mosquitto-conf-5.html) | broker                              |
-| PostgreSQL                                          | 18      | image `postgres:18-alpine` (in use)                                                                          | everything                          |
-| Prisma, `@prisma/adapter-pg`, `pg`                  | 7.10.x  | in use; pin 7.10, since npm's `latest` is an 8.0 RC · [docs](https://www.prisma.io/docs)                     | `packages/db`                       |
+| PostgreSQL                                          | 18      | image `postgres:18.6-alpine`, pinned in [00](../implementation-plans/00-foundation.md)                       | everything                          |
+| Prisma, `@prisma/adapter-pg`, `pg`                  | 7.10.x  | in use; pin 7.10, since npm's `latest` is an 8.0 RC · [docs](https://www.prisma.io/docs)                     | `database/`                         |
 | Zod                                                 | 4.6     | in use                                                                                                       | contracts, service settings         |
 | pino                                                | 10.4    | `pnpm add pino --filter <service>`; `pino-pretty` locally · [getpino.io](https://getpino.io)                 | services                            |
 | croner                                              | 11      | `pnpm add croner --filter @greenwave/predictor` · [GitHub](https://github.com/Hexagon/croner)                | predictor                           |
@@ -47,16 +47,20 @@ Frontend 3000, Postgres 5432, MQTT 1883, MQTT over WebSocket 9001. Inside Compos
 
 All listed in `.env.example`.
 
-| Variable                                                          | Used by                                   | Value                                                            |
-| ----------------------------------------------------------------- | ----------------------------------------- | ---------------------------------------------------------------- |
-| `DATABASE_URL`                                                    | frontend, backend, predictor, migrate     | `postgres:5432` in Compose, `localhost` in `.env` for `pnpm dev` |
-| `MQTT_URL`                                                        | adapter, backend, loadgen                 | `mqtt://mosquitto:1883`                                          |
-| `MQTT_WS_URL`                                                     | frontend, handed to the browser           | `ws://localhost:9001`                                            |
-| `MQTT_*_PASSWORD`                                                 | `mosquitto-init` and the matching service | random strings                                                   |
-| `CITY_ID`, `ROUTE_IDS`, `POLL_INTERVAL_SECONDS`, `ADAPTER_SOURCE` | adapter                                   | `aarhus`, the 13 ids, `60`, `fixture` in development             |
-| `TOMTOM_API_KEY`                                                  | adapter, frozen Vercel app                | only where the live adapter runs or fixtures are recorded        |
-| `MAPBOX_PUBLIC_TOKEN`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`    | frontend                                  | as today                                                         |
-| `CRON_SECRET`                                                     | frozen Vercel app only                    | leaves the app's env in [WP8](wp8-clean-up.md)                   |
+| Variable                                                          | Used by                                   | Value                                                                                    |
+| ----------------------------------------------------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `DATABASE_URL`                                                    | frontend, backend, predictor, migrate     | `postgres:5432` in Compose, `localhost` in `.env` for `pnpm dev`                         |
+| `MQTT_URL`                                                        | adapter, backend, loadgen                 | `mqtt://mosquitto:1883`                                                                  |
+| `MQTT_WS_URL`                                                     | frontend, handed to the browser           | `ws://localhost:9001`                                                                    |
+| `MQTT_*_PASSWORD`                                                 | `mosquitto-init` and the matching service | random strings                                                                           |
+| `CITY_ID`, `ROUTE_IDS`, `POLL_INTERVAL_SECONDS`, `ADAPTER_SOURCE` | adapter                                   | `aarhus`, the 13 ids, `60`, `fixture` in development                                     |
+| `BACKEND_CLIENT_ID`                                               | backend                                   | optional; defaults to `backend-<hostname>` ([04](../implementation-plans/04-backend.md)) |
+| `CITY_IDS`, `FORECAST_TAU_MINUTES`, `HISTORY_DAYS`                | predictor                                 | `aarhus`, from the backtest (`60` until then), `28`                                      |
+| `RATE`, `DURATION_SECONDS`, `CITY_COUNT`                          | loadgen                                   | per scenario ([07](../implementation-plans/07-loadgen.md))                               |
+| `SKIP_ENV_VALIDATION`                                             | frontend image build only                 | `1` in the `Dockerfile`'s builder stage                                                  |
+| `TOMTOM_API_KEY`                                                  | adapter, frozen Vercel app                | only where the live adapter runs or fixtures are recorded                                |
+| `MAPBOX_PUBLIC_TOKEN`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`    | frontend                                  | as today                                                                                 |
+| `CRON_SECRET`                                                     | frozen Vercel app only                    | leaves the app's env in [WP8](wp8-clean-up.md)                                           |
 
 ## Startup order
 

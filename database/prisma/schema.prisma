@@ -1,0 +1,333 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions Session[]
+  accounts Account[]
+  devices  Device[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model Device {
+  id        String   @id @default(cuid())
+  name      String
+  location  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  readings Reading[]
+
+  @@index([ownerId])
+  @@map("device")
+}
+
+model Reading {
+  id          String   @id @default(cuid())
+  recordedAt  DateTime @default(now())
+  temperature Decimal  @db.Decimal(6, 2)
+  humidity    Decimal  @db.Decimal(6, 2)
+
+  deviceId String
+  device   Device @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  @@index([deviceId, recordedAt])
+  @@map("reading")
+}
+
+/// Mirrors CONGESTION_LEVELS in shared/. The backend assigns
+/// classifyCongestion's result to this column, so a level added on one side
+/// only stops compiling. Never derive the Zod list from this enum: shared/ is
+/// value-imported by browser code, which must not pull in Prisma.
+enum TrafficCongestion {
+  free
+  light
+  moderate
+  heavy
+  closed
+
+  @@map("traffic_congestion")
+}
+
+/// A monitored route of one city. Upserted by the backend from every observation.
+model TrafficRoute {
+  cityId    String
+  id        String
+  /// Without TomTom's CW_AU_ prefix.
+  name      String
+  lengthM   Int
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+
+  segments TrafficSegment[]
+  state    TrafficRouteState?
+
+  @@id([cityId, id])
+  @@map("traffic_route")
+}
+
+/// Static geometry, inserted once (createMany + skipDuplicates). `id` is
+/// TomTom's segmentIdStr; segment ids are unique across Aarhus's routes, but
+/// the key includes the route anyway.
+model TrafficSegment {
+  cityId      String
+  routeId     String
+  id          String
+  ordinal     Int
+  lengthM     Int
+  /// GeoJSON [longitude, latitude] pairs.
+  coordinates Json
+
+  route TrafficRoute         @relation(fields: [cityId, routeId], references: [cityId, id], onDelete: Cascade)
+  state TrafficSegmentState?
+
+  @@id([cityId, routeId, id])
+  @@index([cityId, routeId, ordinal])
+  @@map("traffic_segment")
+}
+
+/// The newest reading of a route, and the two flags with the streaks that
+/// switch them. Written only when an observation is newer than `observedAt`.
+model TrafficRouteState {
+  cityId               String
+  routeId              String
+  eventId              String
+  observedAt           DateTime @db.Timestamptz(3)
+  travelTimeSec        Int
+  typicalTravelTimeSec Int
+  delaySec             Int
+  passable             Boolean
+
+  /// When the flag is on: the first reading of the run that switched it on.
+  congestedSince              DateTime? @db.Timestamptz(3)
+  /// First reading of the current run that disagrees with the flag, if any.
+  congestedPendingSince       DateTime? @db.Timestamptz(3)
+  /// Length of that run; the flag switches when it reaches FLAG_SWITCH_READINGS.
+  congestedStreak             Int       @default(0)
+  slowerThanUsualSince        DateTime? @db.Timestamptz(3)
+  slowerThanUsualPendingSince DateTime? @db.Timestamptz(3)
+  slowerThanUsualStreak       Int       @default(0)
+
+  route TrafficRoute @relation(fields: [cityId, routeId], references: [cityId, id], onDelete: Cascade)
+
+  @@id([cityId, routeId])
+  @@map("traffic_route_state")
+}
+
+/// The newest reading of each segment, written with its route state.
+model TrafficSegmentState {
+  cityId           String
+  routeId          String
+  segmentId        String
+  observedAt       DateTime          @db.Timestamptz(3)
+  currentSpeedKmh  Int
+  averageSpeedKmh  Int
+  typicalSpeedKmh  Int
+  relativeSpeedPct Int
+  confidencePct    Int
+  congestion       TrafficCongestion
+
+  segment TrafficSegment @relation(fields: [cityId, routeId, segmentId], references: [cityId, routeId, id], onDelete: Cascade)
+
+  @@id([cityId, routeId, segmentId])
+  @@map("traffic_segment_state")
+}
+
+/// One row per segment per UTC quarter hour of `observedAt`. Sums, not
+/// averages: adding to a sum is exact, and the mean is sum / sampleCount.
+/// Time-first key so writes append at the index's right edge. No relations:
+/// an append-only log must never be cascade-deleted with its route. Fixture
+/// readings never land here.
+model TrafficSegmentHistory {
+  bucketStart      DateTime @db.Timestamptz(3)
+  cityId           String
+  routeId          String
+  segmentId        String
+  sampleCount      Int
+  currentSpeedSum  Int
+  averageSpeedSum  Int
+  typicalSpeedSum  Int
+  relativeSpeedSum Int
+
+  @@id([bucketStart, cityId, routeId, segmentId])
+  @@map("traffic_segment_history")
+}
+
+/// One row per observation the backend has processed; the insert that finds
+/// the row already there is how a duplicate delivery is detected.
+model TrafficObservationReceipt {
+  eventId    String   @id
+  receivedAt DateTime @default(now()) @db.Timestamptz(3)
+
+  @@index([receivedAt])
+  @@map("traffic_observation_receipt")
+}
+
+/// The proof of concept's log: the frozen Vercel recorder writes it in Neon,
+/// and the predictor backfills from it. Route ids are integers here.
+///
+/// One row per segment per 15-minute run, written by the cron route.
+/// `recordedAt` is the run's UTC quarter hour, not the read time, and is part of the key: a
+/// duplicated or retried trigger collides and is skipped instead of
+/// double-counted. Time-first so each run appends at the index's right edge;
+/// add a (routeId, segmentIdStr) index together with the first per-segment read.
+/// No relation to TrafficRoute or TrafficSegment: an append-only log must never
+/// be cascade-deleted with them. `confidence` is null on rows recorded before
+/// 2 Nov 2026, when it was added.
+model TrafficHistory {
+  recordedAt    DateTime
+  routeId       Int
+  segmentIdStr  String
+  currentSpeed  Int
+  averageSpeed  Int
+  relativeSpeed Int
+  typicalSpeed  Int
+  confidence    Int?
+
+  @@id([recordedAt, routeId, segmentIdStr])
+  @@map("traffic_history")
+}
+
+/// The route-level half of the same run: one row per route that answered,
+/// keyed and deduplicated exactly like TrafficHistory, and for the same reason
+/// without relations. Travel times are in seconds.
+model TrafficRouteHistory {
+  recordedAt        DateTime
+  routeId           Int
+  travelTime        Int
+  typicalTravelTime Int
+  delayTime         Int
+  completeness      Int
+  routeConfidence   Int
+  passable          Boolean
+
+  @@id([recordedAt, routeId])
+  @@map("traffic_route_history")
+}
+
+/// One TomTom Traffic Stats export: a typical weekday averaged over `dayCount`
+/// days. Per-slot values everywhere below are scalar lists aligned with
+/// `slotStartMinutes` — index i of every list is the same time slot. The
+/// importer replaces the single row wholesale, cascading to its routes.
+model TrafficStatsDataset {
+  id               String   @id @default(cuid())
+  jobName          String
+  dateFrom         DateTime @db.Date
+  dateTo           DateTime @db.Date
+  dayCount         Int
+  /// Local (Europe/Copenhagen) minutes after midnight, sorted and contiguous.
+  slotStartMinutes Int[]
+  slotEndMinutes   Int[]
+  /// TomTom's `creationTime`, not the import time.
+  exportedAt       DateTime
+  importedAt       DateTime @default(now())
+
+  routes TrafficStatsRoute[]
+
+  @@map("traffic_stats_dataset")
+}
+
+/// `id` is the export's route index (the `_N` file suffix), a different id
+/// space from the live TrafficRoute. Travel times are in seconds, per slot.
+model TrafficStatsRoute {
+  id                Int     @id
+  name              String
+  lengthMeters      Int
+  medianTravelTimes Float[]
+  p10TravelTimes    Float[]
+  p90TravelTimes    Float[]
+
+  datasetId String
+  dataset   TrafficStatsDataset @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  segments TrafficStatsSegment[]
+
+  @@index([datasetId])
+  @@map("traffic_stats_route")
+}
+
+/// `id` is TomTom's `newSegmentId`. `travelTimeRatios` is TomTom's own ratio
+/// against the first slot (06:00–06:30), not against free flow.
+model TrafficStatsSegment {
+  id                    String  @id
+  ordinal               Int
+  streetName            String
+  speedLimit            Int
+  lengthMeters          Float
+  shape                 Json
+  harmonicAverageSpeeds Float[]
+  travelTimeRatios      Float[]
+  sampleSizes           Int[]
+
+  routeId Int
+  route   TrafficStatsRoute @relation(fields: [routeId], references: [id], onDelete: Cascade)
+
+  @@index([routeId, ordinal])
+  @@map("traffic_stats_segment")
+}

@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules
 /.pnp
 .pnp.*
 .yarn/*
@@ -14,8 +14,8 @@
 /coverage
 
 # next.js
-/.next/
-/out/
+frontend/.next/
+frontend/out/
 
 # production
 /build
@@ -42,10 +42,10 @@ yarn-error.log*
 next-env.d.ts
 
 # prisma generated client
-/src/generated
+database/src/generated
 
 # fallow cache
 .fallow
 
 # TomTom Traffic Stats export (imported with pnpm db:import-traffic-stats)
-/traffic-history.geojson/
+/frontend/traffic-history.geojson/

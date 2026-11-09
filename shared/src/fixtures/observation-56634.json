@@ -1,0 +1,2336 @@
+{
+  "eventId": "aarhus:56634:2026-10-19T09:41:00Z",
+  "schemaVersion": 1,
+  "source": "live",
+  "cityId": "aarhus",
+  "routeId": "56634",
+  "observedAt": "2026-10-19T09:41:00Z",
+  "route": {
+    "name": "Ringvejen sydgående",
+    "lengthM": 9637,
+    "travelTimeSec": 1017,
+    "typicalTravelTimeSec": 977,
+    "delaySec": 323,
+    "passable": true
+  },
+  "segments": [
+    {
+      "id": "1170420026289651713",
+      "lengthM": 10,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 35,
+      "typicalSpeedKmh": 35,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.21815, 56.18899],
+        [10.21801, 56.18894]
+      ]
+    },
+    {
+      "id": "1170420026289618945",
+      "lengthM": 24,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 38,
+      "typicalSpeedKmh": 37,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.21801, 56.18894],
+        [10.21767, 56.18883]
+      ]
+    },
+    {
+      "id": "1170420026289684481",
+      "lengthM": 39,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 45,
+      "typicalSpeedKmh": 43,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.21767, 56.18883],
+        [10.21713, 56.18865]
+      ]
+    },
+    {
+      "id": "1170420026290372609",
+      "lengthM": 48,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 49,
+      "typicalSpeedKmh": 48,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.21713, 56.18865],
+        [10.21646, 56.18843]
+      ]
+    },
+    {
+      "id": "1170420026673659905",
+      "lengthM": 6,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 49,
+      "typicalSpeedKmh": 49,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.21646, 56.18843],
+        [10.21637, 56.1884]
+      ]
+    },
+    {
+      "id": "1170420026673758209",
+      "lengthM": 34,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 47,
+      "typicalSpeedKmh": 46,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.21637, 56.1884],
+        [10.21591, 56.18824]
+      ]
+    },
+    {
+      "id": "1170420026673790977",
+      "lengthM": 57,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 29,
+      "typicalSpeedKmh": 28,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.21591, 56.18824],
+        [10.21512, 56.18798]
+      ]
+    },
+    {
+      "id": "1170420026289553409",
+      "lengthM": 34,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 16,
+      "typicalSpeedKmh": 15,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.21512, 56.18798],
+        [10.21464, 56.18783]
+      ]
+    },
+    {
+      "id": "1170420026289946625",
+      "lengthM": 114,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 50,
+      "typicalSpeedKmh": 48,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.21464, 56.18783],
+        [10.21307, 56.18729]
+      ]
+    },
+    {
+      "id": "1170420026195214337",
+      "lengthM": 104,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 61,
+      "typicalSpeedKmh": 59,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.21307, 56.18729],
+        [10.21167, 56.18683],
+        [10.21162, 56.18681]
+      ]
+    },
+    {
+      "id": "1170420026195116033",
+      "lengthM": 50,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 60,
+      "typicalSpeedKmh": 58,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.21162, 56.18681],
+        [10.21093, 56.18657]
+      ]
+    },
+    {
+      "id": "1170420026195247105",
+      "lengthM": 64,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 58,
+      "typicalSpeedKmh": 54,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.21093, 56.18657],
+        [10.21085, 56.18655],
+        [10.21015, 56.18632],
+        [10.21003, 56.18628]
+      ]
+    },
+    {
+      "id": "1170420026226540545",
+      "lengthM": 98,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 38,
+      "typicalSpeedKmh": 36,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.21003, 56.18628],
+        [10.20992, 56.18624],
+        [10.20967, 56.18617],
+        [10.20865, 56.18584]
+      ]
+    },
+    {
+      "id": "1170420026826096641",
+      "lengthM": 15,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 49,
+      "typicalSpeedKmh": 48,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.20865, 56.18584],
+        [10.20844, 56.18577]
+      ]
+    },
+    {
+      "id": "1170420026826031105",
+      "lengthM": 10,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 51,
+      "typicalSpeedKmh": 48,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.20844, 56.18577],
+        [10.2083, 56.18572]
+      ]
+    },
+    {
+      "id": "1170420026537902081",
+      "lengthM": 10,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 49,
+      "typicalSpeedKmh": 48,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.2083, 56.18572],
+        [10.20816, 56.18568]
+      ]
+    },
+    {
+      "id": "1170420026226409473",
+      "lengthM": 42,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 54,
+      "typicalSpeedKmh": 53,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.20816, 56.18568],
+        [10.20758, 56.18549]
+      ]
+    },
+    {
+      "id": "1170420026741686273",
+      "lengthM": 216,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 56,
+      "typicalSpeedKmh": 53,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.20758, 56.18549],
+        [10.20697, 56.1853],
+        [10.20686, 56.18526],
+        [10.20457, 56.18451]
+      ]
+    },
+    {
+      "id": "1170420026670186497",
+      "lengthM": 45,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 37,
+      "typicalSpeedKmh": 33,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.20457, 56.18451],
+        [10.20394, 56.1843]
+      ]
+    },
+    {
+      "id": "1170420026226606081",
+      "lengthM": 49,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 20,
+      "typicalSpeedKmh": 19,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.20394, 56.1843],
+        [10.20363, 56.18421],
+        [10.20326, 56.18408]
+      ]
+    },
+    {
+      "id": "1170420026226442241",
+      "lengthM": 13,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 42,
+      "typicalSpeedKmh": 40,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.20326, 56.18408],
+        [10.20319, 56.18406],
+        [10.20308, 56.18402]
+      ]
+    },
+    {
+      "id": "1170420026226671617",
+      "lengthM": 27,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 39,
+      "typicalSpeedKmh": 38,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.20308, 56.18402],
+        [10.20271, 56.1839]
+      ]
+    },
+    {
+      "id": "1170420026537934849",
+      "lengthM": 86,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 51,
+      "typicalSpeedKmh": 51,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.20271, 56.1839],
+        [10.20245, 56.18382],
+        [10.2021, 56.18371],
+        [10.20171, 56.18361],
+        [10.20148, 56.18354]
+      ]
+    },
+    {
+      "id": "1170420026537803777",
+      "lengthM": 54,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 54,
+      "typicalSpeedKmh": 58,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.20148, 56.18354],
+        [10.20125, 56.18348],
+        [10.20091, 56.18339],
+        [10.20069, 56.18333]
+      ]
+    },
+    {
+      "id": "1170420026670252033",
+      "lengthM": 75,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 49,
+      "typicalSpeedKmh": 55,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.20069, 56.18333],
+        [10.1999, 56.18314],
+        [10.19957, 56.18307]
+      ]
+    },
+    {
+      "id": "1170420026670284801",
+      "lengthM": 20,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 40,
+      "typicalSpeedKmh": 51,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.19957, 56.18307],
+        [10.19927, 56.18301]
+      ]
+    },
+    {
+      "id": "1170420026620870657",
+      "lengthM": 28,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 30,
+      "typicalSpeedKmh": 47,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.19927, 56.18301],
+        [10.19885, 56.18292]
+      ]
+    },
+    {
+      "id": "1170420026620903425",
+      "lengthM": 23,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 17,
+      "typicalSpeedKmh": 24,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.19885, 56.18292],
+        [10.1985, 56.18285]
+      ]
+    },
+    {
+      "id": "1170420026676838401",
+      "lengthM": 35,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 7,
+      "typicalSpeedKmh": 5,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.1985, 56.18285],
+        [10.19797, 56.18274]
+      ]
+    },
+    {
+      "id": "1170420026676641793",
+      "lengthM": 34,
+      "currentSpeedKmh": 38,
+      "averageSpeedKmh": 5,
+      "typicalSpeedKmh": 5,
+      "relativeSpeedPct": 88,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.19797, 56.18274],
+        [10.19745, 56.18263]
+      ]
+    },
+    {
+      "id": "1170420026645446657",
+      "lengthM": 10,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 37,
+      "typicalSpeedKmh": 37,
+      "relativeSpeedPct": 100,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.19745, 56.18263],
+        [10.19731, 56.18259]
+      ]
+    },
+    {
+      "id": "1170420026645544961",
+      "lengthM": 4,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 40,
+      "typicalSpeedKmh": 40,
+      "relativeSpeedPct": 100,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.19731, 56.18259],
+        [10.19724, 56.18258]
+      ]
+    },
+    {
+      "id": "1170420026354860033",
+      "lengthM": 7,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 40,
+      "typicalSpeedKmh": 40,
+      "relativeSpeedPct": 100,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.19724, 56.18258],
+        [10.19714, 56.18255]
+      ]
+    },
+    {
+      "id": "1170420026354827265",
+      "lengthM": 67,
+      "currentSpeedKmh": 55,
+      "averageSpeedKmh": 45,
+      "typicalSpeedKmh": 45,
+      "relativeSpeedPct": 110,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.19714, 56.18255],
+        [10.19614, 56.18233]
+      ]
+    },
+    {
+      "id": "1170420026621165569",
+      "lengthM": 21,
+      "currentSpeedKmh": 55,
+      "averageSpeedKmh": 54,
+      "typicalSpeedKmh": 53,
+      "relativeSpeedPct": 110,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.19614, 56.18233],
+        [10.19584, 56.18225]
+      ]
+    },
+    {
+      "id": "1170420026742898689",
+      "lengthM": 29,
+      "currentSpeedKmh": 55,
+      "averageSpeedKmh": 57,
+      "typicalSpeedKmh": 57,
+      "relativeSpeedPct": 110,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.19584, 56.18225],
+        [10.19542, 56.18214]
+      ]
+    },
+    {
+      "id": "1170420026742865921",
+      "lengthM": 11,
+      "currentSpeedKmh": 55,
+      "averageSpeedKmh": 59,
+      "typicalSpeedKmh": 59,
+      "relativeSpeedPct": 110,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.19542, 56.18214],
+        [10.19526, 56.1821]
+      ]
+    },
+    {
+      "id": "1170420026630111233",
+      "lengthM": 111,
+      "currentSpeedKmh": 55,
+      "averageSpeedKmh": 62,
+      "typicalSpeedKmh": 62,
+      "relativeSpeedPct": 110,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.19526, 56.1821],
+        [10.19488, 56.18201],
+        [10.19434, 56.18187],
+        [10.19363, 56.18169]
+      ]
+    },
+    {
+      "id": "1170420026743062529",
+      "lengthM": 235,
+      "currentSpeedKmh": 34,
+      "averageSpeedKmh": 56,
+      "typicalSpeedKmh": 56,
+      "relativeSpeedPct": 68,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.19363, 56.18169],
+        [10.1932, 56.18157],
+        [10.19242, 56.18134],
+        [10.19148, 56.18105],
+        [10.19135, 56.18101],
+        [10.19029, 56.18068]
+      ]
+    },
+    {
+      "id": "1170420026630275073",
+      "lengthM": 12,
+      "currentSpeedKmh": 34,
+      "averageSpeedKmh": 39,
+      "typicalSpeedKmh": 42,
+      "relativeSpeedPct": 68,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.19029, 56.18068],
+        [10.19011, 56.18063]
+      ]
+    },
+    {
+      "id": "1170420026630307841",
+      "lengthM": 87,
+      "currentSpeedKmh": 34,
+      "averageSpeedKmh": 21,
+      "typicalSpeedKmh": 19,
+      "relativeSpeedPct": 68,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.19011, 56.18063],
+        [10.18888, 56.18026]
+      ]
+    },
+    {
+      "id": "1170420026350960641",
+      "lengthM": 34,
+      "currentSpeedKmh": 34,
+      "averageSpeedKmh": 48,
+      "typicalSpeedKmh": 45,
+      "relativeSpeedPct": 68,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.18888, 56.18026],
+        [10.18843, 56.18009]
+      ]
+    },
+    {
+      "id": "1170420026742603777",
+      "lengthM": 216,
+      "currentSpeedKmh": 52,
+      "averageSpeedKmh": 57,
+      "typicalSpeedKmh": 53,
+      "relativeSpeedPct": 104,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.18843, 56.18009],
+        [10.18769, 56.17983],
+        [10.18716, 56.17965],
+        [10.18603, 56.17927],
+        [10.18547, 56.17906]
+      ]
+    },
+    {
+      "id": "1170420026618249217",
+      "lengthM": 159,
+      "currentSpeedKmh": 52,
+      "averageSpeedKmh": 40,
+      "typicalSpeedKmh": 38,
+      "relativeSpeedPct": 104,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.18547, 56.17906],
+        [10.18444, 56.17869],
+        [10.18335, 56.17826]
+      ]
+    },
+    {
+      "id": "1170420026618413057",
+      "lengthM": 49,
+      "currentSpeedKmh": 17,
+      "averageSpeedKmh": 52,
+      "typicalSpeedKmh": 44,
+      "relativeSpeedPct": 34,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.18335, 56.17826],
+        [10.18311, 56.17816],
+        [10.18271, 56.178]
+      ]
+    },
+    {
+      "id": "1170420026618445825",
+      "lengthM": 27,
+      "currentSpeedKmh": 16,
+      "averageSpeedKmh": 52,
+      "typicalSpeedKmh": 46,
+      "relativeSpeedPct": 32,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.18271, 56.178],
+        [10.18236, 56.17786]
+      ]
+    },
+    {
+      "id": "1170420026618052609",
+      "lengthM": 34,
+      "currentSpeedKmh": 16,
+      "averageSpeedKmh": 52,
+      "typicalSpeedKmh": 47,
+      "relativeSpeedPct": 32,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.18236, 56.17786],
+        [10.18214, 56.17776],
+        [10.18192, 56.17768]
+      ]
+    },
+    {
+      "id": "1170420026618085377",
+      "lengthM": 102,
+      "currentSpeedKmh": 16,
+      "averageSpeedKmh": 45,
+      "typicalSpeedKmh": 37,
+      "relativeSpeedPct": 32,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.18192, 56.17768],
+        [10.18106, 56.17735],
+        [10.18064, 56.17719],
+        [10.18056, 56.17717]
+      ]
+    },
+    {
+      "id": "1170420026676510721",
+      "lengthM": 14,
+      "currentSpeedKmh": 16,
+      "averageSpeedKmh": 33,
+      "typicalSpeedKmh": 23,
+      "relativeSpeedPct": 32,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.18056, 56.17717],
+        [10.18036, 56.17711]
+      ]
+    },
+    {
+      "id": "1170420026676543489",
+      "lengthM": 26,
+      "currentSpeedKmh": 16,
+      "averageSpeedKmh": 22,
+      "typicalSpeedKmh": 21,
+      "relativeSpeedPct": 32,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.18036, 56.17711],
+        [10.18001, 56.17698]
+      ]
+    },
+    {
+      "id": "1170420026676477953",
+      "lengthM": 22,
+      "currentSpeedKmh": 16,
+      "averageSpeedKmh": 14,
+      "typicalSpeedKmh": 10,
+      "relativeSpeedPct": 32,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.18001, 56.17698],
+        [10.17969, 56.17689]
+      ]
+    },
+    {
+      "id": "1170420026676445185",
+      "lengthM": 34,
+      "currentSpeedKmh": 16,
+      "averageSpeedKmh": 14,
+      "typicalSpeedKmh": 12,
+      "relativeSpeedPct": 32,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.17969, 56.17689],
+        [10.17945, 56.17682],
+        [10.1794, 56.1768],
+        [10.17921, 56.17674]
+      ]
+    },
+    {
+      "id": "1170420026350829569",
+      "lengthM": 8,
+      "currentSpeedKmh": 16,
+      "averageSpeedKmh": 43,
+      "typicalSpeedKmh": 41,
+      "relativeSpeedPct": 32,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.17921, 56.17674],
+        [10.17911, 56.1767]
+      ]
+    },
+    {
+      "id": "1170420026350796801",
+      "lengthM": 8,
+      "currentSpeedKmh": 16,
+      "averageSpeedKmh": 42,
+      "typicalSpeedKmh": 41,
+      "relativeSpeedPct": 32,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.17911, 56.1767],
+        [10.179, 56.17667]
+      ]
+    },
+    {
+      "id": "1170420026219397121",
+      "lengthM": 48,
+      "currentSpeedKmh": 32,
+      "averageSpeedKmh": 42,
+      "typicalSpeedKmh": 38,
+      "relativeSpeedPct": 64,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.179, 56.17667],
+        [10.17833, 56.17646]
+      ]
+    },
+    {
+      "id": "1170420026741882881",
+      "lengthM": 70,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 55,
+      "typicalSpeedKmh": 46,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.17833, 56.17646],
+        [10.17821, 56.17643],
+        [10.17757, 56.17626],
+        [10.1773, 56.17619]
+      ]
+    },
+    {
+      "id": "1170420026741915649",
+      "lengthM": 52,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 59,
+      "typicalSpeedKmh": 50,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.1773, 56.17619],
+        [10.1772, 56.17617],
+        [10.17678, 56.17607],
+        [10.17652, 56.17601]
+      ]
+    },
+    {
+      "id": "1170420026252558337",
+      "lengthM": 229,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 59,
+      "typicalSpeedKmh": 52,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.17652, 56.17601],
+        [10.17608, 56.17591],
+        [10.17512, 56.17571],
+        [10.17303, 56.17532]
+      ]
+    },
+    {
+      "id": "1170420026791919617",
+      "lengthM": 32,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 54,
+      "typicalSpeedKmh": 50,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.17303, 56.17532],
+        [10.17281, 56.17527],
+        [10.17254, 56.17522]
+      ]
+    },
+    {
+      "id": "1170420026792083457",
+      "lengthM": 342,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 41,
+      "typicalSpeedKmh": 40,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.17254, 56.17522],
+        [10.17242, 56.1752],
+        [10.17139, 56.175],
+        [10.17088, 56.1749],
+        [10.17053, 56.17483],
+        [10.1694, 56.17462],
+        [10.16806, 56.17438],
+        [10.16731, 56.17423]
+      ]
+    },
+    {
+      "id": "1170420026278707201",
+      "lengthM": 58,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 19,
+      "typicalSpeedKmh": 23,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.16731, 56.17423],
+        [10.16668, 56.17411],
+        [10.16643, 56.17406]
+      ]
+    },
+    {
+      "id": "1170420026278543361",
+      "lengthM": 34,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 18,
+      "typicalSpeedKmh": 19,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.16643, 56.17406],
+        [10.16614, 56.174],
+        [10.16591, 56.17395]
+      ]
+    },
+    {
+      "id": "1170420026278313985",
+      "lengthM": 16,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 44,
+      "typicalSpeedKmh": 39,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.16591, 56.17395],
+        [10.16579, 56.17393],
+        [10.16567, 56.17391]
+      ]
+    },
+    {
+      "id": "1170420026278641665",
+      "lengthM": 52,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 44,
+      "typicalSpeedKmh": 40,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.16567, 56.17391],
+        [10.16488, 56.17374]
+      ]
+    },
+    {
+      "id": "1170420026742112257",
+      "lengthM": 56,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 50,
+      "typicalSpeedKmh": 45,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.16488, 56.17374],
+        [10.16468, 56.1737],
+        [10.16443, 56.17365],
+        [10.16403, 56.17357]
+      ]
+    },
+    {
+      "id": "1170420026742177793",
+      "lengthM": 28,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 51,
+      "typicalSpeedKmh": 48,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.16403, 56.17357],
+        [10.16367, 56.17349],
+        [10.16361, 56.17348]
+      ]
+    },
+    {
+      "id": "1170420026555727873",
+      "lengthM": 223,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 39,
+      "typicalSpeedKmh": 40,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.16361, 56.17348],
+        [10.16233, 56.17322],
+        [10.16196, 56.17315],
+        [10.16168, 56.1731],
+        [10.16131, 56.17302],
+        [10.16081, 56.1729],
+        [10.16026, 56.17274]
+      ]
+    },
+    {
+      "id": "1170420026278412289",
+      "lengthM": 48,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 28,
+      "typicalSpeedKmh": 28,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.16026, 56.17274],
+        [10.15978, 56.17261],
+        [10.15957, 56.17255]
+      ]
+    },
+    {
+      "id": "1170420026278445057",
+      "lengthM": 48,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 41,
+      "typicalSpeedKmh": 40,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15957, 56.17255],
+        [10.15933, 56.17248],
+        [10.15891, 56.17233]
+      ]
+    },
+    {
+      "id": "1170138551472652289",
+      "lengthM": 75,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 34,
+      "typicalSpeedKmh": 36,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15891, 56.17233],
+        [10.1587, 56.17226],
+        [10.15853, 56.1722],
+        [10.15829, 56.1721],
+        [10.15808, 56.17201],
+        [10.15793, 56.17194]
+      ]
+    },
+    {
+      "id": "1170138551472586753",
+      "lengthM": 26,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 27,
+      "typicalSpeedKmh": 33,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15793, 56.17194],
+        [10.15781, 56.17189],
+        [10.15771, 56.17184],
+        [10.15761, 56.17179]
+      ]
+    },
+    {
+      "id": "1170138551099752449",
+      "lengthM": 7,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 24,
+      "typicalSpeedKmh": 31,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15761, 56.17179],
+        [10.15753, 56.17175]
+      ]
+    },
+    {
+      "id": "1170138551474388993",
+      "lengthM": 52,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 14,
+      "typicalSpeedKmh": 12,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15753, 56.17175],
+        [10.15704, 56.1715],
+        [10.15691, 56.17143]
+      ]
+    },
+    {
+      "id": "1170138551474716673",
+      "lengthM": 36,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 13,
+      "typicalSpeedKmh": 13,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15691, 56.17143],
+        [10.15649, 56.1712]
+      ]
+    },
+    {
+      "id": "1170138551124262913",
+      "lengthM": 8,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 42,
+      "typicalSpeedKmh": 42,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15649, 56.1712],
+        [10.1564, 56.17115]
+      ]
+    },
+    {
+      "id": "1170138551124230145",
+      "lengthM": 10,
+      "currentSpeedKmh": 35,
+      "averageSpeedKmh": 44,
+      "typicalSpeedKmh": 44,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.1564, 56.17115],
+        [10.1563, 56.17108]
+      ]
+    },
+    {
+      "id": "1170138551123738625",
+      "lengthM": 75,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 47,
+      "typicalSpeedKmh": 42,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.1563, 56.17108],
+        [10.1555, 56.17057]
+      ]
+    },
+    {
+      "id": "1170138551474257921",
+      "lengthM": 40,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 54,
+      "typicalSpeedKmh": 49,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.1555, 56.17057],
+        [10.15507, 56.1703]
+      ]
+    },
+    {
+      "id": "1170138551474323457",
+      "lengthM": 67,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 52,
+      "typicalSpeedKmh": 44,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15507, 56.1703],
+        [10.15436, 56.16984]
+      ]
+    },
+    {
+      "id": "1170138551474487297",
+      "lengthM": 18,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 38,
+      "typicalSpeedKmh": 31,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15436, 56.16984],
+        [10.15417, 56.16972]
+      ]
+    },
+    {
+      "id": "1170138551474782209",
+      "lengthM": 35,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 28,
+      "typicalSpeedKmh": 25,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15417, 56.16972],
+        [10.15407, 56.16965],
+        [10.1538, 56.16948]
+      ]
+    },
+    {
+      "id": "1170138551123869697",
+      "lengthM": 12,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 52,
+      "typicalSpeedKmh": 49,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.1538, 56.16948],
+        [10.15373, 56.16944],
+        [10.15367, 56.1694]
+      ]
+    },
+    {
+      "id": "1170138551124131841",
+      "lengthM": 50,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 55,
+      "typicalSpeedKmh": 51,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15367, 56.1694],
+        [10.15314, 56.16906]
+      ]
+    },
+    {
+      "id": "1170138551124099073",
+      "lengthM": 62,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 60,
+      "typicalSpeedKmh": 54,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15314, 56.16906],
+        [10.15249, 56.16864]
+      ]
+    },
+    {
+      "id": "1170138551421763585",
+      "lengthM": 59,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 61,
+      "typicalSpeedKmh": 53,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15249, 56.16864],
+        [10.15186, 56.16824]
+      ]
+    },
+    {
+      "id": "1170138551421796353",
+      "lengthM": 8,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 61,
+      "typicalSpeedKmh": 54,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15186, 56.16824],
+        [10.15178, 56.16818]
+      ]
+    },
+    {
+      "id": "1170138551421730817",
+      "lengthM": 10,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 60,
+      "typicalSpeedKmh": 53,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15178, 56.16818],
+        [10.15167, 56.16811]
+      ]
+    },
+    {
+      "id": "1170138551124492289",
+      "lengthM": 246,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 49,
+      "typicalSpeedKmh": 51,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15167, 56.16811],
+        [10.15152, 56.16802],
+        [10.15111, 56.16775],
+        [10.15021, 56.16717],
+        [10.14988, 56.16696],
+        [10.14907, 56.16644]
+      ]
+    },
+    {
+      "id": "1170138551144448001",
+      "lengthM": 38,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 34,
+      "typicalSpeedKmh": 29,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14907, 56.16644],
+        [10.14867, 56.16618]
+      ]
+    },
+    {
+      "id": "1170138551144513537",
+      "lengthM": 46,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 54,
+      "typicalSpeedKmh": 51,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14867, 56.16618],
+        [10.14819, 56.16587]
+      ]
+    },
+    {
+      "id": "1170138551570989057",
+      "lengthM": 309,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 53,
+      "typicalSpeedKmh": 53,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14819, 56.16587],
+        [10.14797, 56.16574],
+        [10.14736, 56.16533],
+        [10.14706, 56.16512],
+        [10.14681, 56.16494],
+        [10.14646, 56.16467],
+        [10.14616, 56.16442],
+        [10.14591, 56.16419],
+        [10.14569, 56.16399],
+        [10.14542, 56.16373],
+        [10.1453, 56.16361]
+      ]
+    },
+    {
+      "id": "1170138551476060161",
+      "lengthM": 30,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 44,
+      "typicalSpeedKmh": 37,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.1453, 56.16361],
+        [10.14522, 56.16353],
+        [10.14514, 56.16345],
+        [10.14507, 56.16337]
+      ]
+    },
+    {
+      "id": "1170138551475994625",
+      "lengthM": 49,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 29,
+      "typicalSpeedKmh": 22,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14507, 56.16337],
+        [10.14496, 56.16326],
+        [10.14473, 56.16297]
+      ]
+    },
+    {
+      "id": "1170138551476027393",
+      "lengthM": 35,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 15,
+      "typicalSpeedKmh": 14,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14473, 56.16297],
+        [10.14465, 56.16288],
+        [10.1445, 56.16268]
+      ]
+    },
+    {
+      "id": "1170138551438671873",
+      "lengthM": 11,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 38,
+      "typicalSpeedKmh": 36,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.1445, 56.16268],
+        [10.14443, 56.16259]
+      ]
+    },
+    {
+      "id": "1170138551167516673",
+      "lengthM": 11,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 49,
+      "typicalSpeedKmh": 46,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14443, 56.16259],
+        [10.14439, 56.16254],
+        [10.14437, 56.1625]
+      ]
+    },
+    {
+      "id": "1170138551167483905",
+      "lengthM": 8,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 52,
+      "typicalSpeedKmh": 48,
+      "relativeSpeedPct": 70,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14437, 56.1625],
+        [10.14435, 56.16247],
+        [10.14432, 56.16243]
+      ]
+    },
+    {
+      "id": "1170138551167385601",
+      "lengthM": 54,
+      "currentSpeedKmh": 56,
+      "averageSpeedKmh": 51,
+      "typicalSpeedKmh": 48,
+      "relativeSpeedPct": 101,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14432, 56.16243],
+        [10.14405, 56.16197]
+      ]
+    },
+    {
+      "id": "1170138551570497537",
+      "lengthM": 214,
+      "currentSpeedKmh": 57,
+      "averageSpeedKmh": 59,
+      "typicalSpeedKmh": 55,
+      "relativeSpeedPct": 103,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14405, 56.16197],
+        [10.14391, 56.16173],
+        [10.14367, 56.16127],
+        [10.14352, 56.1609],
+        [10.1434, 56.1606],
+        [10.14329, 56.16022],
+        [10.14325, 56.1601]
+      ]
+    },
+    {
+      "id": "1170138551628955649",
+      "lengthM": 85,
+      "currentSpeedKmh": 33,
+      "averageSpeedKmh": 55,
+      "typicalSpeedKmh": 53,
+      "relativeSpeedPct": 60,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14325, 56.1601],
+        [10.14321, 56.15993],
+        [10.14317, 56.15976],
+        [10.14315, 56.1596],
+        [10.14312, 56.15934]
+      ]
+    },
+    {
+      "id": "1170138551628988417",
+      "lengthM": 59,
+      "currentSpeedKmh": 32,
+      "averageSpeedKmh": 42,
+      "typicalSpeedKmh": 41,
+      "relativeSpeedPct": 58,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14312, 56.15934],
+        [10.14311, 56.15924],
+        [10.14308, 56.15881]
+      ]
+    },
+    {
+      "id": "1170138551628922881",
+      "lengthM": 30,
+      "currentSpeedKmh": 32,
+      "averageSpeedKmh": 31,
+      "typicalSpeedKmh": 28,
+      "relativeSpeedPct": 58,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14308, 56.15881],
+        [10.14307, 56.15854]
+      ]
+    },
+    {
+      "id": "1170138551628890113",
+      "lengthM": 42,
+      "currentSpeedKmh": 32,
+      "averageSpeedKmh": 36,
+      "typicalSpeedKmh": 33,
+      "relativeSpeedPct": 58,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14307, 56.15854],
+        [10.14307, 56.15847],
+        [10.14306, 56.15834],
+        [10.14305, 56.15816]
+      ]
+    },
+    {
+      "id": "1170138551141990401",
+      "lengthM": 78,
+      "currentSpeedKmh": 32,
+      "averageSpeedKmh": 55,
+      "typicalSpeedKmh": 53,
+      "relativeSpeedPct": 58,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14305, 56.15816],
+        [10.14304, 56.15795],
+        [10.14304, 56.15746]
+      ]
+    },
+    {
+      "id": "1170138551571775489",
+      "lengthM": 294,
+      "currentSpeedKmh": 32,
+      "averageSpeedKmh": 56,
+      "typicalSpeedKmh": 53,
+      "relativeSpeedPct": 58,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14304, 56.15746],
+        [10.14305, 56.15689],
+        [10.14307, 56.15646],
+        [10.14309, 56.15615],
+        [10.14311, 56.15585],
+        [10.14317, 56.15513],
+        [10.14319, 56.15499],
+        [10.14322, 56.15482]
+      ]
+    },
+    {
+      "id": "1170138551567286273",
+      "lengthM": 30,
+      "currentSpeedKmh": 32,
+      "averageSpeedKmh": 40,
+      "typicalSpeedKmh": 39,
+      "relativeSpeedPct": 58,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14322, 56.15482],
+        [10.14327, 56.15455]
+      ]
+    },
+    {
+      "id": "1170138551567319041",
+      "lengthM": 15,
+      "currentSpeedKmh": 32,
+      "averageSpeedKmh": 34,
+      "typicalSpeedKmh": 27,
+      "relativeSpeedPct": 58,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14327, 56.15455],
+        [10.1433, 56.15442]
+      ]
+    },
+    {
+      "id": "1170138551477469185",
+      "lengthM": 35,
+      "currentSpeedKmh": 32,
+      "averageSpeedKmh": 23,
+      "typicalSpeedKmh": 19,
+      "relativeSpeedPct": 58,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.1433, 56.15442],
+        [10.14335, 56.15423],
+        [10.14339, 56.15411]
+      ]
+    },
+    {
+      "id": "1170138551477436417",
+      "lengthM": 58,
+      "currentSpeedKmh": 32,
+      "averageSpeedKmh": 14,
+      "typicalSpeedKmh": 13,
+      "relativeSpeedPct": 58,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14339, 56.15411],
+        [10.1434, 56.15406],
+        [10.14345, 56.15392],
+        [10.14359, 56.1536]
+      ]
+    },
+    {
+      "id": "1170138551213752320",
+      "lengthM": 8,
+      "currentSpeedKmh": 32,
+      "averageSpeedKmh": 45,
+      "typicalSpeedKmh": 42,
+      "relativeSpeedPct": 58,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14359, 56.1536],
+        [10.14362, 56.15353]
+      ]
+    },
+    {
+      "id": "1170138551213785088",
+      "lengthM": 6,
+      "currentSpeedKmh": 32,
+      "averageSpeedKmh": 46,
+      "typicalSpeedKmh": 43,
+      "relativeSpeedPct": 58,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14362, 56.15353],
+        [10.14365, 56.15348]
+      ]
+    },
+    {
+      "id": "1170138551213457408",
+      "lengthM": 25,
+      "currentSpeedKmh": 32,
+      "averageSpeedKmh": 49,
+      "typicalSpeedKmh": 42,
+      "relativeSpeedPct": 58,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14365, 56.15348],
+        [10.14369, 56.1534],
+        [10.14372, 56.15334],
+        [10.14376, 56.15326]
+      ]
+    },
+    {
+      "id": "1170138551213490176",
+      "lengthM": 61,
+      "currentSpeedKmh": 62,
+      "averageSpeedKmh": 51,
+      "typicalSpeedKmh": 48,
+      "relativeSpeedPct": 106,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14376, 56.15326],
+        [10.14409, 56.15274]
+      ]
+    },
+    {
+      "id": "1170138551571709952",
+      "lengthM": 56,
+      "currentSpeedKmh": 62,
+      "averageSpeedKmh": 60,
+      "typicalSpeedKmh": 55,
+      "relativeSpeedPct": 106,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14409, 56.15274],
+        [10.14421, 56.15257],
+        [10.14444, 56.15228]
+      ]
+    },
+    {
+      "id": "1170138551571677184",
+      "lengthM": 40,
+      "currentSpeedKmh": 62,
+      "averageSpeedKmh": 63,
+      "typicalSpeedKmh": 58,
+      "relativeSpeedPct": 106,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14444, 56.15228],
+        [10.14449, 56.15222],
+        [10.14472, 56.15196]
+      ]
+    },
+    {
+      "id": "1170138551571447808",
+      "lengthM": 164,
+      "currentSpeedKmh": 62,
+      "averageSpeedKmh": 61,
+      "typicalSpeedKmh": 55,
+      "relativeSpeedPct": 106,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14472, 56.15196],
+        [10.14535, 56.1512],
+        [10.14563, 56.15086],
+        [10.14585, 56.15063]
+      ]
+    },
+    {
+      "id": "1170138551571316736",
+      "lengthM": 56,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 48,
+      "typicalSpeedKmh": 45,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14585, 56.15063],
+        [10.14589, 56.15059],
+        [10.14608, 56.15038],
+        [10.1463, 56.15019]
+      ]
+    },
+    {
+      "id": "1170138551571382272",
+      "lengthM": 90,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 61,
+      "typicalSpeedKmh": 55,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.1463, 56.15019],
+        [10.1464, 56.15011],
+        [10.14645, 56.15006],
+        [10.14657, 56.14997],
+        [10.14697, 56.14968],
+        [10.14706, 56.14962],
+        [10.14718, 56.14955]
+      ]
+    },
+    {
+      "id": "1170138551571415040",
+      "lengthM": 92,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 60,
+      "typicalSpeedKmh": 61,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14718, 56.14955],
+        [10.14769, 56.14924],
+        [10.14821, 56.14896]
+      ]
+    },
+    {
+      "id": "1170138551210901504",
+      "lengthM": 183,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 56,
+      "typicalSpeedKmh": 54,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.14821, 56.14896],
+        [10.14968, 56.14816],
+        [10.1503, 56.1478]
+      ]
+    },
+    {
+      "id": "1170138551211098112",
+      "lengthM": 53,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 44,
+      "typicalSpeedKmh": 43,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.1503, 56.1478],
+        [10.15048, 56.1477],
+        [10.1507, 56.14757],
+        [10.15089, 56.14746]
+      ]
+    },
+    {
+      "id": "1170138551211130880",
+      "lengthM": 67,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 30,
+      "typicalSpeedKmh": 36,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15089, 56.14746],
+        [10.15109, 56.14731],
+        [10.15123, 56.1472],
+        [10.15139, 56.14706],
+        [10.15148, 56.14696]
+      ]
+    },
+    {
+      "id": "1170138551567220736",
+      "lengthM": 28,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 20,
+      "typicalSpeedKmh": 19,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15148, 56.14696],
+        [10.15164, 56.14672]
+      ]
+    },
+    {
+      "id": "1170138551567253504",
+      "lengthM": 18,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 17,
+      "typicalSpeedKmh": 17,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15164, 56.14672],
+        [10.15167, 56.14668],
+        [10.15172, 56.1466],
+        [10.15174, 56.14657]
+      ]
+    },
+    {
+      "id": "1170138551210934272",
+      "lengthM": 6,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 37,
+      "typicalSpeedKmh": 37,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15174, 56.14657],
+        [10.15177, 56.14652]
+      ]
+    },
+    {
+      "id": "1170138551210999808",
+      "lengthM": 15,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 42,
+      "typicalSpeedKmh": 41,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15177, 56.14652],
+        [10.15181, 56.14645],
+        [10.15185, 56.14639]
+      ]
+    },
+    {
+      "id": "1170138551211163648",
+      "lengthM": 8,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 45,
+      "typicalSpeedKmh": 45,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15185, 56.14639],
+        [10.15188, 56.14635],
+        [10.15189, 56.14632]
+      ]
+    },
+    {
+      "id": "1170138551622795264",
+      "lengthM": 22,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 46,
+      "typicalSpeedKmh": 46,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15189, 56.14632],
+        [10.15192, 56.14627],
+        [10.15193, 56.14623],
+        [10.15198, 56.14613]
+      ]
+    },
+    {
+      "id": "1170138551622828032",
+      "lengthM": 44,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 48,
+      "typicalSpeedKmh": 47,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15198, 56.14613],
+        [10.15213, 56.14574]
+      ]
+    },
+    {
+      "id": "1170138551221452800",
+      "lengthM": 19,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 50,
+      "typicalSpeedKmh": 49,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15213, 56.14574],
+        [10.1522, 56.14557]
+      ]
+    },
+    {
+      "id": "1170138551572234240",
+      "lengthM": 264,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 45,
+      "typicalSpeedKmh": 45,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.1522, 56.14557],
+        [10.15225, 56.14542],
+        [10.15235, 56.14517],
+        [10.15246, 56.14487],
+        [10.15264, 56.14439],
+        [10.15289, 56.14373],
+        [10.15307, 56.14325]
+      ]
+    },
+    {
+      "id": "1170138551572594688",
+      "lengthM": 301,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 58,
+      "typicalSpeedKmh": 54,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15307, 56.14325],
+        [10.15335, 56.14257],
+        [10.15344, 56.14237],
+        [10.15369, 56.14172],
+        [10.15412, 56.14061]
+      ]
+    },
+    {
+      "id": "1170138551572561920",
+      "lengthM": 41,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 64,
+      "typicalSpeedKmh": 59,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15412, 56.14061],
+        [10.15426, 56.14025]
+      ]
+    },
+    {
+      "id": "1170138551234232320",
+      "lengthM": 12,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 65,
+      "typicalSpeedKmh": 59,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15426, 56.14025],
+        [10.15428, 56.1402],
+        [10.1543, 56.14014]
+      ]
+    },
+    {
+      "id": "1170138551234265088",
+      "lengthM": 11,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 65,
+      "typicalSpeedKmh": 64,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.1543, 56.14014],
+        [10.15434, 56.14004]
+      ]
+    },
+    {
+      "id": "1170138551233576960",
+      "lengthM": 18,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 65,
+      "typicalSpeedKmh": 60,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15434, 56.14004],
+        [10.1544, 56.13988]
+      ]
+    },
+    {
+      "id": "1170138551233609728",
+      "lengthM": 18,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 66,
+      "typicalSpeedKmh": 65,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.1544, 56.13988],
+        [10.15446, 56.13972]
+      ]
+    },
+    {
+      "id": "1170138551233052672",
+      "lengthM": 34,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 66,
+      "typicalSpeedKmh": 65,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15446, 56.13972],
+        [10.15458, 56.13942]
+      ]
+    },
+    {
+      "id": "1170138551567581184",
+      "lengthM": 41,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 66,
+      "typicalSpeedKmh": 65,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15458, 56.13942],
+        [10.15471, 56.13906]
+      ]
+    },
+    {
+      "id": "1170138551614504960",
+      "lengthM": 23,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 66,
+      "typicalSpeedKmh": 65,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15471, 56.13906],
+        [10.15474, 56.13899],
+        [10.15479, 56.13886]
+      ]
+    },
+    {
+      "id": "1170138551614537728",
+      "lengthM": 15,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 66,
+      "typicalSpeedKmh": 65,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15479, 56.13886],
+        [10.15484, 56.13873]
+      ]
+    },
+    {
+      "id": "1170138551233249280",
+      "lengthM": 11,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 66,
+      "typicalSpeedKmh": 65,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15484, 56.13873],
+        [10.15488, 56.13863]
+      ]
+    },
+    {
+      "id": "1170138551234002944",
+      "lengthM": 10,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 66,
+      "typicalSpeedKmh": 65,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15488, 56.13863],
+        [10.15491, 56.13854]
+      ]
+    },
+    {
+      "id": "1170138551234035712",
+      "lengthM": 184,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 58,
+      "typicalSpeedKmh": 57,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15491, 56.13854],
+        [10.155, 56.1383],
+        [10.1551, 56.13805],
+        [10.15542, 56.1372],
+        [10.15546, 56.13711],
+        [10.15553, 56.13692]
+      ]
+    },
+    {
+      "id": "1170138551233871872",
+      "lengthM": 20,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 39,
+      "typicalSpeedKmh": 35,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15553, 56.13692],
+        [10.15555, 56.13685],
+        [10.15558, 56.13674]
+      ]
+    },
+    {
+      "id": "1170138551233904640",
+      "lengthM": 69,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 18,
+      "typicalSpeedKmh": 15,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15558, 56.13674],
+        [10.15566, 56.13649],
+        [10.15574, 56.13623],
+        [10.15579, 56.13613]
+      ]
+    },
+    {
+      "id": "1170138551233413120",
+      "lengthM": 20,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 12,
+      "typicalSpeedKmh": 12,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15579, 56.13613],
+        [10.15585, 56.13595]
+      ]
+    },
+    {
+      "id": "1170138551233314816",
+      "lengthM": 14,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 39,
+      "typicalSpeedKmh": 38,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15585, 56.13595],
+        [10.1559, 56.13583]
+      ]
+    },
+    {
+      "id": "1170138551233150976",
+      "lengthM": 12,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 45,
+      "typicalSpeedKmh": 45,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.1559, 56.13583],
+        [10.15592, 56.13577],
+        [10.15594, 56.13572]
+      ]
+    },
+    {
+      "id": "1170138551253762048",
+      "lengthM": 14,
+      "currentSpeedKmh": 39,
+      "averageSpeedKmh": 48,
+      "typicalSpeedKmh": 48,
+      "relativeSpeedPct": 67,
+      "confidencePct": 100,
+      "coordinates": [
+        [10.15594, 56.13572],
+        [10.15599, 56.1356]
+      ]
+    },
+    {
+      "id": "1170138551568105472",
+      "lengthM": 22,
+      "currentSpeedKmh": 20,
+      "averageSpeedKmh": 48,
+      "typicalSpeedKmh": 48,
+      "relativeSpeedPct": 51,
+      "confidencePct": 98,
+      "coordinates": [
+        [10.15599, 56.1356],
+        [10.15606, 56.13541]
+      ]
+    },
+    {
+      "id": "1170138551568007168",
+      "lengthM": 23,
+      "currentSpeedKmh": 20,
+      "averageSpeedKmh": 51,
+      "typicalSpeedKmh": 51,
+      "relativeSpeedPct": 51,
+      "confidencePct": 98,
+      "coordinates": [
+        [10.15606, 56.13541],
+        [10.15614, 56.13521]
+      ]
+    },
+    {
+      "id": "1170138551572758528",
+      "lengthM": 60,
+      "currentSpeedKmh": 20,
+      "averageSpeedKmh": 55,
+      "typicalSpeedKmh": 52,
+      "relativeSpeedPct": 51,
+      "confidencePct": 98,
+      "coordinates": [
+        [10.15614, 56.13521],
+        [10.15627, 56.13492],
+        [10.15637, 56.13469]
+      ]
+    },
+    {
+      "id": "1170138551572725760",
+      "lengthM": 10,
+      "currentSpeedKmh": 20,
+      "averageSpeedKmh": 58,
+      "typicalSpeedKmh": 59,
+      "relativeSpeedPct": 51,
+      "confidencePct": 98,
+      "coordinates": [
+        [10.15637, 56.13469],
+        [10.15641, 56.1346]
+      ]
+    },
+    {
+      "id": "1170138551253565440",
+      "lengthM": 368,
+      "currentSpeedKmh": 20,
+      "averageSpeedKmh": 55,
+      "typicalSpeedKmh": 55,
+      "relativeSpeedPct": 51,
+      "confidencePct": 98,
+      "coordinates": [
+        [10.15641, 56.1346],
+        [10.15653, 56.13431],
+        [10.15657, 56.13421],
+        [10.15675, 56.13373],
+        [10.15686, 56.13343],
+        [10.1571, 56.13284],
+        [10.15721, 56.13251],
+        [10.15729, 56.13234],
+        [10.15734, 56.13223],
+        [10.15739, 56.13213],
+        [10.15745, 56.13201],
+        [10.15756, 56.13187],
+        [10.15765, 56.13174],
+        [10.15778, 56.1316],
+        [10.15796, 56.13142]
+      ]
+    },
+    {
+      "id": "1170138551253598208",
+      "lengthM": 58,
+      "currentSpeedKmh": 20,
+      "averageSpeedKmh": 30,
+      "typicalSpeedKmh": 25,
+      "relativeSpeedPct": 51,
+      "confidencePct": 98,
+      "coordinates": [
+        [10.15796, 56.13142],
+        [10.1582, 56.13122],
+        [10.15851, 56.131]
+      ]
+    },
+    {
+      "id": "1170420026056376320",
+      "lengthM": 66,
+      "currentSpeedKmh": 20,
+      "averageSpeedKmh": 17,
+      "typicalSpeedKmh": 15,
+      "relativeSpeedPct": 51,
+      "confidencePct": 98,
+      "coordinates": [
+        [10.15851, 56.131],
+        [10.15917, 56.13053]
+      ]
+    },
+    {
+      "id": "1170420026056441856",
+      "lengthM": 77,
+      "currentSpeedKmh": 20,
+      "averageSpeedKmh": 40,
+      "typicalSpeedKmh": 37,
+      "relativeSpeedPct": 51,
+      "confidencePct": 98,
+      "coordinates": [
+        [10.15917, 56.13053],
+        [10.15953, 56.13028],
+        [10.15994, 56.12999]
+      ]
+    },
+    {
+      "id": "1170420026056474624",
+      "lengthM": 6,
+      "currentSpeedKmh": 20,
+      "averageSpeedKmh": 44,
+      "typicalSpeedKmh": 45,
+      "relativeSpeedPct": 51,
+      "confidencePct": 98,
+      "coordinates": [
+        [10.15994, 56.12999],
+        [10.16, 56.12995]
+      ]
+    },
+    {
+      "id": "1170420026056507392",
+      "lengthM": 27,
+      "currentSpeedKmh": 20,
+      "averageSpeedKmh": 43,
+      "typicalSpeedKmh": 40,
+      "relativeSpeedPct": 51,
+      "confidencePct": 98,
+      "coordinates": [
+        [10.16, 56.12995],
+        [10.16027, 56.12976]
+      ]
+    },
+    {
+      "id": "1170420026055458816",
+      "lengthM": 53,
+      "currentSpeedKmh": 20,
+      "averageSpeedKmh": 41,
+      "typicalSpeedKmh": 39,
+      "relativeSpeedPct": 51,
+      "confidencePct": 98,
+      "coordinates": [
+        [10.16027, 56.12976],
+        [10.16081, 56.12939]
+      ]
+    },
+    {
+      "id": "1170420026664026112",
+      "lengthM": 17,
+      "currentSpeedKmh": 20,
+      "averageSpeedKmh": 37,
+      "typicalSpeedKmh": 35,
+      "relativeSpeedPct": 51,
+      "confidencePct": 98,
+      "coordinates": [
+        [10.16081, 56.12939],
+        [10.16099, 56.12927]
+      ]
+    },
+    {
+      "id": "1170420026664124416",
+      "lengthM": 25,
+      "currentSpeedKmh": 20,
+      "averageSpeedKmh": 31,
+      "typicalSpeedKmh": 28,
+      "relativeSpeedPct": 51,
+      "confidencePct": 98,
+      "coordinates": [
+        [10.16099, 56.12927],
+        [10.16107, 56.12921],
+        [10.16114, 56.12917],
+        [10.1612, 56.12914],
+        [10.16126, 56.1291]
+      ]
+    },
+    {
+      "id": "1170420026739523584",
+      "lengthM": 42,
+      "currentSpeedKmh": 20,
+      "averageSpeedKmh": 6,
+      "typicalSpeedKmh": 5,
+      "relativeSpeedPct": 51,
+      "confidencePct": 98,
+      "coordinates": [
+        [10.16126, 56.1291],
+        [10.16141, 56.12901],
+        [10.1615, 56.12897],
+        [10.16175, 56.12884]
+      ]
+    },
+    {
+      "id": "1170420026739589120",
+      "lengthM": 35,
+      "currentSpeedKmh": 20,
+      "averageSpeedKmh": 5,
+      "typicalSpeedKmh": 3,
+      "relativeSpeedPct": 51,
+      "confidencePct": 98,
+      "coordinates": [
+        [10.16175, 56.12884],
+        [10.16185, 56.12879],
+        [10.16204, 56.12871],
+        [10.16218, 56.12864]
+      ]
+    }
+  ]
+}

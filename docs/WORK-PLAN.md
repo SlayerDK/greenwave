@@ -5,7 +5,7 @@ How we build [`ARCHITECTURE.md`](../ARCHITECTURE.md) by the hand-in on **Fri 4 D
 > Written 2 Nov 2026. Tick your own checkboxes in your own PRs; Monday's planning starts from them.
 
 - **Hand-in:** the report and a live demo, both Fri 4 Dec, with a backup video.
-- **Team:** Christian, Bjoern and bd-nis, each owning a vertical slice. Slices meet only at `packages/contracts` and the database tables.
+- **Team:** Christian, Bjoern and bd-nis, each owning a vertical slice. Slices meet only at `shared/` (the contracts) and the database tables.
 - **History:** recorded from 2 Nov by the proof of concept's Vercel cron, in 15-minute slots, then by the backend once the pipeline runs.
 
 ## Work packages
@@ -24,6 +24,8 @@ How we build [`ARCHITECTURE.md`](../ARCHITECTURE.md) by the hand-in on **Fri 4 D
 | [WP9 · Report and demo](work-plan/wp9-report-and-demo.md)             | everyone  | drafts as packages land, then week 49             | all             |
 
 Versions, topics, MQTT users, ports and environment variables: [Libraries and connections](work-plan/libraries-and-connections.md).
+
+To hand a package to a teammate or their agent, use its [implementation plan](implementation-plans/README.md): one per container, with the files, code, tests and checks.
 
 Every package ends with a 1–2 page draft of its report section.
 
@@ -92,6 +94,6 @@ Meetings: 30-minute planning on Mondays, 15-minute check-in on Thursdays.
 ## Ways of working
 
 - One branch per package (`wp4-backend`), merged by PR. Small PRs beat big ones.
-- Every PR gets one reviewer, who runs `pnpm lint && pnpm typecheck && pnpm test --run && pnpm analyze`. Changes to `packages/contracts` or the Prisma schema need both of the others.
+- Every PR gets one reviewer, who runs `pnpm lint && pnpm typecheck && pnpm test --run && pnpm analyze`. Changes to `shared/` or the Prisma schema need both of the others.
 - Unit tests sit next to the code in every package. Tests of removed code go with it ([WP8](work-plan/wp8-clean-up.md)). The [WP7](work-plan/wp7-load-tests.md) resilience checks run at M2 and before the rehearsal.
 - Prerequisites: Docker Desktop; Node 24 LTS, whose corepack provides the pinned pnpm 12.6 (on newer Node, install pnpm directly); your own Mapbox token. The TomTom key only where the live adapter runs or fixtures are recorded.

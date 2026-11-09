@@ -1,9 +1,10 @@
-node_modules
-.next
+# Every image builds with the repo root as its context.
+**/node_modules
+**/.next
+**/src/generated
 .git
-.env
+**/.env
 .env.*
 !.env.example
-Dockerfile
-docker-compose.yml
-traffic-history.geojson
+frontend/traffic-history.geojson
+docs

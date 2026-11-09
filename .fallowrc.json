@@ -1,14 +1,14 @@
 {
   "$schema": "./node_modules/fallow/schema.json",
-  "ignorePatterns": ["src/generated/**", "**/*.generated.ts"],
+  "ignorePatterns": ["database/src/generated/**", "**/*.generated.ts"],
   "ignoreExports": [
     {
-      "file": "src/components/ui/**",
+      "file": "frontend/src/components/ui/**",
       "exports": ["*"]
     }
   ],
   "health": {
-    "ignore": ["src/components/ui/**"]
+    "ignore": ["frontend/src/components/ui/**"]
   },
   "ignoreDependencies": ["pg", "@ls-lint/ls-lint", "react-is"],
   "ignoreExportsUsedInFile": true,
@@ -16,53 +16,76 @@
     "zones": [
       {
         "name": "db",
-        "patterns": ["src/lib/config/prisma.ts", "src/generated/**"]
+        "patterns": ["frontend/src/lib/config/prisma.ts", "database/**"]
       },
       {
         "name": "data",
         "patterns": [
-          "src/lib/*/queries.ts",
-          "src/lib/*/mutations.ts",
-          "src/lib/*/data-access.ts",
-          "src/lib/*/actions.ts",
-          "src/lib/*/service.ts",
-          "src/lib/*/*-service.ts",
-          "src/lib/*/schema.ts",
-          "src/lib/*/serialization.ts",
-          "src/lib/auth/**"
+          "frontend/src/lib/*/queries.ts",
+          "frontend/src/lib/*/mutations.ts",
+          "frontend/src/lib/*/data-access.ts",
+          "frontend/src/lib/*/actions.ts",
+          "frontend/src/lib/*/service.ts",
+          "frontend/src/lib/*/*-service.ts",
+          "frontend/src/lib/*/schema.ts",
+          "frontend/src/lib/*/serialization.ts",
+          "frontend/src/lib/auth/**"
         ]
       },
       {
         "name": "hooks",
-        "patterns": ["src/hooks/**"]
+        "patterns": ["frontend/src/hooks/**"]
       },
       {
         "name": "ui",
-        "patterns": ["src/app/**", "src/components/**", "src/providers/**"]
+        "patterns": [
+          "frontend/src/app/**",
+          "frontend/src/components/**",
+          "frontend/src/providers/**"
+        ]
+      },
+      {
+        "name": "utils",
+        "patterns": [
+          "frontend/src/lib/utils/**",
+          "frontend/src/lib/config/env.ts"
+        ]
       },
       {
         "name": "shared",
-        "patterns": ["src/lib/utils/**", "src/lib/config/env.ts"]
+        "patterns": ["shared/**"]
+      },
+      {
+        "name": "services",
+        "patterns": ["adapter/**", "backend/**", "predictor/**", "loadgen/**"]
       }
     ],
     "rules": [
       {
         "from": "ui",
-        "allow": ["data", "hooks", "shared"],
+        "allow": ["data", "hooks", "utils", "shared"],
         "allowTypeOnly": ["db"]
       },
       {
         "from": "hooks",
-        "allow": ["data", "shared"],
+        "allow": ["data", "utils", "shared"],
         "allowTypeOnly": ["db"]
       },
       {
         "from": "data",
-        "allow": ["db", "shared"]
+        "allow": ["db", "utils", "shared"]
+      },
+      {
+        "from": "utils",
+        "allow": []
       },
       {
         "from": "shared",
         "allow": []
+      },
+      {
+        "from": "services",
+        "allow": ["shared", "db"]
       }
     ]
   }

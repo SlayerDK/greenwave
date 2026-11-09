@@ -2,6 +2,8 @@
 
 **bd-nis · data Mon 2 – Wed 4 Nov, job Mon 16 – Fri 20 Nov, evaluation Mon 23 – Fri 27 Nov.** Needs WP0's data and WP1's schema. · [← Work plan](../WORK-PLAN.md)
 
+> **Implementation plan:** [06 · Predictor](../implementation-plans/06-predictor.md). It has the step-by-step detail for handing this off; this file keeps the owner, dates and summary.
+
 ## Data (week 45, then every Monday)
 
 - [ ] Import Neon's history locally. Christian shares the Neon URL; the local copies of both history tables are staging copies, so empty them first:
@@ -27,7 +29,7 @@ What the recorded rows mean:
 
 ## The job (week 47)
 
-`services/predictor` (_new_), every 15 minutes just after a bucket closes: `new Cron("2,17,32,47 * * * *", () => runForecast(new Date()))`.
+`predictor/` (_new_), every 15 minutes just after a bucket closes: `new Cron("2,17,32,47 * * * *", () => runForecast(new Date()))`.
 
 - [ ] **Profile** P(segment, day type, slot). Day type: weekday or weekend. Slot: local 15 minutes in Europe/Copenhagen (the double `AT TIME ZONE` above in SQL, `Intl.DateTimeFormat` in TS). Average the daily bucket means, not raw samples: a pipeline bucket holds about 15 samples and a Vercel one 1, and each day should count once.
 - [ ] **Fallbacks** when a cell has fewer than 3 days:

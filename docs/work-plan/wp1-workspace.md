@@ -2,15 +2,19 @@
 
 **Christian · Mon 2 – Fri 6 Nov.** Everything else builds on it. · [← Work plan](../WORK-PLAN.md)
 
+> **Implementation plan:** [00 · Foundation](../implementation-plans/00-foundation.md). It has the step-by-step detail for handing this off; this file keeps the owner, dates and summary.
+>
+> **Status, Mon 9 Nov:** done on branches `wp1-layout` (the move) and `wp1-contracts` (contracts and schema), awaiting review. The last three models are 06's. The report drafts are still open.
+
 ## pnpm workspace
 
-- [ ] `pnpm-workspace.yaml` gets `packages: ["packages/*", "services/*"]` beside `allowBuilds`.
-- [ ] The Next.js app stays at the repo root and depends on `@greenwave/contracts` and `@greenwave/db` (`workspace:*`).
-- [ ] In `.gitignore`, `/node_modules` becomes `node_modules` (pnpm creates one per package), and add `packages/db/src/generated`.
+- [x] One directory per container plus `shared/`, and tooling at the root (layout in the [implementation plans](../implementation-plans/README.md#repository-layout)). `pnpm-workspace.yaml` lists `shared`, `database`, `adapter`, `backend`, `predictor`, `loadgen` and `frontend` beside `allowBuilds`.
+- [x] The Next.js app moves into `frontend/` (`@greenwave/frontend`) and depends on `@greenwave/shared` and `@greenwave/database` (`workspace:*`). `vercel.json` stays at the root, which keeps the recorder frozen.
+- [x] In `.gitignore`, `/node_modules` becomes `node_modules` (pnpm creates one per package), and add `database/src/generated`.
 
-Packages are consumed as TypeScript source, so files inside `packages/*` use **relative imports**: an `@/` would resolve against the importer's tsconfig. Turbopack compiles workspace packages itself, so no `transpilePackages`.
+Packages are consumed as TypeScript source, so files in every package except `frontend/` use **relative imports**: an `@/` would resolve against the importer's tsconfig. Turbopack compiles workspace packages itself, so no `transpilePackages`.
 
-## `packages/contracts` (_new_)
+## `shared/` (_new_, `@greenwave/shared`)
 
 Merge by **Tue 3 Nov** so the others can build against it. Zod only, no `server-only`: the browser imports it.
 
@@ -24,15 +28,15 @@ Merge by **Tue 3 Nov** so the others can build against it. Zod only, no `server-
 
 `source` exists because replayed fixtures are stamped "now"; without it they would land in the history prediction learns from.
 
-- [ ] Test: `src/lib/traffic/fixtures/route-details.json` becomes a valid observation, every id still a string.
+- [x] Test: `src/lib/traffic/fixtures/route-details.json` becomes a valid observation, every id still a string.
 
-## `packages/db` (_new_)
+## `database/` (_new_, `@greenwave/database`)
 
-- [ ] Move `prisma/` and `prisma.config.ts` into it; generate to `packages/db/src/generated/prisma`. `prisma.config.ts` loads the root `.env` (`dotenv.config({ path: "../../.env" })`).
-- [ ] `src/index.ts` exports `createPrismaClient(url)` (the `PrismaPg` adapter, as today), `Prisma` and the model types.
-- [ ] `src/lib/config/prisma.ts` keeps its `globalThis` singleton and calls `createPrismaClient(env.DATABASE_URL)`.
-- [ ] Point the five importers of `@/generated/prisma` at `@greenwave/db`: `prisma/seed.ts`, `scripts/import-traffic-stats.ts`, `src/lib/config/prisma.ts`, `src/lib/devices/serialization.ts`, `src/lib/traffic-stats/serialization.ts`.
-- [ ] Root `db:*` scripts forward with `pnpm --filter @greenwave/db exec prisma …`; `postinstall` generates the client.
+- [x] Move `prisma/` and `prisma.config.ts` into it; generate to `database/src/generated/prisma`. `prisma.config.ts` loads the root `.env` (`dotenv.config({ path: "../.env" })`).
+- [x] `src/index.ts` exports `createPrismaClient(url)` (the `PrismaPg` adapter, as today), `Prisma` and the model types.
+- [x] `src/lib/config/prisma.ts` keeps its `globalThis` singleton and calls `createPrismaClient(env.DATABASE_URL)`.
+- [x] Point the five importers of `@/generated/prisma` at `@greenwave/database`: `prisma/seed.ts`, and under `frontend/`: `scripts/import-traffic-stats.ts`, `src/lib/config/prisma.ts`, `src/lib/devices/serialization.ts`, `src/lib/traffic-stats/serialization.ts`.
+- [x] Root `db:*` scripts forward to `@greenwave/database`'s scripts; `postinstall` generates the client.
 
 ## Schema
 
@@ -57,10 +61,11 @@ One migration. Fields camelCase, tables `@@map`ped to snake_case.
 
 ## Tooling
 
-- [ ] Root `tsconfig.json` excludes `packages` and `services`; each has its own (`strict`, `moduleResolution: "bundler"`, `noEmit`), and `pnpm typecheck` also runs `pnpm -r typecheck`.
-- [ ] `vitest.config.mts`: `test.projects`, the app on jsdom, packages and services on node.
-- [ ] `.fallowrc.json`: a `contracts` zone (imports nothing), `packages/db/**` in `db`, a `services` zone (contracts and db), and let `ui`, `hooks` and `data` import contracts. Every new file needs a zone, or boundary coverage fails.
-- [ ] `eslint.config.mjs`: the relative-import ban applies to `src/**` only; add `@greenwave/db` to the restricted imports.
-- [ ] `.ls-lint.yml`: kebab-case for `packages/*/src/**` and `services/*/src/**` too.
+- [x] A root `tsconfig.base.json` that every package but the frontend extends (`strict`, `moduleResolution: "bundler"`, `noEmit`); `pnpm typecheck` runs `pnpm -r typecheck`.
+- [x] `vitest.config.mts`: `test.projects`, the frontend on jsdom, the other packages on node.
+- [x] `.fallowrc.json`: zone patterns prefixed with `frontend/`, a `shared` zone (imports nothing), `database/**` in `db`, a `services` zone (`shared` and `db`), and let `ui`, `hooks` and `data` import `shared`. The frontend's old `shared` zone is renamed `utils`.
+- [x] `eslint.config.mjs`: Next's configs and the relative-import ban apply to `frontend/**` only (`settings.next.rootDir`); add `@greenwave/database` to the restricted imports.
+- [x] `.ls-lint.yml`: kebab-case for every package's `src/**`.
+- [x] `CLAUDE.md` in two: the Next-specific rules move to `frontend/CLAUDE.md` beside `frontend/AGENTS.md`.
 
 **Done when** M1's checks pass, and the architecture and MQTT-design sections have a draft.
