@@ -1,26 +1,12 @@
-import react from "@vitejs/plugin-react";
-import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
 
 /**
- * `server-only` throws unless it is resolved under the `react-server` condition.
- * The package ships a zero-byte module for that case; pointing at it directly
- * keeps the `server-only` data layer importable from tests.
+ * One project per workspace package. The frontend keeps its own config (jsdom,
+ * the server-only alias, the setup file); the others run on Node by default.
+ * A glob, because Vitest refuses a listed directory that does not exist yet.
  */
-const serverOnlyStub = fileURLToPath(
-  new URL("node_modules/server-only/empty.js", import.meta.url),
-);
-
 export default defineConfig({
-  plugins: [react()],
-  resolve: {
-    tsconfigPaths: true,
-    alias: { "server-only": serverOnlyStub },
-  },
   test: {
-    environment: "jsdom",
-    globals: true,
-    setupFiles: ["./vitest.setup.ts"],
-    include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
+    projects: ["{frontend,shared,database,adapter,backend,predictor,loadgen}"],
   },
 });

@@ -1,5 +1,5 @@
 ls:
-  src/**:
+  "{frontend,shared,database,adapter,backend,predictor,loadgen}/src/**":
     .ts: kebab-case
     .tsx: kebab-case
     .css: kebab-case
@@ -8,5 +8,5 @@ ls:
 
 ignore:
   - node_modules
-  - .next
-  - src/generated
+  - frontend/.next
+  - database/src/generated

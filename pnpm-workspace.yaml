@@ -1,3 +1,32 @@
+packages:
+  - shared
+  - database
+  - adapter
+  - backend
+  - predictor
+  - loadgen
+  - frontend
+
+# One version for a dependency several packages share. Packages write
+# "catalog:" instead of a version; `pnpm add <pkg> --save-catalog` adds one.
+catalog:
+  zod: ^4.6.5
+  typescript: ^5
+  tsx: ^4.23.15
+  "@types/node": ^24
+  prisma: 7.10.0
+  "@prisma/client": 7.10.0
+  "@prisma/adapter-pg": 7.10.0
+  pg: ^8.23.0
+  # For the services and the live map (plans 03–05). fallow flags each
+  # suppression below as stale once its first package uses it: delete it then.
+  # fallow-ignore-next-line unused-catalog-entry
+  mqtt: ^5.16.0
+  # fallow-ignore-next-line unused-catalog-entry
+  pino: ^10.4.0
+  # fallow-ignore-next-line unused-catalog-entry
+  pino-pretty: ^13
+
 allowBuilds:
   "@prisma/engines": true
   esbuild: true
