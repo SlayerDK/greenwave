@@ -24,7 +24,7 @@ Then sign up at http://localhost:3000/signup.
 
 ### Vercel
 
-Production is frozen until after the hand-in: `vercel.json` skips every build, so the deployed recorder keeps running while `main` changes. Traffic history is recorded every 15 minutes by a long-running GitHub Actions workflow calling `/api/cron/traffic-history`, because Vercel's Hobby plan only allows daily crons.
+Production is frozen until after the hand-in: `vercel.json` skips every build, so the deployed recorder keeps running while `main` changes. Traffic history is recorded every 15 minutes by a long-running GitHub Actions workflow calling `/api/cron/traffic-history`, because Vercel's Hobby plan only allows daily crons. Its timestamps are UTC, so Neon shows them an hour behind Danish time (two in summer); `CLAUDE.md` has the query that converts them.
 
 1. In Vercel, add a new project and import this repo. Build, ignore and region settings come from `vercel.json`. The first build fails until steps 3–4 are done; that is expected.
 2. In the project's **Storage** tab, create a **Neon** database in AWS Frankfurt (`eu-central-1`), Free plan, connected to **Production**. This sets `DATABASE_URL` and `DATABASE_URL_UNPOOLED`.
