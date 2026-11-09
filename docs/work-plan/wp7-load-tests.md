@@ -2,7 +2,9 @@
 
 **Bjoern · Mon 16 – Fri 27 Nov.** Needs WP3 and WP4. · [← Work plan](../WORK-PLAN.md)
 
-- [ ] `services/loadgen` (_new_), MQTT user `loadgen`: publishes copies of a fixture observation for synthetic cities `load-01`…`load-NN`, each with a fresh `eventId`, `observedAt` = now and `source: "loadtest"`, at `RATE` messages a second for `DURATION`. The backend still writes their history, so the test covers the full write path.
+> **Implementation plan:** [07 · Load generator](../implementation-plans/07-loadgen.md). It has the step-by-step detail for handing this off; this file keeps the owner, dates and summary.
+
+- [ ] `loadgen/` (_new_), MQTT user `loadgen`: publishes copies of a fixture observation for synthetic cities `load-01`…`load-NN`, each with a fresh `eventId`, `observedAt` = now and `source: "loadtest"`, at `RATE` messages a second for `DURATION`. The backend still writes their history, so the test covers the full write path.
 - [ ] A `loadtest` Compose profile, as its own project so its data lands in separate volumes:
 
   ```bash

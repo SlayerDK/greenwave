@@ -2,6 +2,8 @@
 
 **Christian · part 1 Tue 17 – Fri 20 Nov; part 2 after 4 Dec.** Part 1 needs WP5's live map. · [← Work plan](../WORK-PLAN.md)
 
+> **Implementation plan:** [05 · Frontend](../implementation-plans/05-frontend.md) (phase D). It has the step-by-step detail for handing this off; this file keeps the owner, dates and summary.
+
 ## Part 1
 
 - [ ] Remove:

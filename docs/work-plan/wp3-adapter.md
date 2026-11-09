@@ -2,7 +2,9 @@
 
 **Bjoern · Mon 9 – Wed 11 Nov.** Needs WP1's contracts and WP2's broker. · [← Work plan](../WORK-PLAN.md)
 
-- [ ] `services/adapter/src/tomtom.ts` (_new_): move `fetchRouteDetails`, `readRoute` and the TomTom schemas from `src/lib/traffic/`. Drop the Next-only `next: { revalidate, tags }` option. Keep `segmentIdStr` and the `date` header (`CLAUDE.md` explains both).
+> **Implementation plan:** [03 · Adapter](../implementation-plans/03-adapter.md). It has the step-by-step detail for handing this off; this file keeps the owner, dates and summary.
+
+- [ ] `adapter/src/tomtom.ts` (_new_): move `fetchRouteDetails`, `readRoute` and the TomTom schemas from `src/lib/traffic/`. Drop the Next-only `next: { revalidate, tags }` option. Keep `segmentIdStr` and the `date` header (`CLAUDE.md` explains both).
 - [ ] `src/normalize.ts`: TomTom details → observation, using `toPositions` and `toRouteLabel` (they move too). `observationSchema.parse` before publishing, so format drift fails here, not in the backend.
 - [ ] `src/main.ts`: Zod-validated env; poll at the start of every minute, skipping a poll while the last one runs; `Promise.all` over the routes, publish those that answered, log the rest.
 - [ ] Fixture mode: `pnpm --filter @greenwave/adapter record-fixtures` saves one response per route, once. `ADAPTER_SOURCE=fixture` replays them with speeds jittered ±10%, `observedAt` = now and `source: "fixture"`. Live readings carry `source: "live"`.

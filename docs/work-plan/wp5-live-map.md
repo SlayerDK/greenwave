@@ -2,6 +2,8 @@
 
 **bd-nis · Thu 5 – Fri 13 Nov; forecast slider Mon 23 – Thu 26 Nov.** Needs WP1; the slider needs WP6. · [← Work plan](../WORK-PLAN.md)
 
+> **Implementation plan:** [05 · Frontend](../implementation-plans/05-frontend.md). It has the step-by-step detail for handing this off; this file keeps the owner, dates and summary.
+
 ## First paint from Postgres
 
 - [ ] `src/lib/traffic/queries.ts` (_new_): the latest network for a city, in one Prisma query with `include` (routes, segments with geometry, route and segment state).

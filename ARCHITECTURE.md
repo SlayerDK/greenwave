@@ -167,7 +167,7 @@ With a normal subscription, three backend copies would each get every reading. S
 
 | Service          | What it is                                                | Host port                     |
 | ---------------- | --------------------------------------------------------- | ----------------------------- |
-| `postgres`       | Already in `docker-compose.yml`                           | 5432                          |
+| `postgres`       | Already in `compose.yaml`                                 | 5432                          |
 | `mosquitto`      | The broker                                                | 1883 (MQTT), 9001 (WebSocket) |
 | `migrate`        | Runs `prisma migrate deploy`, then exits                  | none                          |
 | `adapter-aarhus` | City id, routes and TomTom key from environment variables | none                          |
@@ -268,7 +268,7 @@ A CoAP gateway and traffic signs, production deployment (TLS, broker login for b
 
 Owners, dates and implementation details for each item are in [`docs/WORK-PLAN.md`](docs/WORK-PLAN.md).
 
-- [ ] **Workspace:** a pnpm workspace with `services/adapter`, `services/backend`, `packages/contracts` (message schemas, topics, and the congestion thresholds from `src/lib/traffic/serialization.ts`) and `packages/db` (Prisma).
+- [ ] **Workspace:** a pnpm workspace with one directory per container (`frontend/`, `adapter/`, `backend/`, `predictor/`, `loadgen/`, `broker/`, `database/` for Prisma and `migrate`) and `shared/` (message schemas, topics, and the congestion thresholds from `src/lib/traffic/serialization.ts`). The Next.js app moves into `frontend/`.
 
 - [ ] **Compose:** `mosquitto` with its config and access rules, `migrate`, `adapter-aarhus`, `backend` and `frontend`, with healthchecks.
 
