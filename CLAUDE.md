@@ -231,6 +231,10 @@ free 1 GB blocks writes once full; export and prune before then (see `docs/WORK-
   Stats slot starts and ends on one. With `skipDuplicates`, a duplicated, retried or manual run in the
   same slot inserts nothing (`inserted: 0`), which is what makes the scheduler's retries safe. No foreign keys: an
   append-only log must not be cascade-deleted with `traffic_route`.
+- **`recordedAt` is UTC in a column without a time zone** (`TIMESTAMP(3)`), so Neon's console shows
+  every row an hour behind Danish time, two in summer. The rows are right; convert with
+  `("recordedAt" AT TIME ZONE 'UTC') AT TIME ZONE 'Europe/Copenhagen'`. A single `AT TIME ZONE` reads
+  the UTC value as Danish time and shifts it the wrong way.
 - **Reads uncached and calls no `updateTag`.** That is Server-Action-only, and nothing re-renders off
   this write; the map's 60s cache just ages out. Unlike the snapshot action, this is correct.
 - **It is a `*-service.ts`, never an action.** It has no `requireAuth()` — the route checks
