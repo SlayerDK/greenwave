@@ -101,72 +101,137 @@ model Reading {
   @@map("reading")
 }
 
-/// Mirrors the `routeStatus` union in src/lib/traffic/schema.ts. Assigning the
-/// Zod value to this column in mutations.ts is what makes the two fail to
-/// compile if they ever drift apart.
-enum TrafficRouteStatus {
-  NEW
-  ACTIVE
-  PENDING_UPDATE
-  MM_FAILED
-  ARCHIVED
+/// Mirrors CONGESTION_LEVELS in shared/. The backend assigns
+/// classifyCongestion's result to this column, so a level added on one side
+/// only stops compiling. Never derive the Zod list from this enum: shared/ is
+/// value-imported by browser code, which must not pull in Prisma.
+enum TrafficCongestion {
+  free
+  light
+  moderate
+  heavy
+  closed
 
-  @@map("traffic_route_status")
+  @@map("traffic_congestion")
 }
 
-/// A TomTom monitored route. `id` is TomTom's own routeId.
+/// A monitored route of one city. Upserted by the backend from every observation.
 model TrafficRoute {
-  id           Int                @id
-  name         String
-  status       TrafficRouteStatus
-  lengthMeters Int
-  createdAt    DateTime           @default(now())
-  updatedAt    DateTime           @updatedAt
+  cityId    String
+  id        String
+  /// Without TomTom's CW_AU_ prefix.
+  name      String
+  lengthM   Int
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
-  segments  TrafficSegment[]
-  snapshots TrafficSnapshot[]
+  segments TrafficSegment[]
+  state    TrafficRouteState?
 
+  @@id([cityId, id])
   @@map("traffic_route")
 }
 
-/// Road geometry is static, so it is stored once per segment rather than on
-/// every snapshot. `segmentIdStr` is TomTom's id as a string: the numeric form
-/// exceeds Number.MAX_SAFE_INTEGER and does not survive JSON parsing.
+/// Static geometry, inserted once (createMany + skipDuplicates). `id` is
+/// TomTom's segmentIdStr; segment ids are unique across Aarhus's routes, but
+/// the key includes the route anyway.
 model TrafficSegment {
-  id           String @id @default(cuid())
-  segmentIdStr String
-  ordinal      Int
-  lengthMeters Int
-  shape        Json
+  cityId      String
+  routeId     String
+  id          String
+  ordinal     Int
+  lengthM     Int
+  /// GeoJSON [longitude, latitude] pairs.
+  coordinates Json
 
-  routeId Int
-  route   TrafficRoute @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  route TrafficRoute         @relation(fields: [cityId, routeId], references: [cityId, id], onDelete: Cascade)
+  state TrafficSegmentState?
 
-  @@unique([routeId, segmentIdStr])
-  @@index([routeId, ordinal])
+  @@id([cityId, routeId, id])
+  @@index([cityId, routeId, ordinal])
   @@map("traffic_segment")
 }
 
-/// One poll of a route: the route-level totals plus the per-segment speeds that
-/// actually change between polls.
-model TrafficSnapshot {
-  id                String   @id @default(cuid())
-  recordedAt        DateTime @default(now())
-  travelTime        Int
-  typicalTravelTime Int
-  delayTime         Int
-  completeness      Int
-  routeConfidence   Int
-  passable          Boolean
-  segmentSpeeds     Json
+/// The newest reading of a route, and the two flags with the streaks that
+/// switch them. Written only when an observation is newer than `observedAt`.
+model TrafficRouteState {
+  cityId               String
+  routeId              String
+  eventId              String
+  observedAt           DateTime @db.Timestamptz(3)
+  travelTimeSec        Int
+  typicalTravelTimeSec Int
+  delaySec             Int
+  passable             Boolean
 
-  routeId Int
-  route   TrafficRoute @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  /// When the flag is on: the first reading of the run that switched it on.
+  congestedSince              DateTime? @db.Timestamptz(3)
+  /// First reading of the current run that disagrees with the flag, if any.
+  congestedPendingSince       DateTime? @db.Timestamptz(3)
+  /// Length of that run; the flag switches when it reaches FLAG_SWITCH_READINGS.
+  congestedStreak             Int       @default(0)
+  slowerThanUsualSince        DateTime? @db.Timestamptz(3)
+  slowerThanUsualPendingSince DateTime? @db.Timestamptz(3)
+  slowerThanUsualStreak       Int       @default(0)
 
-  @@index([routeId, recordedAt])
-  @@map("traffic_snapshot")
+  route TrafficRoute @relation(fields: [cityId, routeId], references: [cityId, id], onDelete: Cascade)
+
+  @@id([cityId, routeId])
+  @@map("traffic_route_state")
 }
 
+/// The newest reading of each segment, written with its route state.
+model TrafficSegmentState {
+  cityId           String
+  routeId          String
+  segmentId        String
+  observedAt       DateTime          @db.Timestamptz(3)
+  currentSpeedKmh  Int
+  averageSpeedKmh  Int
+  typicalSpeedKmh  Int
+  relativeSpeedPct Int
+  confidencePct    Int
+  congestion       TrafficCongestion
+
+  segment TrafficSegment @relation(fields: [cityId, routeId, segmentId], references: [cityId, routeId, id], onDelete: Cascade)
+
+  @@id([cityId, routeId, segmentId])
+  @@map("traffic_segment_state")
+}
+
+/// One row per segment per UTC quarter hour of `observedAt`. Sums, not
+/// averages: adding to a sum is exact, and the mean is sum / sampleCount.
+/// Time-first key so writes append at the index's right edge. No relations:
+/// an append-only log must never be cascade-deleted with its route. Fixture
+/// readings never land here.
+model TrafficSegmentHistory {
+  bucketStart      DateTime @db.Timestamptz(3)
+  cityId           String
+  routeId          String
+  segmentId        String
+  sampleCount      Int
+  currentSpeedSum  Int
+  averageSpeedSum  Int
+  typicalSpeedSum  Int
+  relativeSpeedSum Int
+
+  @@id([bucketStart, cityId, routeId, segmentId])
+  @@map("traffic_segment_history")
+}
+
+/// One row per observation the backend has processed; the insert that finds
+/// the row already there is how a duplicate delivery is detected.
+model TrafficObservationReceipt {
+  eventId    String   @id
+  receivedAt DateTime @default(now()) @db.Timestamptz(3)
+
+  @@index([receivedAt])
+  @@map("traffic_observation_receipt")
+}
+
+/// The proof of concept's log: the frozen Vercel recorder writes it in Neon,
+/// and the predictor backfills from it. Route ids are integers here.
+///
 /// One row per segment per 15-minute run, written by the cron route.
 /// `recordedAt` is the run's UTC quarter hour, not the read time, and is part of the key: a
 /// duplicated or retried trigger collides and is skipped instead of

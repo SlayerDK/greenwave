@@ -3,7 +3,7 @@
 import { type Slot } from "@/app/(app)/history/_lib/slot-features";
 import { CONGESTION_STYLE } from "@/components/traffic/congestion-style";
 import { Button } from "@/components/ui/button";
-import { type CongestionLevel } from "@/lib/traffic/serialization";
+import { type CongestionLevel } from "@greenwave/shared";
 import { PauseIcon, PlayIcon } from "lucide-react";
 import { Slider } from "radix-ui";
 

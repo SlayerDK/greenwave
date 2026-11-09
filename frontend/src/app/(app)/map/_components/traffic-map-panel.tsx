@@ -1,6 +1,5 @@
 "use client";
 
-import { RecordSnapshotButton } from "@/app/(app)/map/_components/record-snapshot-button";
 import { RefreshTrafficButton } from "@/app/(app)/map/_components/refresh-traffic-button";
 import { RouteSummaryList } from "@/app/(app)/map/_components/route-summary-list";
 import { CongestionLegend } from "@/components/traffic/congestion-legend";
@@ -60,13 +59,10 @@ export const TrafficMapPanel = ({
           {traffic.routes.length} of {routeCount} routes ·{" "}
           {featureCollection.features.length} segments
         </p>
-        <div className="flex items-center gap-2">
-          <RefreshTrafficButton
-            onRefresh={() => void query.refetch()}
-            isFetching={query.isFetching}
-          />
-          <RecordSnapshotButton />
-        </div>
+        <RefreshTrafficButton
+          onRefresh={() => void query.refetch()}
+          isFetching={query.isFetching}
+        />
       </div>
 
       {/* Left beside the map rather than replacing it: stale segments beat a

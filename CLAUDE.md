@@ -23,6 +23,8 @@ Directories other than `frontend/` and `database/` arrive with their plans.
 
 - **Containers share code only through `shared/` and `database/`.** Nothing imports across container
   directories.
+- **`shared/` runs in the browser too:** Zod only, no Node built-ins, no Prisma. The Prisma enum
+  `TrafficCongestion` mirrors its `CONGESTION_LEVELS`; never derive one from the other.
 - **Imports:** `@/` aliases inside `frontend/`; relative imports in every other package. They are
   consumed as TypeScript source, so an `@/` there would resolve against the importer's tsconfig.
 - **One `.env`, at the root.** Next would look for it in `frontend/`, so the frontend's scripts load

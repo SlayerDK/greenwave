@@ -1,4 +1,4 @@
-import { type CongestionLevel } from "@/lib/traffic/serialization";
+import { type CongestionLevel } from "@greenwave/shared";
 import { type LayerProps } from "react-map-gl/mapbox";
 
 export const TRAFFIC_LAYER_ID = "traffic-segments";

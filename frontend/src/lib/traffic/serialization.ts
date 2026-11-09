@@ -3,6 +3,7 @@ import {
   type TomTomRouteDetails,
   type TomTomSegment,
 } from "@/lib/traffic/schema";
+import { classifyCongestion, type CongestionLevel } from "@greenwave/shared";
 import {
   type Feature,
   type FeatureCollection,
@@ -20,8 +21,8 @@ const toPosition = ({ latitude, longitude }: TomTomPoint): Position => [
   latitude,
 ];
 
-/** Used by both the GeoJSON output and the stored segment geometry. */
-export const toPositions = (points: TomTomPoint[]): Position[] =>
+/** Every coordinate list goes through here. */
+const toPositions = (points: TomTomPoint[]): Position[] =>
   points.map(toPosition);
 
 /**
@@ -29,9 +30,6 @@ export const toPositions = (points: TomTomPoint[]): Position[] =>
  * "CW_AU_Randersvej sydgående" — while the two Ringvejen routes carry none.
  * Trimmed rather than replaced from a curated table so an upstream rename
  * reaches the UI instead of silently disagreeing with it.
- *
- * `mutations.ts` applies this too, so the stored route name matches what the
- * dashboard shows.
  */
 const ROUTE_NAME_PREFIX = "CW_AU_";
 
@@ -39,30 +37,6 @@ export const toRouteLabel = (routeName: string): string =>
   routeName.startsWith(ROUTE_NAME_PREFIX)
     ? routeName.slice(ROUTE_NAME_PREFIX.length)
     : routeName;
-
-/**
- * `relativeSpeed` is current speed as a percentage of free flow. A segment
- * closed to traffic reports `currentSpeed: 0`, which TomTom documents explicitly.
- *
- * Structural rather than `TomTomSegment` so the historical page can colour by
- * the same thresholds against its own baseline — one home for the cut-offs.
- */
-export const classifyCongestion = ({
-  currentSpeed,
-  relativeSpeed,
-}: {
-  currentSpeed: number;
-  relativeSpeed: number;
-}) => {
-  if (currentSpeed === 0) return "closed";
-  if (relativeSpeed < 50) return "heavy";
-  if (relativeSpeed < 75) return "moderate";
-  if (relativeSpeed < 90) return "light";
-
-  return "free";
-};
-
-export type CongestionLevel = ReturnType<typeof classifyCongestion>;
 
 export type TrafficSegmentProperties = {
   segmentIdStr: string;

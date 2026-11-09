@@ -1,11 +1,7 @@
 "use client";
 
-import { recordRouteSnapshotsAction } from "@/lib/traffic/actions";
 import { type NetworkTraffic } from "@/lib/traffic/serialization";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-
-/** Shared by the read and by the invalidation that follows a snapshot. */
-const TRAFFIC_QUERY_KEY = ["traffic", "network"];
+import { useQuery } from "@tanstack/react-query";
 
 /**
  * The client genuinely needs this data itself, which is the case CLAUDE.md
@@ -25,7 +21,7 @@ const TRAFFIC_QUERY_KEY = ["traffic", "network"];
  */
 export const useNetworkTraffic = (initialData?: NetworkTraffic) =>
   useQuery({
-    queryKey: TRAFFIC_QUERY_KEY,
+    queryKey: ["traffic", "network"],
     queryFn: async (): Promise<NetworkTraffic> => {
       const response = await fetch("/api/traffic");
       if (!response.ok) throw new Error("Failed to load traffic data.");
@@ -36,26 +32,3 @@ export const useNetworkTraffic = (initialData?: NetworkTraffic) =>
     staleTime: Infinity,
     refetchInterval: false,
   });
-
-export const useRecordNetworkSnapshot = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async () => {
-      const result = await recordRouteSnapshotsAction();
-      if (!result.success) throw new Error(result.error);
-
-      return result.data;
-    },
-    /**
-     * The action read past the server cache and called `updateTag`, so the next
-     * read is of fresh data — but `initialData` cannot overwrite a cache entry
-     * that already has data, so without invalidating here the map would keep
-     * painting the payload the snapshot just superseded. `router.refresh()`
-     * would not fix it: once `query.data` exists, the RSC's payload is no
-     * longer what the panel renders.
-     */
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: TRAFFIC_QUERY_KEY }),
-  });
-};

@@ -4,11 +4,10 @@ import {
   type SerializedTrafficStatsSegment,
 } from "@/lib/traffic-stats/serialization";
 import {
-  classifyCongestion,
-  type CongestionLevel,
   type LineFeatureCollection,
   type TrafficBbox,
 } from "@/lib/traffic/serialization";
+import { classifyCongestion, type CongestionLevel } from "@greenwave/shared";
 import { type LineString } from "geojson";
 import { z } from "zod";
 

@@ -10,7 +10,7 @@ import {
   SegmentPopupFrame,
 } from "@/components/traffic/segment-popup-frame";
 import { type SerializedTrafficStatsRoute } from "@/lib/traffic-stats/serialization";
-import { type CongestionLevel } from "@/lib/traffic/serialization";
+import { type CongestionLevel } from "@greenwave/shared";
 
 export type StatsSelection = {
   segmentKey: string;

@@ -19,8 +19,7 @@ const REQUEST_TIMEOUT_MS = 8_000;
 /**
  * TomTom answers with `no-store`, which the Next Data Cache ignores in favour of
  * these options. Caching here deduplicates upstream calls across every
- * concurrent viewer; `recordRouteSnapshotAction` calls `updateTag` to expire the
- * entry once it has read something newer.
+ * concurrent viewer.
  */
 
 /**

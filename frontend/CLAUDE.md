@@ -102,7 +102,7 @@ The serialize function is the one place with no return annotation — annotating
 ## Traffic (external API domain)
 
 `src/lib/traffic/` consumes TomTom's Route Monitoring API and is the reference for talking to a
-third party. It differs from `devices/` in three ways worth knowing:
+third party. It differs from `devices/` in two ways worth knowing:
 
 - **`tomtom-service.ts`, not `client.ts`.** fallow's `data` zone is a whitelist of filenames, so an
   arbitrary name lands in no zone and `pnpm analyze` fails. `*-service.ts` is on both that list and
@@ -111,19 +111,12 @@ third party. It differs from `devices/` in three ways worth knowing:
 - **`serialization.ts` has no `server-only`.** It is a pure transform with no Prisma import, so
   keeping the marker off makes it unit-testable. `vitest.config.mts` aliases `server-only` to the
   package's empty module so the modules that _do_ need it stay testable too.
-- **`TrafficRoute.status` is a Prisma enum mirroring the `routeStatus` Zod union.** Assigning one to
-  the other in `mutations.ts` is the whole drift guard — no runtime check, it just stops compiling.
-  It is one-directional by nature, and deliberately so: it catches a status the Zod schema accepts
-  but the column cannot store (verified — both `upsert` branches error), and stays quiet when the
-  column allows a value we never write, which is harmless. Do not derive the Zod enum from the
-  generated Prisma one: `schema.ts` is value-imported by `"use client"` code, so that would pull
-  Prisma into the browser bundle.
 
 **Thirteen routes, one registry.** `MONITORED_ROUTE_IDS` in `schema.ts` is the whole fan-out list,
 and since no user input reaches a route id any more it doubles as the allowlist — nothing can spend
 our `TOMTOM_API_KEY` on a route that is not in it. Every read goes through it: `getNetworkTraffic()`
-takes no argument, `GET /api/traffic` takes no query parameter, and neither
-`recordRouteSnapshotsAction()` nor the cron's `recordTrafficHistory()` takes any input. Adding a route is a one-line change plus whatever its label needs.
+takes no argument, `GET /api/traffic` takes no query parameter, and the cron's
+`recordTrafficHistory()` takes no input. Adding a route is a one-line change plus whatever its label needs.
 
 - **One route failing must not cost the other twelve.** `readRoute` in `tomtom-service.ts` turns an
   expected `TrafficError` into a `failures` entry and rethrows anything else, so `map/error.tsx` is
@@ -159,10 +152,9 @@ Three things that will silently produce wrong output if changed:
    cached for 60s, so stamping at serialize time reports a cache hit as fresh.
 
 Auth is Better Auth throughout, with one exception: `/api/cron/*`, whose scheduler has no session
-and instead sends `Authorization: Bearer $CRON_SECRET`. `recordRouteSnapshotsAction` and the
-`data-access` reads sit behind `requireAuth()`, and `/api/traffic` checks `getSession()` so an API
-client gets a 401 instead of an `unauthorized()` interrupt. Segment geometry is static, so it is
-stored once per segment and snapshots carry only the speeds that change.
+and instead sends `Authorization: Bearer $CRON_SECRET`. The `data-access` reads sit behind
+`requireAuth()`, and `/api/traffic` checks `getSession()` so an API client gets a 401 instead of an
+`unauthorized()` interrupt.
 
 **Nothing refetches on its own.** The map is painted from the RSC's `initialData` and stays there:
 `useNetworkTraffic` sets `staleTime: Infinity` and `refetchInterval: false`, so there is no poll, no
@@ -175,30 +167,11 @@ thirteen routes on a timer is thirteen route-handler reads a minute per open tab
 the upstream read. Within it, Refresh re-reads a warm cache and legitimately hands back the same
 payload rather than spending thirteen TomTom calls.
 
-Recording a snapshot passes `revalidateSeconds: 0` to read past that cache, and must therefore also
-call `updateTag(trafficTag(routeId))` for **every route it recorded**, or the next read comes out of
-the still-warm cache and the map keeps painting the payload the snapshot just superseded. That
-failure is silent: nothing errors. Call it from the action body after the fan-out, not inside the
-per-route helper, so it is unambiguously on the Server Action's own context. A route that failed has
-nothing newer to expire, so it gets no `updateTag`.
-
-**`updateTag` alone is not enough on the client side.** `useRecordNetworkSnapshot` must also
-`invalidateQueries` — `initialData` cannot overwrite a cache entry that already holds data, so the
-panel would go on rendering the superseded `query.data`. `router.refresh()` does not fix it either:
-once `query.data` exists, the RSC's payload is no longer what the panel renders. This used to be
-masked by the poll, which corrected it within a window; with the poll gone it would never correct.
-
-`updateTag`, not `revalidateTag`. Next 16 split the two: `revalidateTag(tag, profile)` is
-stale-while-revalidate and would serve the superseded payload to the very refresh it triggers, while
-`updateTag` expires immediately for read-your-own-writes and is Server-Action-only. Reach for
-`updateTag` whenever a mutation's own `router.refresh()` has to observe the write.
-
-> Snapshots are write-only today. They are recorded when something calls `useRecordNetworkSnapshot`
-> — there is no scheduled collection of snapshots (the 15-minute job writes `traffic_history`, below) —
-> and nothing reads them back yet. The read path
-> (`queries.ts`, a history endpoint, a `serializeTrafficSnapshot`) was deleted rather than left
-> unused; add it together with whatever renders it, and give the query an explicit `select` so a
-> 24h window does not drag every `segmentSpeeds` blob along with it.
+**`updateTag`, not `revalidateTag`, when a mutation must see its own write.** Next 16 split the
+two: `revalidateTag(tag, profile)` is stale-while-revalidate and would serve the superseded payload
+to the very refresh it triggers, while `updateTag` expires immediately for read-your-own-writes and
+is Server-Action-only. Reach for `updateTag` whenever a mutation's own `router.refresh()` has to
+observe the write.
 
 ## Traffic history (scheduled)
 
@@ -222,7 +195,7 @@ free 1 GB blocks writes once full; export and prune before then (see the root's 
   `("recordedAt" AT TIME ZONE 'UTC') AT TIME ZONE 'Europe/Copenhagen'`. A single `AT TIME ZONE` reads
   the UTC value as Danish time and shifts it the wrong way.
 - **Reads uncached and calls no `updateTag`.** That is Server-Action-only, and nothing re-renders off
-  this write; the map's 60s cache just ages out. Unlike the snapshot action, this is correct.
+  this write; the map's 60s cache just ages out.
 - **It is a `*-service.ts`, never an action.** It has no `requireAuth()` — the route checks
   `CRON_SECRET` — and a `"use server"` export would be a public, unauthenticated endpoint.
 - **`src/proxy.ts` must not match `api/cron`.** The scheduler has no session; the redirect to
