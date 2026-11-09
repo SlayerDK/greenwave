@@ -164,15 +164,17 @@ deleted: src/hooks/traffic/use-traffic.ts, refresh-traffic-button.tsx, src/app/a
 - [ ] `Dockerfile` (already moved to `frontend/Dockerfile` by 00): rewrite it on [02](02-migrate.md#the-dockerfile-pattern)'s pattern, built from the repo root.
 
   ```dockerfile
-  FROM node:24.<minor>-alpine AS base   # the same pinned minor as the services
-  RUN corepack enable
-  ENV PNPM_HOME="/pnpm" PATH="/pnpm:$PATH" NEXT_TELEMETRY_DISABLED=1
+  FROM node:24.22-alpine AS base   # the same pinned minor as the services
+  # Identical to every other Dockerfile up to `RUN pnpm fetch`, so the images share its layer.
+  RUN apk add --no-cache openssl && corepack enable
+  ENV PNPM_HOME="/pnpm" PATH="/pnpm:$PATH"
   WORKDIR /app
 
   FROM base AS builder
-  COPY pnpm-lock.yaml pnpm-workspace.yaml ./
+  COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
   RUN pnpm fetch
-  COPY package.json tsconfig.base.json ./
+  ENV NEXT_TELEMETRY_DISABLED=1
+  COPY tsconfig.base.json ./
   COPY shared shared
   COPY database database
   COPY frontend frontend
@@ -182,7 +184,7 @@ deleted: src/hooks/traffic/use-traffic.ts, refresh-traffic-button.tsx, src/app/a
   RUN pnpm --filter @greenwave/frontend build
 
   FROM base AS runner
-  ENV NODE_ENV=production PORT=3000 HOSTNAME=0.0.0.0
+  ENV NODE_ENV=production PORT=3000 HOSTNAME=0.0.0.0 NEXT_TELEMETRY_DISABLED=1
   RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
   COPY --from=builder --chown=nextjs:nodejs /app/frontend/.next/standalone ./
   COPY --from=builder --chown=nextjs:nodejs /app/frontend/.next/static ./frontend/.next/static
@@ -192,7 +194,7 @@ deleted: src/hooks/traffic/use-traffic.ts, refresh-traffic-button.tsx, src/app/a
   CMD ["node", "frontend/server.js"]
   ```
 
-  It copies only `shared/`, `database/` and `frontend/`, as 02's pattern does, so editing a service does not rebuild the app; fall back to `COPY . .` if 02 found that pnpm refuses it. The server already runs with `node`. The Prisma CLI and `start-prod` are gone: migrations belong to `migrate` ([02](02-migrate.md)), and the container runs only the server.
+  It copies only `shared/`, `database/` and `frontend/`, as 02's pattern does, so editing a service does not rebuild the app (02 verified that pnpm accepts the missing directories). `package.json` is copied before `pnpm fetch` so corepack runs the pinned pnpm; see 02's _Changed in implementation_ notes. The server already runs with `node`. The Prisma CLI and `start-prod` are gone: migrations belong to `migrate` ([02](02-migrate.md)), and the container runs only the server.
 
 - [ ] **Verify** the image really reaches Postgres. If Prisma fails at runtime with a missing file, add it with `outputFileTracingIncludes`.
 - [ ] `compose.yaml`. List the variables the app reads instead of `env_file: .env`, which would also hand it the MQTT passwords and everything else in `.env`. `${…}` is interpolated from the root `.env`.
