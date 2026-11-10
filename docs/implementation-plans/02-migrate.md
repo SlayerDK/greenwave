@@ -1,6 +1,6 @@
 # 02 · Migrate, and the Dockerfile pattern
 
-**Compose service `migrate` (one-shot), built from `database/Dockerfile`, plus the Dockerfile pattern the adapter, backend, predictor and loadgen copy.** [WP2](../work-plan/wp2-compose-and-broker.md) · Bjoern · 2–6 Nov · Needs [00](00-foundation.md) · Unblocks [03](03-adapter.md), [04](04-backend.md), [06](06-predictor.md), [07](07-loadgen.md). · [← Plans](README.md)
+**Compose service `migrate` (one-shot), built from `database/Dockerfile`, plus the Dockerfile pattern the adapter, backend and predictor copy.** [WP2](../work-plan/wp2-compose-and-broker.md) · Bjoern · 2–6 Nov · Needs [00](00-foundation.md) · Unblocks [03](03-adapter.md), [04](04-backend.md), [06](06-predictor.md), [07](07-loadgen.md). · [← Plans](README.md)
 
 ## Goal
 

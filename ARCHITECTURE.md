@@ -4,7 +4,7 @@ Live traffic for Aarhus's main roads on a Mapbox map, with every road segment co
 
 The project started as adaptive traffic-light control (presentation 1). With real TomTom data from Aarhus Kommune it works with real-time data instead: it shows the current traffic state and predicts the future state.
 
-> **Status (2026-11-02):** agreed design, not implemented yet. [`docs/WORK-PLAN.md`](docs/WORK-PLAN.md) says who builds what before the hand-in on 4 December 2026. Today the app is a single Next.js proof of concept that calls TomTom's API directly over HTTP (see `README.md`). Its Vercel cron records the traffic history until the hand-in.
+> **Status (2026-11-09):** target design with a merged workspace/contracts/database foundation; the broker is implemented on 10 Nov, but the adapter/backend/live-frontend pipeline is not implemented yet. [`docs/WORK-PLAN.md`](docs/WORK-PLAN.md) says who builds what before the hand-in on 4 December 2026. Today the app is a single Next.js proof of concept that calls TomTom's API directly over HTTP (see `README.md`). Its Vercel cron records the traffic history until the hand-in.
 
 At a glance:
 
@@ -12,7 +12,7 @@ At a glance:
 - **Protocols:** HTTP from each city's API into our adapter, MQTT 5 between our services, MQTT over WebSocket to the browser.
 - **Broker:** one Mosquitto instance, one topic tree per city.
 - **Runs on:** Docker Compose on one machine.
-- **Scales by:** an adapter per city and more backend copies.
+- **Current scale:** one Aarhus adapter and one backend. More cities/workers are scalability discussion and future work, not delivery requirements.
 
 ## Overview
 
@@ -31,7 +31,7 @@ Each city's adapter polls its traffic API and publishes the readings over MQTT. 
 
 ### An adapter per city, not a broker per city
 
-The per-city component polls an HTTP API, validates the data and converts it into GeoJSON and our message format, which makes it an adapter (L8 slide 12, L7 slide 23); a broker only routes messages. Each adapter absorbs its city's quirks, so adding a city means adding an adapter and nothing else.
+The per-city component polls an HTTP API, validates the data and converts it into GeoJSON and our message format, which makes it an adapter (L8 slide 12, L7 slide 23); a broker only routes messages. Each adapter absorbs its city's quirks, so a future city would need an adapter plus an explicit MQTT user/ACL entry and configuration. Only Aarhus is in the current delivery scope.
 
 ### One broker, one topic tree per city
 
@@ -55,11 +55,11 @@ The backend and the broker hold long-lived connections, and everything runs with
 
 ### MQTT only, no CoAP
 
-The requirement is MQTT. CoAP suits constrained devices; a CoAP gateway and traffic signs are out of scope.
+MQTT is required by [Brightspace L6](https://brightspace.au.dk/d2l/le/content/220544/Home?itemIdentifier=D2L.LE.Content.ContentObject.ModuleCO-2843971). A CoAP gateway and traffic signs are out of scope.
 
 ### Distributed and event-driven, not microservices
 
-There are four deployable parts, each split off for a reason: the adapter scales per city and holds API keys, the backend needs a long-lived MQTT connection, the frontend scales with viewers, and the broker is shared infrastructure. Splitting further would add contracts and harder tracing for no gain (L8 slides 5 and 24). Kafka isn't needed because Postgres holds the history (L8 slide 28).
+The live pipeline separates adapter, backend, frontend and broker for a reason: the adapter scales per city and holds API keys, the backend needs a long-lived MQTT connection, the frontend scales with viewers, and the broker is shared infrastructure. Splitting further would add contracts and harder tracing for no gain (L8 slides 5 and 24). Kafka isn't needed because Postgres holds the history (L8 slide 28).
 
 ### Historical data kept separate
 
@@ -76,7 +76,7 @@ Historical analysis and prediction meet the live pipeline only in Postgres: the 
 - **Self-contained messages:** every message carries its segments' geometry, so a reading never travels without its location and there is no separate geometry topic. The geometry adds about 50%: the Ringvejen fixture's 165 segments are 25 KB without it and 38 KB with it.
 - **Retained state** gives a newly opened map every route at once. The expiry makes a stalled pipeline show "no data" instead of stale green roads.
 - **Last Will:** if an adapter dies, the broker publishes `offline` on its status topic.
-- **QoS 1 and a persistent session:** the broker queues readings while the backend restarts, and the backend drops duplicates by `eventId`.
+- **QoS 1 and a persistent session:** an already-subscribed backend with fixed client ID `backend-1` can recover a short outage within its one-hour session expiry and the broker's 1,000-message queue. The backend drops duplicates by `eventId`; this is not end-to-end exactly-once or power-loss durability.
 - **No event topic:** congestion is part of the state (`congestedSince`), because the map only needs to know whether a route is congested now. A `…/events/congestion` topic is worth adding once something has to react to the moment congestion starts, such as notifications.
 
 ### Observation message
@@ -155,13 +155,11 @@ For each observation, the backend:
 | Overload                                           | The broker buffers; MQTT 5 Receive Maximum caps unacknowledged messages     |
 | Two writers to the same data                       | Only the backend writes traffic data                                        |
 
-## Shared subscriptions
+## Single backend and session identity
 
-With a normal subscription, three backend copies would each get every reading. Subscribing to `$share/backend/greenwave/v1/+/routes/+/observations` makes the copies one group, and the broker gives each message to only one of them (MQTT 5 specification, section 4.8.2). Publishers don't change.
+The required pipeline has one backend, processing one message at a time on the normal `greenwave/v1/+/routes/+/observations` filter. Use the existing `observationTopic("+", "+")` builder, not the legacy shared-subscription export. Store congestion streaks in Postgres so a process restart does not reset them.
 
-- Browsers subscribe normally, because every open map needs every update.
-- If a copy dies holding a message, the broker can hand it to another copy. That's one more reason duplicates are dropped by `eventId`.
-- Mosquitto hands out messages round-robin, so one route's readings land on different copies and step 3 can't keep them in memory. Either split cities between copies, or keep each route's recent readings in Postgres and update them in a transaction (L8 slide 34). We start with one copy.
+Keep client ID `backend-1` through restart and container recreation. A hostname-derived identity changes after recreation; an abandoned persistent shared session can keep receiving readings that the replacement does not process. Do not run a second backend with either a new shared identity or the same fixed identity. Multiple workers would need a separate assignment/concurrency design and are future work.
 
 ## Deployment
 
@@ -176,58 +174,31 @@ With a normal subscription, three backend copies would each get every reading. S
 
 - Healthchecks and `depends_on` start the services in order; the backend and frontend wait for `migrate`.
 - Services reach each other by name (`mqtt://mosquitto:1883`). The browser runs on the host and uses `ws://localhost:9001`.
-- `docker compose up --scale backend=3` scales the backend, and a new city is a new `adapter-<city>` service.
+- Run one backend only, with `BACKEND_CLIENT_ID=backend-1` in development and Compose. Publish broker host ports as `127.0.0.1:1883:1883` and `127.0.0.1:9001:9001`; internal services still use `mosquitto:1883`.
 
-```conf
-# mosquitto.conf
-listener 1883
-listener 9001
-protocol websockets
+The [broker implementation plan](docs/implementation-plans/01-broker.md) owns the exact config, init script, Compose blocks and smoke commands. It uses a persistent data volume and two users only. Anonymous clients read state/status and healthcheck uptime; the adapter writes only Aarhus observations/status; the backend reads observations and writes state. Passwords come from `.env` through a one-shot init job, never Git.
 
-allow_anonymous true
-password_file /mosquitto/config/passwords
-acl_file /mosquitto/config/acl
-
-persistence true
-persistence_location /mosquitto/data/
-```
-
-```conf
-# acl: rules before the first "user" line apply to anonymous clients (the browsers)
-topic read greenwave/v1/+/routes/+/state
-topic read greenwave/v1/+/adapter/status
-
-user adapter-aarhus
-topic write greenwave/v1/aarhus/#
-
-user backend
-topic readwrite greenwave/v1/#
-```
-
-Mosquitto checks these rules when it delivers a message, not when a client subscribes, so `$share` subscriptions need no rule of their own.
+The default 1,000-message queue is enough for the one-hour Aarhus session at 13 messages/minute (about 780 readings). Replay requires an existing subscription and the same client ID. Queue overflow, session expiry, observations before the first subscription, abrupt broker crashes and the commit-to-publish gap are documented limits, not solved by QoS 1. See [operations and limits](docs/implementation-plans/01-broker.md#operations-and-limits).
 
 ## Scalability
 
-The system grows by adding instances where the load is (L7 slides 40–43):
+We implement one city and one backend. [WP7](docs/work-plan/wp7-load-tests.md) records a short baseline and explains 100× growth; it does not claim a measured capacity limit or horizontal scaling.
 
-| Growth     | Response                                                                                                                                |
-| ---------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Cities     | One more adapter. Calls to a city's API grow with its routes, not with viewers                                                          |
-| Messages   | One Mosquitto handles far more than this. Beyond that, bridge regional brokers or switch to a clustering broker, with no client changes |
-| Processing | More backend copies on the shared subscription                                                                                          |
-| Data       | Latest state is one row per segment; history is aggregated, with retention or partitioning later                                        |
-| Viewers    | The broker fans out the retained state. For very large audiences, send geometry once and only speeds after that                         |
+| Growth              | What must be reassessed                                                                         |
+| ------------------- | ----------------------------------------------------------------------------------------------- |
+| Cities/routes       | More adapters and explicit credentials/ACLs, API quotas, message volume and database write cost |
+| Messages/processing | Per-message processing time, bounded queue and lag; one backend can become the bottleneck       |
+| Data                | History growth, retention and database capacity; aggregation bounds samples per stored bucket   |
+| Viewers             | Broker fan-out and network/browser work; viewer growth does not multiply TomTom polling         |
 
-It holds up because every part under load is either stateless (adapters, frontend) or partitioned by a key it already has (city, route), and every part speaks one protocol and one message format.
-
-In numbers: Aarhus produces 13 messages and about 250 KB a minute, which is trivial for Mosquitto. The real limits are TomTom's quota and Postgres. Per-minute history would be about 1.6 million rows a day for Aarhus alone, hence 15-minute aggregates (about 100,000 rows a day). Mosquitto tops out at one CPU core, but the backend and database hit their limits first (L7 slide 42). A load generator under a `loadtest` Compose profile can show this with measurements: messages per second, backend lag (now minus `observedAt`) and database write rate.
+At the planned rate, Aarhus sends 13 observations/minute. 100 equivalent cities would offer about 1,300/minute (21.7/second), before considering payload bytes and storage. This is arithmetic, not a benchmark. The existing 15-minute history and prediction plans add substantive data handling without requiring a worker cluster. Explain why extra workers, regional brokers or managed infrastructure might become relevant later, rather than implementing them now.
 
 ## Pros and cons
 
 Pros:
 
-- A new city is just a new adapter.
-- Parts fail separately: the Last Will flags a dead adapter, the broker queues readings for a restarting backend, and the map keeps its last state.
+- A future city can reuse the topic/message design, with its own adapter and explicit user/ACL configuration.
+- Parts fail separately: the Last Will flags a dead adapter, the broker queues an established backend session's readings during a bounded short outage, and the map marks stale state rather than treating it as current.
 - Load on the city APIs doesn't grow with viewers.
 - One `docker compose up` runs everything, and `mosquitto_sub` shows every message.
 - A standard protocol keeps the parts replaceable.
@@ -262,13 +233,13 @@ Prediction is part of the goal: the map should show where traffic is heading, no
 
 ## Out of scope
 
-A CoAP gateway and traffic signs, production deployment (TLS, broker login for browsers, backups) and broker clustering.
+A CoAP gateway and traffic signs, production deployment (TLS, broker login for browsers, backups), broker clustering, multiple backend workers, shared subscriptions, synthetic-city load generation and dedicated monitoring services.
 
 ## Implementation overview
 
 Owners, dates and implementation details for each item are in [`docs/WORK-PLAN.md`](docs/WORK-PLAN.md).
 
-- [ ] **Workspace:** a pnpm workspace with one directory per container (`frontend/`, `adapter/`, `backend/`, `predictor/`, `loadgen/`, `broker/`, `database/` for Prisma and `migrate`) and `shared/` (message schemas, topics, and the congestion thresholds from `src/lib/traffic/serialization.ts`). The Next.js app moves into `frontend/`.
+- [ ] **Workspace:** a pnpm workspace with one directory per container (`frontend/`, `adapter/`, `backend/`, `predictor/`, `broker/`, `database/` for Prisma and `migrate`) and `shared/` (message schemas, topics, and the congestion thresholds from `src/lib/traffic/serialization.ts`). The Next.js app moves into `frontend/`.
 
 - [ ] **Compose:** `mosquitto` with its config and access rules, `migrate`, `adapter-aarhus`, `backend` and `frontend`, with healthchecks.
 
@@ -276,12 +247,12 @@ Owners, dates and implementation details for each item are in [`docs/WORK-PLAN.m
 
 - [ ] **Database:** city ids, a latest-state table, and 15-minute averaged history instead of hourly samples.
 
-- [ ] **Backend:** shared subscription, validation, deduplication, classification, congestion status, Postgres writes and retained state.
+- [ ] **Backend:** one normal subscription, fixed client ID, validation, deduplication, classification, congestion status, Postgres writes and retained state.
 
 - [ ] **Frontend:** first paint from Postgres, plus a hook that merges live state into the TanStack Query cache.
 
 - [ ] **Clean-up:** remove the direct TomTom calls, `/api/traffic`, the Refresh and snapshot buttons, `TrafficSnapshot`, the cron route and workflow, `vercel.json` and `build-vercel`; update `README.md` and `CLAUDE.md`. The workflow and `vercel.json` go last, after the hand-in, because until then they keep the frozen Vercel deployment recording history.
 
-- [ ] **Load test:** a load generator under a `loadtest` profile, and measurements for the report.
+- [ ] **Verification:** a short measured baseline, focused permission/restart/recreation/staleness checks, and a justified 100× scalability discussion. No required load-generator service.
 
 - [ ] **Prediction:** a forecasts table, a first forecast job on the recorded history and Traffic Stats, a backtest against two baselines, and a forecast slider on the map.

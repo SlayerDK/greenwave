@@ -17,5 +17,35 @@ services:
       timeout: 5s
       retries: 10
 
+  mosquitto-init:
+    image: eclipse-mosquitto:2.1.2-alpine
+    entrypoint: ["/bin/sh", "/init.sh"]
+    user: root
+    environment:
+      MQTT_ADAPTER_PASSWORD: ${MQTT_ADAPTER_PASSWORD:?set it in .env}
+      MQTT_BACKEND_PASSWORD: ${MQTT_BACKEND_PASSWORD:?set it in .env}
+    volumes:
+      - ./broker/init.sh:/init.sh:ro
+      - mosquitto-secrets:/mosquitto/secrets
+
+  mosquitto:
+    image: eclipse-mosquitto:2.1.2-alpine
+    restart: unless-stopped
+    depends_on:
+      mosquitto-init: { condition: service_completed_successfully }
+    ports: ["127.0.0.1:1883:1883", "127.0.0.1:9001:9001"]
+    volumes:
+      - ./broker/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - ./broker/acl:/mosquitto/config/acl:ro
+      - mosquitto-secrets:/mosquitto/secrets:ro
+      - mosquitto-data:/mosquitto/data
+    healthcheck:
+      test: ["CMD-SHELL", "mosquitto_sub -t '$$SYS/broker/uptime' -C 1 -W 15"]
+      interval: 10s
+      timeout: 20s
+      retries: 5
+
 volumes:
   postgres-data:
+  mosquitto-secrets:
+  mosquitto-data:
