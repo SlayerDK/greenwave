@@ -7,7 +7,9 @@ IoT device and sensor dashboard — Next.js 16, Prisma 7 + PostgreSQL, Better Au
 ```bash
 pnpm install
 cp .env.example .env        # a .env with a generated BETTER_AUTH_SECRET is already present
-pnpm db:up                  # Postgres via Docker Compose
+# Set MQTT_ADAPTER_PASSWORD and MQTT_BACKEND_PASSWORD in .env first.
+# Generate each separately with: openssl rand -hex 16
+pnpm db:up                  # Postgres and the local MQTT broker via Docker Compose
 pnpm db:migrate             # create the schema
 pnpm db:seed                # optional demo data
 pnpm db:import-traffic-stats # optional: load traffic-history.geojson/ for /history
@@ -15,6 +17,9 @@ pnpm dev
 ```
 
 Then sign up at http://localhost:3000/signup.
+
+The [broker guide](broker/README.md) covers local MQTT access, password rotation and
+`pnpm broker:verify`, which runs the broker acceptance checks in a disposable Compose project.
 
 ## Scripts
 

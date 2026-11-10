@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="680" height="320" viewBox="0 0 680 320" role="img" aria-labelledby="title desc">
-  <title id="title">Normal versus shared MQTT subscriptions</title>
-  <desc id="desc">Left: with a normal subscription, three backend copies each receive messages 1, 2 and 3, so every message is processed three times. Right: with a shared subscription, the broker gives message 1 to copy 1, message 2 to copy 2 and message 3 to copy 3, so each message is processed once.</desc>
+  <title id="title">Future work: normal versus shared MQTT subscriptions</title>
+  <desc id="desc">Future-work illustration only; the required GreenWave pipeline runs one backend with a normal subscription. Left: with a normal subscription, three backend copies each receive messages 1, 2 and 3, so every message is processed three times. Right: with a shared subscription, the broker gives message 1 to copy 1, message 2 to copy 2 and message 3 to copy 3, so each publication is routed to one member. This illustration does not promise exactly-once processing or recovery when a member is offline.</desc>
   <style>
     .bg { fill: #ffffff; }
     text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
@@ -39,6 +39,7 @@
   </defs>
   <rect class="bg" x="0" y="0" width="680" height="320" rx="12"/>
 
+  <text class="ts muted" x="340" y="20" text-anchor="middle">Future work only: not the required GreenWave pipeline</text>
   <rect class="panel" x="40" y="40" width="280" height="260" rx="12"/>
   <text class="th ink" x="60" y="66" dominant-baseline="central">Normal subscription</text>
   <text class="ts muted" x="60" y="86" dominant-baseline="central">every copy gets every message</text>

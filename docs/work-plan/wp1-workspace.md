@@ -18,13 +18,13 @@ Packages are consumed as TypeScript source, so files in every package except `fr
 
 Merge by **Tue 3 Nov** so the others can build against it. Zod only, no `server-only`: the browser imports it.
 
-| File             | Exports                                                                                                                                                                                      |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `topics.ts`      | `observationTopic(city, route)`, `stateTopic(city, route)`, `statusTopic(city)`; wildcards `SHARED_OBSERVATIONS`, `ALL_STATES`, `ALL_STATUSES`                                               |
-| `observation.ts` | `observationSchema` (as in `ARCHITECTURE.md`, with `source: "live" \| "fixture" \| "loadtest"`), `toEventId(cityId, routeId, observedAt)`                                                    |
-| `state.ts`       | `stateSchema`: the observation plus `segments[].congestion`, `route.congestedSince`, `route.slowerThanUsualSince` (ISO string or `null`)                                                     |
-| `status.ts`      | `adapterStatusSchema`: `{ status: "online" \| "offline", at }`                                                                                                                               |
-| `congestion.ts`  | `classifyCongestion` (moved from `src/lib/traffic/serialization.ts`), `CONGESTED_LENGTH_SHARE = 0.2`, `SLOWER_THAN_USUAL_RATIO = 1.3`, `FLAG_SWITCH_READINGS = 3`, `STATE_TTL_SECONDS = 300` |
+| File             | Exports                                                                                                                                                                                                                                        |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `topics.ts`      | `observationTopic(city, route)`, `stateTopic(city, route)`, `statusTopic(city)`; normal observations via `observationTopic("+", "+")`; `ALL_STATES`, `ALL_STATUSES`; merged `SHARED_OBSERVATIONS` is legacy and unused by the approved backend |
+| `observation.ts` | `observationSchema` (as in `ARCHITECTURE.md`, with `source: "live" \| "fixture" \| "loadtest"`), `toEventId(cityId, routeId, observedAt)`                                                                                                      |
+| `state.ts`       | `stateSchema`: the observation plus `segments[].congestion`, `route.congestedSince`, `route.slowerThanUsualSince` (ISO string or `null`)                                                                                                       |
+| `status.ts`      | `adapterStatusSchema`: `{ status: "online" \| "offline", at }`                                                                                                                                                                                 |
+| `congestion.ts`  | `classifyCongestion` (moved from `src/lib/traffic/serialization.ts`), `CONGESTED_LENGTH_SHARE = 0.2`, `SLOWER_THAN_USUAL_RATIO = 1.3`, `FLAG_SWITCH_READINGS = 3`, `STATE_TTL_SECONDS = 300`                                                   |
 
 `source` exists because replayed fixtures are stamped "now"; without it they would land in the history prediction learns from.
 

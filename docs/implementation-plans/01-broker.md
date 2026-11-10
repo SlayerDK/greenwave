@@ -1,68 +1,68 @@
 # 01 · Broker: `mosquitto-init` and `mosquitto`
 
-**Compose services `mosquitto-init` (one-shot) and `mosquitto`.** [WP2](../work-plan/wp2-compose-and-broker.md) · Bjoern · 2–6 Nov, wiring 12–13 Nov · Needs nothing · Unblocks [03](03-adapter.md), [04](04-backend.md), [05](05-frontend.md), [07](07-loadgen.md). · [← Plans](README.md)
+**Compose services `mosquitto-init` (one-shot) and `mosquitto`.** [WP2](../work-plan/wp2-compose-and-broker.md) · bd-nis · original target 2–6 Nov, wiring 12–13 Nov · Needs nothing · Unblocks [03](03-adapter.md), [04](04-backend.md), [05](05-frontend.md). · [← Plans](README.md)
 
 ## Goal
 
-One Mosquitto 2.1 broker that the services reach on `mqtt://mosquitto:1883` and browsers on `ws://localhost:9001`. Every service logs in as its own user, browsers connect anonymously and may only read state and status, retained state survives a broker restart, and no password is in git.
+One local Mosquitto 2.1.2 broker, one Aarhus adapter and one backend. Services use `mqtt://mosquitto:1883` inside Compose; host tools use `mqtt://localhost:1883`; browsers use `ws://localhost:9001`. Publish both host ports on `127.0.0.1` only. Each service has its own user, browsers have anonymous read-only access, and retained state and sessions survive a graceful broker restart. No password goes in Git.
+
+This is the limited scope approved on 9 Nov. No shared subscriptions, multiple backend workers, load-generator or monitor accounts, queue tuning, TLS, cloud hosting or clustering. The existing prediction and frontend plans are unchanged. [WP7](../work-plan/wp7-load-tests.md) supplies focused failure evidence and scalability reasoning, not a new service.
 
 ## Read first
 
-- [`ARCHITECTURE.md`](../../ARCHITECTURE.md) → _MQTT design_ and _Deployment_ (the config and ACL this plan starts from).
-- [Libraries and connections](../work-plan/libraries-and-connections.md) → _MQTT users_, _Ports_, _Startup order_.
-- `compose.yaml` (renamed from `docker-compose.yml` by [00](00-foundation.md); only `postgres` today) and the `db:up`/`db:down` scripts in `package.json`.
-- The [mosquitto.conf reference](https://mosquitto.org/man/mosquitto-conf-5.html), sections _listener_, _acl_file_ and _max_queued_messages_.
+- [`ARCHITECTURE.md`](../../ARCHITECTURE.md), MQTT design and deployment.
+- [Libraries and connections](../work-plan/libraries-and-connections.md), users, ports and variables.
+- `compose.yaml` and `package.json`. Postgres and the broker are implemented in Compose; other services remain with their owners.
+- [Mosquitto configuration](https://mosquitto.org/man/mosquitto-conf-5.html), [client options](https://mosquitto.org/man/mosquitto_sub-1.html), and [Docker port publishing](https://docs.docker.com/reference/compose-file/services/#ports).
 
 ## Interfaces
 
-| Provides                                                             | To                                                    |
-| -------------------------------------------------------------------- | ----------------------------------------------------- |
-| `mqtt://mosquitto:1883` (in Compose), `mqtt://localhost:1883` (host) | adapter, backend, loadgen, measurement scripts        |
-| `ws://localhost:9001`                                                | browsers                                              |
-| Users `adapter-aarhus`, `backend`, `loadgen`, `monitor`              | each with password `MQTT_<USER>_PASSWORD` from `.env` |
-| Anonymous read of state, status and `$SYS/broker/uptime`             | browsers, the healthcheck                             |
+| Provides                                                  | Consumer                            |
+| --------------------------------------------------------- | ----------------------------------- |
+| `mqtt://mosquitto:1883` / `mqtt://localhost:1883`         | adapter and backend / host tools    |
+| `ws://localhost:9001`                                     | browsers                            |
+| User `adapter-aarhus`                                     | `MQTT_ADAPTER_PASSWORD` from `.env` |
+| User `backend`                                            | `MQTT_BACKEND_PASSWORD` from `.env` |
+| Anonymous reads of state, status and `$SYS/broker/uptime` | browsers and healthcheck            |
+
+The backend uses a normal `greenwave/v1/+/routes/+/observations` subscription and the fixed client ID `backend-1`, including after container recreation. Only one backend may use this broker. See [04](04-backend.md).
 
 ## Files
 
-```
-broker/mosquitto.conf   (new)
-broker/acl              (new)
-broker/init.sh          (new) writes the password file
-compose.yaml                     mosquitto-init, mosquitto, volumes
-package.json                     db:up / db:down
-.env.example                     MQTT_* variables
+```text
+broker/mosquitto.conf   new
+broker/acl              new
+broker/init.sh          creates the password file
+broker/verify.mjs       reproducible isolated acceptance checks
+broker/README.md        setup, operations and verification
+docs/report/broker.md   broker report draft
+compose.yaml           broker services and volumes
+package.json           db:up / db:down
+.env.example           two passwords and connection URLs
 ```
 
 ## Steps
 
-- [ ] `broker/mosquitto.conf`:
+- [x] `broker/mosquitto.conf`:
 
   ```conf
-  # Settings below apply to both listeners.
-  per_listener_settings false
-
   listener 1883
   protocol mqtt
 
   listener 9001
   protocol websockets
 
-  # Browsers connect anonymously; the ACL limits them to reading state and status.
+  # Global auth applies to both listeners. Anonymous clients are read-only by ACL.
   allow_anonymous true
   password_file /mosquitto/secrets/passwords
   acl_file /mosquitto/config/acl
 
-  # Retained state and persistent sessions survive a broker restart.
   persistence true
   persistence_location /mosquitto/data/
   autosave_interval 60
 
-  # The default 1,000 is about 75 minutes of Aarhus readings for a stopped backend.
-  max_queued_messages 5000
-
-  # $SYS every 10 s: the healthcheck and the load test read it.
+  # Keep the default queue limit of 1,000 per client. No custom tuning.
   sys_interval 10
-
   log_dest stdout
   log_type error
   log_type warning
@@ -70,162 +70,190 @@ package.json                     db:up / db:down
   log_type information
   ```
 
-- [ ] `broker/acl`. Rules before the first `user` line apply to anonymous clients. Mosquitto checks them when it delivers, not when a client subscribes, so `$share/…` needs no rule of its own.
+- [x] `broker/acl`. Rules before the first `user` apply to anonymous clients. Give each publisher only its actual outputs:
 
   ```conf
-  # Anonymous: browsers and the healthcheck
   topic read greenwave/v1/+/routes/+/state
   topic read greenwave/v1/+/adapter/status
   topic read $SYS/broker/uptime
 
   user adapter-aarhus
-  topic write greenwave/v1/aarhus/#
+  topic write greenwave/v1/aarhus/routes/+/observations
+  topic write greenwave/v1/aarhus/adapter/status
 
   user backend
-  topic readwrite greenwave/v1/#
-
-  user loadgen
-  topic write greenwave/v1/+/routes/+/observations
-
-  user monitor
-  topic read $SYS/#
+  topic read greenwave/v1/+/routes/+/observations
+  topic write greenwave/v1/+/routes/+/state
   ```
 
-  The adapter's Last Will is published by the broker on its behalf, but Mosquitto checks it against the adapter's own write rule at connect, which `aarhus/#` covers.
+  The status write rule also authorizes the adapter's retained Last Will. The adapter cannot publish processed state; the backend cannot publish observations or impersonate the adapter's status.
 
-- [ ] `broker/init.sh`, run by `mosquitto-init`:
+- [x] `broker/init.sh`, run by `mosquitto-init`:
 
   ```sh
   #!/bin/sh
-  # Writes the broker's password file from .env into the mosquitto-secrets volume.
   set -eu
+  umask 077
+
+  # Reject either missing/empty secret before touching the working password file.
+  for name in MQTT_ADAPTER_PASSWORD MQTT_BACKEND_PASSWORD; do
+    case "$name" in
+      MQTT_ADAPTER_PASSWORD) password=${MQTT_ADAPTER_PASSWORD:-} ;;
+      MQTT_BACKEND_PASSWORD) password=${MQTT_BACKEND_PASSWORD:-} ;;
+    esac
+    [ -n "$password" ] || { echo "empty password: $name" >&2; exit 1; }
+  done
+  unset password
 
   file=/mosquitto/secrets/passwords
-  tmp="$file.tmp"
-  rm -f "$tmp"
+  dir=$(mktemp -d /mosquitto/secrets/.init.XXXXXX)
+  tmp="$dir/passwords"
+  trap 'rm -f "$tmp"; rmdir "$dir"' EXIT
+  trap 'exit 1' HUP INT TERM
 
-  add() { # user, password; -c only for the first, since -c recreates the file
-    [ -n "$2" ] || { echo "empty password for $1" >&2; exit 1; }
-    if [ -f "$tmp" ]; then mosquitto_passwd -b "$tmp" "$1" "$2"
-    else mosquitto_passwd -c -b "$tmp" "$1" "$2"; fi
-  }
-
-  add adapter-aarhus "$MQTT_ADAPTER_PASSWORD"
-  add backend "$MQTT_BACKEND_PASSWORD"
-  add loadgen "$MQTT_LOADGEN_PASSWORD"
-  add monitor "$MQTT_MONITOR_PASSWORD"
-
+  # -c is only for the first account. Install both users together, atomically.
+  mosquitto_passwd -c -b "$tmp" adapter-aarhus "$MQTT_ADAPTER_PASSWORD"
+  mosquitto_passwd -b "$tmp" backend "$MQTT_BACKEND_PASSWORD"
+  chown mosquitto:mosquitto "$tmp"
+  chmod 0600 "$tmp"
   mv "$tmp" "$file"
-  chown mosquitto:mosquitto "$file"
-  chmod 0700 "$file"
   ```
 
-- [ ] `compose.yaml`. Leave `postgres` as it is (00 pins its minor version); it keeps its `container_name` because it is never scaled. **No `container_name` on anything else.**
+  Use a private temporary directory and `-c` only for the first account. With the pinned image, repeating `-c` refuses the existing file and leaves later accounts uncreated. Rerunning this script replaces the complete file atomically; an empty password fails before replacing the working file.
+
+- [x] Merge these services and root-level volumes into `compose.yaml`; preserve the existing `postgres` service and volume. The snippet is a Compose fragment, not a replacement file:
 
   ```yaml
-  mosquitto-init:
-    image: eclipse-mosquitto:2.1.2-alpine
-    entrypoint: ["/bin/sh", "/init.sh"]
-    user: root
-    environment: # interpolated from .env; Compose refuses to start if one is missing
-      MQTT_ADAPTER_PASSWORD: ${MQTT_ADAPTER_PASSWORD:?set it in .env}
-      MQTT_BACKEND_PASSWORD: ${MQTT_BACKEND_PASSWORD:?set it in .env}
-      MQTT_LOADGEN_PASSWORD: ${MQTT_LOADGEN_PASSWORD:?set it in .env}
-      MQTT_MONITOR_PASSWORD: ${MQTT_MONITOR_PASSWORD:?set it in .env}
-    volumes:
-      - ./broker/init.sh:/init.sh:ro
-      - mosquitto-secrets:/mosquitto/secrets
+  services:
+    mosquitto-init:
+      image: eclipse-mosquitto:2.1.2-alpine
+      entrypoint: ["/bin/sh", "/init.sh"]
+      user: root
+      environment:
+        MQTT_ADAPTER_PASSWORD: ${MQTT_ADAPTER_PASSWORD:?set it in .env}
+        MQTT_BACKEND_PASSWORD: ${MQTT_BACKEND_PASSWORD:?set it in .env}
+      volumes:
+        - ./broker/init.sh:/init.sh:ro
+        - mosquitto-secrets:/mosquitto/secrets
 
-  mosquitto:
-    image: eclipse-mosquitto:2.1.2-alpine
-    restart: unless-stopped
-    depends_on:
-      mosquitto-init: { condition: service_completed_successfully }
-    ports: ["1883:1883", "9001:9001"]
-    volumes:
-      - ./broker/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
-      - ./broker/acl:/mosquitto/config/acl:ro
-      - mosquitto-secrets:/mosquitto/secrets
-      - mosquitto-data:/mosquitto/data
-    healthcheck:
-      test: ["CMD-SHELL", "mosquitto_sub -t '$$SYS/broker/uptime' -C 1 -W 15"]
-      interval: 10s
-      timeout: 20s
-      retries: 5
+    mosquitto:
+      image: eclipse-mosquitto:2.1.2-alpine
+      restart: unless-stopped
+      depends_on:
+        mosquitto-init: { condition: service_completed_successfully }
+      ports: ["127.0.0.1:1883:1883", "127.0.0.1:9001:9001"]
+      volumes:
+        - ./broker/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+        - ./broker/acl:/mosquitto/config/acl:ro
+        - mosquitto-secrets:/mosquitto/secrets:ro
+        - mosquitto-data:/mosquitto/data
+      healthcheck:
+        test: ["CMD-SHELL", "mosquitto_sub -t '$$SYS/broker/uptime' -C 1 -W 15"]
+        interval: 10s
+        timeout: 20s
+        retries: 5
 
   volumes:
-    postgres-data:
     mosquitto-secrets:
     mosquitto-data:
   ```
 
-- [ ] `package.json`: `"db:up": "docker compose up -d postgres mosquitto"` (Compose starts `mosquitto-init` as its dependency) and `"db:down": "docker compose down"`.
-- [ ] `.env.example`, a new block:
+- [x] `package.json`: `"db:up": "docker compose up -d postgres mosquitto"`; `"db:down": "docker compose down"`; `"broker:verify": "node broker/verify.mjs"`.
+- [x] Add to `.env.example`:
 
   ```bash
-  # MQTT. Services reach the broker on localhost in development and on
-  # mosquitto:1883 inside Compose (set there). Generate each password with
-  # openssl rand -hex 16.
   MQTT_URL="mqtt://localhost:1883"
   MQTT_WS_URL="ws://localhost:9001"
   MQTT_ADAPTER_PASSWORD=""
   MQTT_BACKEND_PASSWORD=""
-  MQTT_LOADGEN_PASSWORD=""
-  MQTT_MONITOR_PASSWORD=""
+  BACKEND_CLIENT_ID="backend-1"
   ```
 
-- [ ] Tell the others in the PR description to add the four passwords to their own `.env`.
+  Generate the two passwords separately with `openssl rand -hex 16`. Each teammate sets their own `.env`. [04](04-backend.md) passes the fixed client ID into the backend container.
 
 ## Tests
 
-The broker has no unit tests; the verification commands below are the tests. Paste their output in the PR. Install the clients with `brew install mosquitto`, or run them inside the container with `docker compose exec mosquitto …`.
+`pnpm broker:verify` automates these checks against the actual Compose configuration in a disposable project, including Postgres health, file permissions, init reruns, missing/empty-secret rejection, role/city denials and cleanup. It generates test credentials and requires no `.env`. See [`broker/README.md`](../../broker/README.md).
+
+The manual probes below are an alternative. Run against a disposable local broker with adapter/backend services stopped; these probe payloads are not production traffic. Use the clients inside the pinned image, so no host installation or scratch Node package is needed. Paste results, never credentials, in the PR.
 
 ```bash
-source .env   # for the passwords
+source .env
+mqtt_pub() { docker compose exec -T mosquitto mosquitto_pub -h localhost -V mqttv5 "$@"; }
+mqtt_sub() { docker compose exec -T mosquitto mosquitto_sub -h localhost -V mqttv5 "$@"; }
+state=greenwave/v1/aarhus/routes/broker-check/state
+observation=greenwave/v1/aarhus/routes/broker-check/observations
 
-# 1. Anonymous may read state, but not observations
-mosquitto_sub -h localhost -t 'greenwave/v1/+/routes/+/state' -v &
-mosquitto_pub -h localhost -u backend -P "$MQTT_BACKEND_PASSWORD" \
-  -t greenwave/v1/aarhus/routes/1/state -m '{"x":1}'           # printed by the subscriber
-mosquitto_sub -h localhost -t 'greenwave/v1/#' -v -W 5 &         # anonymous
-mosquitto_pub -h localhost -u backend -P "$MQTT_BACKEND_PASSWORD" \
-  -t greenwave/v1/aarhus/routes/1/observations -m '{}'          # NOT printed
+# 1. Anonymous can read retained state, but cannot read observations.
+mqtt_pub -u backend -P "$MQTT_BACKEND_PASSWORD" -q 1 -r -t "$state" -m visible
+mqtt_sub -t "$state" -C 1 -W 5                         # visible
+mqtt_pub -u adapter-aarhus -P "$MQTT_ADAPTER_PASSWORD" -q 1 -r -t "$observation" -m private
+mqtt_sub -t "$observation" -W 2                       # no payload; timeout exit 27
 
-# 2. The adapter may not write another city (MQTT 5 shows reason 0x87, not authorized)
-mosquitto_pub -V mqttv5 -q 1 -d -h localhost -u adapter-aarhus -P "$MQTT_ADAPTER_PASSWORD" \
-  -t greenwave/v1/odense/routes/1/observations -m '{}'
+# 2. Each denied publish must report PUBACK reason 135 (0x87), not a network error.
+mqtt_pub -q 1 -d -t "$state" -m denied                # anonymous cannot write
+mqtt_pub -u adapter-aarhus -P "$MQTT_ADAPTER_PASSWORD" -q 1 -d -t "$state" -m denied
+mqtt_pub -u adapter-aarhus -P "$MQTT_ADAPTER_PASSWORD" -q 1 -d \
+  -t greenwave/v1/odense/routes/broker-check/observations -m denied
+mqtt_pub -u backend -P "$MQTT_BACKEND_PASSWORD" -q 1 -d -t "$observation" -m denied
 
-# 3. Retained state expires
-mosquitto_pub -V mqttv5 -h localhost -u backend -P "$MQTT_BACKEND_PASSWORD" -r \
-  -D publish message-expiry-interval 10 -t greenwave/v1/aarhus/routes/1/state -m '{}'
-sleep 15 && mosquitto_sub -h localhost -t 'greenwave/v1/aarhus/routes/1/state' -W 3  # nothing
+# 3. Wrong credentials are refused, not treated as anonymous.
+mqtt_sub -u backend -P deliberately-wrong -t "$observation" -W 2
 
-# 4. Retained state survives a broker restart
-mosquitto_pub -h localhost -u backend -P "$MQTT_BACKEND_PASSWORD" -r -t greenwave/v1/aarhus/routes/2/state -m kept
-docker compose restart mosquitto && mosquitto_sub -h localhost -t greenwave/v1/aarhus/routes/2/state -C 1  # "kept"
+# 4. Retained expiry: visible immediately, absent after expiry.
+mqtt_pub -u backend -P "$MQTT_BACKEND_PASSWORD" -q 1 -r -t "$state" -m expires \
+  -D publish message-expiry-interval 2
+mqtt_sub -t "$state" -C 1 -W 2                         # expires
+sleep 3
+mqtt_sub -t "$state" -W 2                             # no payload; exit 27
 
-# 5. WebSocket: from a scratch directory with mqtt installed
-node -e "require('mqtt').connect('ws://localhost:9001').on('connect', c => { console.log('ws ok', c.returnCode ?? 0); process.exit(0) })"
+# 5. Retained state AND an offline persistent session survive a graceful restart.
+# Remove the temporary retained observation before creating the session.
+mqtt_pub -u adapter-aarhus -P "$MQTT_ADAPTER_PASSWORD" -q 1 -r -n -t "$observation"
+mqtt_pub -u backend -P "$MQTT_BACKEND_PASSWORD" -q 1 -r -t "$state" -m kept
+mqtt_sub -u backend -P "$MQTT_BACKEND_PASSWORD" -q 1 -c -x 3600 \
+  -i broker-check-backend -t "$observation" -E -W 5
+mqtt_pub -u adapter-aarhus -P "$MQTT_ADAPTER_PASSWORD" -q 1 -t "$observation" -m queued
+docker compose restart mosquitto
+docker compose up -d --wait mosquitto                  # wait for healthy, not just started
+mqtt_sub -t "$state" -C 1 -W 5                         # kept
+mqtt_sub -u backend -P "$MQTT_BACKEND_PASSWORD" -q 1 -c -x 3600 \
+  -i broker-check-backend -t "$observation" -C 1 -W 5    # queued
+
+# 6. WebSocket transport: anonymous subscription receives the same state.
+docker compose exec -T mosquitto mosquitto_sub -h localhost -p 9001 --ws \
+  -V mqttv5 -t "$state" -C 1 -W 5                      # kept
+
+# Clean the test retained messages and session.
+mqtt_pub -u backend -P "$MQTT_BACKEND_PASSWORD" -q 1 -r -n -t "$state"
+mqtt_sub -u backend -P "$MQTT_BACKEND_PASSWORD" -i broker-check-backend \
+  -x 0 -t "$observation" -E -W 5
 ```
 
-Clean up the test retained messages afterwards: publish an empty retained message (`-r -n`) to each topic.
+The pinned publisher can exit 0 even when a publication is denied: assert PUBACK reason 135, not its exit status. Expected refusals/timeouts are successful negative checks, not commands to run under an unqualified `set -e`. Give every subscriber a `-W` timeout; do not leave background clients running. [WP7](../work-plan/wp7-load-tests.md) verifies the actual adapter Last Will, stale-map behaviour, and backend recreation once those components exist.
 
-## Pitfalls
+## Operations and limits
 
-- **`mosquitto_passwd -c` recreates the file.** Using it for every user leaves only the last one.
-- **Escape `$` in Compose.** `$SYS` in a healthcheck must be `$$SYS`, or Compose interpolates it to an empty string.
-- **`allow_anonymous true` is local only**: [`ARCHITECTURE.md`](../../ARCHITECTURE.md) lists TLS and browser logins as out of scope.
-- A denied publish at QoS 0 fails silently; test ACLs with `-q 1 -V mqttv5 -d` to see the reason code.
-- Changing the ACL or config needs `docker compose restart mosquitto`; changing a password needs `docker compose up mosquitto-init` and then a restart.
+- Config or ACL edit: restart Mosquitto and wait for healthy. Keep passwords out of logs and Git.
+- Password edit: update `.env`, run `docker compose run --rm --no-deps mosquitto-init`, restart Mosquitto and wait for healthy, then recreate the affected clients with `docker compose up -d --force-recreate adapter-aarhus backend`. Restarting existing client containers does not update their environment. Omit a service not yet implemented; after a backend recreation its client ID must still be `backend-1`.
+- Buffering applies only after the backend's first successful subscription, with the same client ID, for less than the 3,600-second session expiry and within the 1,000-message queue. At 13 messages/minute, one hour is about 780 readings. Queue overflow, expired sessions and observations sent before the first subscription are not recovered by this design.
+- Graceful restart is not power-loss durability. An abrupt broker crash can lose changes since the last persistence save. The accepted commit-to-state-publish gap is described in [04](04-backend.md).
+- `allow_anonymous true` does not make a broker local. The loopback-only host port mappings enforce the intended access boundary. Internal Compose clients still connect by service name. Browsers do not authenticate with the application's login; read access to this local traffic feed is intentional.
+- File-based authentication is supported by the pinned Mosquitto 2.1.2 image. Do not add a dynamic-security service or persistence plugin for this task. Revisit configuration if the broker version changes.
 
 ## Done when
 
-- [ ] `docker compose up -d postgres mosquitto` brings both up healthy (`docker compose ps`).
-- [ ] The five checks above behave as described.
-- [ ] M1 (Fri 6 Nov, now late): together with [02](02-migrate.md), `docker compose up` starts postgres, mosquitto and migrate healthy.
-- [ ] The broker and deployment report sections have a draft ([WP9](../work-plan/wp9-report-and-demo.md)).
+Verified 10 Nov 2026 with `pnpm broker:verify`: 28 checks passed and all test-owned resources were removed. [Recorded evidence and limits](../report/broker.md#evidence).
+
+- [x] `docker compose up -d --wait postgres mosquitto` starts both healthy with only two MQTT passwords configured. Verified in the disposable project, with isolated volumes, no Postgres host port and ephemeral loopback MQTT ports.
+- [x] The six checks above have the stated results; rejected publications and both user logins are verified.
+- [x] Host listeners bind only to `127.0.0.1`; the adapter cannot publish state or another city's observations.
+- [x] Restart retains state and the offline test reading. Init can run twice without losing either user; an empty password fails without replacing the working file.
+- [ ] Together with [02](02-migrate.md), `migrate` exits 0. It is a one-shot job, not a healthy long-running service.
+- [x] The [broker report section](../report/broker.md) has a draft ([WP9](../work-plan/wp9-report-and-demo.md)).
 
 ## Not in this plan
 
-- The Dockerfile pattern and `migrate`: [02](02-migrate.md).
-- Each service's Compose block: its own plan.
+- The Dockerfile pattern and `migrate`: [02](02-migrate.md), Bjoern.
+- Each service's Compose block: its own owner and plan.
+- Dedicated load generation, monitoring users, multiple backend workers, shared subscriptions, managed cloud infrastructure, TLS and clustering.
