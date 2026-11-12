@@ -17,5 +17,15 @@ services:
       timeout: 5s
       retries: 10
 
+  # One-shot: applies pending migrations and exits 0, so it shows as exited.
+  # Never give it restart:. Services that use the database wait for it with
+  # depends_on: { migrate: { condition: service_completed_successfully } }.
+  migrate:
+    build: { context: ., dockerfile: database/Dockerfile }
+    environment:
+      DATABASE_URL: postgresql://greenwave:greenwave@postgres:5432/greenwave
+    depends_on:
+      postgres: { condition: service_healthy }
+
 volumes:
   postgres-data:

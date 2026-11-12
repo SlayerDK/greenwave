@@ -4,7 +4,7 @@ One plan per container in [`ARCHITECTURE.md`](../../ARCHITECTURE.md), detailed e
 
 The [work plan](../WORK-PLAN.md) says **who and when**; these plans say **how**. Owners and dates below are copied from it, and it wins if they disagree.
 
-> Written Mon 9 Nov 2026. The foundation ([00](00-foundation.md)) was implemented the same day on branches `wp1-layout` and `wp1-contracts`, awaiting review; until they merge, `main` still has the Next.js app at the root.
+> Written Mon 9 Nov 2026. The foundation ([00](00-foundation.md)) was implemented and merged into `main` the same day (#9, #10). [02](02-migrate.md) is implemented on branch `wp2-migrate`, which also settles the Dockerfile pattern's open questions.
 
 ## Repository layout
 

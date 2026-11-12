@@ -4,7 +4,7 @@
 
 > **Implementation plan:** [00 · Foundation](../implementation-plans/00-foundation.md). It has the step-by-step detail for handing this off; this file keeps the owner, dates and summary.
 >
-> **Status, Mon 9 Nov:** done on branches `wp1-layout` (the move) and `wp1-contracts` (contracts and schema), awaiting review. The last three models are 06's. The report drafts are still open.
+> **Status, Mon 9 Nov:** done on branches `wp1-layout` (the move) and `wp1-contracts` (contracts and schema), merged into `main` the same day (#9, #10). The last three models are 06's. The report drafts are still open.
 
 ## pnpm workspace
 
