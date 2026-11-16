@@ -4,14 +4,14 @@
 
 > **Implementation plan:** [04 · Backend](../implementation-plans/04-backend.md). It has the step-by-step detail for handing this off; this file keeps the owner, dates and summary.
 
-- [ ] `backend/` (_new_): connect, subscribe, process one observation per transaction, publish the state.
-- [ ] Pure, unit-tested rules:
+- [x] `backend/` (_new_): connect, subscribe, process one observation per transaction, publish the state.
+- [x] Pure, unit-tested rules:
   - `routeIsCongested`: ≥ `CONGESTED_LENGTH_SHARE` of the length is moderate, heavy or closed
   - `routeIsSlowerThanUsual`: `travelTimeSec ≥ SLOWER_THAN_USUAL_RATIO × typicalTravelTimeSec`
   - `nextFlag(previous, on, observedAt)` for both flags: switches after `FLAG_SWITCH_READINGS` readings in a row
   - `isNewer`
-- [ ] Every 10 s, log messages processed, duplicates, and lag p50/p95 (now − `observedAt`). WP7 uses these.
-- [ ] Week 47: `SELECT … FOR UPDATE` on the route-state row, so `--scale backend=3` keeps streaks correct.
+- [x] Every 10 s, log messages processed, duplicates, and lag p50/p95 (now − `observedAt`). WP7 uses these.
+- [x] Week 47: `SELECT … FOR UPDATE` on the route-state row, so `--scale backend=3` keeps streaks correct.
 
 ```ts
 const client = await mqtt.connectAsync(env.MQTT_URL, {

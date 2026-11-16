@@ -80,11 +80,11 @@ export const isNewer = (observedAt: Date, stored: Date | undefined) => !stored |
 export const toBucketStart = (observedAt: Date) => { … };
 ```
 
-- [ ] `nextFlag` cases to cover: off + 1 or 2 congested readings stays off; the 3rd switches on with `since` = the 1st reading's time; on + 2 clear + 1 congested stays on and resets the streak; on + 3 clear switches off with `since: null`; alternating readings never switch.
+- [x] `nextFlag` cases to cover: off + 1 or 2 congested readings stays off; the 3rd switches on with `since` = the 1st reading's time; on + 2 clear + 1 congested stays on and resets the streak; on + 3 clear switches off with `since: null`; alternating readings never switch.
 
 ### 2 · State message (`state-message.ts`)
 
-- [ ] `toRouteState(observation, classified, congestedFlag, slowerFlag): RouteState`: the observation with `segments` replaced by `classified`, plus `route.congestedSince` and `route.slowerThanUsualSince` as ISO strings or `null`. Run it through `stateSchema.parse` in tests, not at runtime.
+- [x] `toRouteState(observation, classified, congestedFlag, slowerFlag): RouteState`: the observation with `segments` replaced by `classified`, plus `route.congestedSince` and `route.slowerThanUsualSince` as ISO strings or `null`. Run it through `stateSchema.parse` in tests, not at runtime.
 
 ### 3 · The transaction (`process-observation.ts`)
 
@@ -159,15 +159,15 @@ client.handleMessage = (packet, done) => {
 await client.subscribeAsync(SHARED_OBSERVATIONS, { qos: 1 });
 ```
 
-- [ ] `processMessage`: `JSON.parse` → `observationSchema.safeParse` → `processObservation` → if it returned a state, `publishAsync(stateTopic(cityId, routeId), JSON.stringify(state), { qos: 1, retain: true, properties: { messageExpiryInterval: STATE_TTL_SECONDS } })`.
-- [ ] `handleFailure`: invalid JSON or schema → log with the topic and the first issue, count it, and call `done()`; it would fail again every time. Anything else (the database) → log and `process.exit(1)`. Compose restarts the container and the broker redelivers the unacknowledged message from the persistent session.
+- [x] `processMessage`: `JSON.parse` → `observationSchema.safeParse` → `processObservation` → if it returned a state, `publishAsync(stateTopic(cityId, routeId), JSON.stringify(state), { qos: 1, retain: true, properties: { messageExpiryInterval: STATE_TTL_SECONDS } })`.
+- [x] `handleFailure`: invalid JSON or schema → log with the topic and the first issue, count it, and call `done()`; it would fail again every time. Anything else (the database) → log and `process.exit(1)`. Compose restarts the container and the broker redelivers the unacknowledged message from the persistent session.
 - [ ] A crash between commit and publish loses that one publish. The next minute's reading republishes; accept it.
-- [ ] `SIGTERM`: stop taking messages, wait for the one in flight, `endAsync()`, `prisma.$disconnect()`.
-- [ ] Log every message at `debug` with its `eventId`, so a reading can be traced through adapter, backend and browser.
+- [x] `SIGTERM`: stop taking messages, wait for the one in flight, `endAsync()`, `prisma.$disconnect()`.
+- [x] Log every message at `debug` with its `eventId`, so a reading can be traced through adapter, backend and browser.
 
 ### Metrics
 
-- [ ] `metrics.ts`: every 10 s, one pino line at `info`, then reset the counters. **This exact shape is [07](07-loadgen.md)'s input**; change it only together with that plan.
+- [x] `metrics.ts`: every 10 s, one pino line at `info`, then reset the counters. **This exact shape is [07](07-loadgen.md)'s input**; change it only together with that plan.
 
   ```json
   {
@@ -186,8 +186,8 @@ await client.subscribeAsync(SHARED_OBSERVATIONS, { qos: 1 });
 
 ### 5 · Compose
 
-- [ ] `backend/Dockerfile`: [02](02-migrate.md#the-dockerfile-pattern)'s pattern, copying `shared/` and `database/` and `backend/`, with `--filter "@greenwave/backend..."`, `WORKDIR /app/backend` and `CMD ["node", "--import", "tsx", "src/main.ts"]`.
-- [ ] `compose.yaml`:
+- [x] `backend/Dockerfile`: [02](02-migrate.md#the-dockerfile-pattern)'s pattern, copying `shared/` and `database/` and `backend/`, with `--filter "@greenwave/backend..."`, `WORKDIR /app/backend` and `CMD ["node", "--import", "tsx", "src/main.ts"]`.
+- [x] `compose.yaml`:
 
   ```yaml
   backend:

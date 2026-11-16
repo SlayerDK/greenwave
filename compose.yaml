@@ -27,5 +27,17 @@ services:
     depends_on:
       postgres: { condition: service_healthy }
 
+  backend:
+    build: { context: ., dockerfile: backend/Dockerfile }
+    init: true
+    environment:
+      DATABASE_URL: postgresql://greenwave:greenwave@postgres:5432/greenwave
+      MQTT_URL: mqtt://mosquitto:1883
+      MQTT_BACKEND_PASSWORD: ${MQTT_BACKEND_PASSWORD:?set it in .env}
+    depends_on:
+      mosquitto: { condition: service_healthy }
+      migrate: { condition: service_completed_successfully }
+    restart: unless-stopped
+
 volumes:
   postgres-data:
