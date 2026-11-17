@@ -4,7 +4,7 @@ One plan per container in [`ARCHITECTURE.md`](../../ARCHITECTURE.md), detailed e
 
 The [work plan](../WORK-PLAN.md) says **who and when**; these plans say **how**. Owners and dates below are copied from it, and it wins if they disagree.
 
-> Updated Mon 9 Nov 2026. The foundation layout and contracts are merged on `main`; `frontend/`, `shared/` and `database/` exist. The broker is implemented on 10 Nov; the remaining services are still plans. The approved pipeline uses one backend and no required load-generator container; see [scope and learning-goal evidence](../WORK-PLAN.md#learning-goals-and-evidence).
+> Updated 17 Nov 2026. The foundation and [migration service](02-migrate.md) are merged into `main`; the migration implementation also settles the shared Dockerfile pattern. The broker is implemented on this branch; the remaining application services are still plans. The approved pipeline uses one backend and no required load-generator container; see [scope and learning-goal evidence](../WORK-PLAN.md#learning-goals-and-evidence).
 
 ## Repository layout
 

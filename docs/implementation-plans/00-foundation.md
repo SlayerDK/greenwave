@@ -16,7 +16,7 @@ Two PRs, in this order:
 1. **The move** (step 1): pure renames and config, no behaviour change. Merge it the day it is green, because every other branch rebases over it.
 2. **The contracts and schema** (steps 2–4).
 
-> **Status, Mon 9 Nov:** implemented on two stacked branches, `wp1-layout` (PR 1) and `wp1-contracts` (PR 2, on top of it), not yet pushed. Every check below passed. Where the implementation had to differ from what this plan first said, the text below now says what was done and why (marked _Changed in implementation_).
+> **Status, Mon 9 Nov:** implemented on two stacked branches, `wp1-layout` (#9) and `wp1-contracts` (#10, on top of it), both merged into `main` the same day. Every check below passed. Where the implementation had to differ from what this plan first said, the text below now says what was done and why (marked _Changed in implementation_).
 
 ## Read first
 
@@ -125,7 +125,7 @@ This plan **defines** the interfaces everyone else uses. Treat the exports and m
 
   The catalog pins Prisma to 7.10: npm's `latest` is an 8.0 RC. `frontend/package.json` depends on `"@greenwave/database": "workspace:*"`. If Next cannot resolve the `@prisma/client` it externalises (`serverExternalPackages`), add `@prisma/client` to the frontend's dependencies too.
 
-- [x] `database/prisma.config.ts`: replace `import "dotenv/config"` with `config({ path: "../.env", quiet: true })` from `dotenv` (`quiet`, because unlike `dotenv/config`, `config()` logs a line by default). Keep the `DATABASE_URL_UNPOOLED ?? env("DATABASE_URL")` choice and its comment. A missing `.env` (in Docker) is harmless: dotenv does not override variables already set.
+- [x] `database/prisma.config.ts`: replace `import "dotenv/config"` with `config({ path: "../.env", quiet: true })` from `dotenv` (`quiet`, because unlike `dotenv/config`, `config()` logs a line by default). Keep the `DATABASE_URL_UNPOOLED ?? env("DATABASE_URL")` choice and its comment. A missing `.env` (in Docker) is harmless: dotenv does not override variables already set. _Changed in [02](02-migrate.md):_ `env("DATABASE_URL")` became `process.env.DATABASE_URL`, because `env()` throws when the config loads and so broke `prisma generate` wherever no URL is set.
 - [x] `database/src/index.ts`:
 
   ```ts
