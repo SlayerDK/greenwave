@@ -4,7 +4,7 @@ Live traffic for Aarhus's main roads on a Mapbox map, with every road segment co
 
 The project started as adaptive traffic-light control (presentation 1). With real TomTom data from Aarhus Kommune it works with real-time data instead: it shows the current traffic state and predicts the future state.
 
-> **Status (2026-11-09):** target design with a merged workspace/contracts/database foundation; the broker is implemented on 10 Nov, but the adapter/backend/live-frontend pipeline is not implemented yet. [`docs/WORK-PLAN.md`](docs/WORK-PLAN.md) says who builds what before the hand-in on 4 December 2026. Today the app is a single Next.js proof of concept that calls TomTom's API directly over HTTP (see `README.md`). Its Vercel cron records the traffic history until the hand-in.
+> **Status (2026-11-17):** target design with a merged workspace/contracts/database foundation; the broker is implemented on 10 Nov and the Aarhus adapter on 17 Nov ([design](docs/designs/adapter.md)), but the backend/live-frontend pipeline is not implemented yet. [`docs/WORK-PLAN.md`](docs/WORK-PLAN.md) says who builds what before the hand-in on 4 December 2026. Today the app is a single Next.js proof of concept that calls TomTom's API directly over HTTP (see `README.md`). Its Vercel cron records the traffic history until the hand-in.
 
 At a glance:
 
@@ -20,7 +20,7 @@ Each city's adapter polls its traffic API and publishes the readings over MQTT. 
 
 | Component              | Responsibility                                                                                                   | Built with                                     |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| Adapter (one per city) | Polls the city's API, converts the data into our message format, publishes it                                    | Node.js, TypeScript, MQTT.js, Zod              |
+| Adapter (one per city) | Polls the city's API, converts the data into our message format, publishes it                                    | Node.js, TypeScript, MQTT.js, Zod, croner      |
 | MQTT broker            | Routes messages by topic; keeps retained state, Last Will messages and sessions                                  | Mosquitto 2                                    |
 | Backend                | Classifies congestion, stores state and history, publishes processed state. The only writer of traffic data      | Node.js, TypeScript, MQTT.js, Prisma           |
 | Postgres               | Geometry, latest state, history, forecasts, the Traffic Stats import, user accounts                              | PostgreSQL 18                                  |
@@ -117,18 +117,18 @@ One message per route per poll. This is the real Ringvejen fixture, cut down to 
 }
 ```
 
-| Field                      | Meaning                                                                                                                |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `eventId`                  | `{cityId}:{routeId}:{observedAt}`, so a repeated reading gets the same id and is dropped                               |
-| `schemaVersion`            | Version of the message format                                                                                          |
-| `source`                   | `live`, `fixture` (recorded responses replayed in development) or `loadtest`. Fixture readings stay out of the history |
-| `cityId`, `routeId`        | Which route. All ids are strings                                                                                       |
-| `observedAt`               | When TomTom produced the data (its `date` response header), not when we received it (L8 slide 9)                       |
-| `route`                    | Name without TomTom's `CW_AU_` prefix, length, current and typical travel time, delay, and whether it's passable       |
-| `segments[].id`            | TomTom's segment id, a string because the number exceeds JavaScript's safe integer range                               |
-| `segments[]` speeds        | Current, average and typical speed in km/h, and current speed as a percentage of free-flow speed                       |
-| `segments[].confidencePct` | TomTom's confidence in the reading, 0–100                                                                              |
-| `segments[].coordinates`   | GeoJSON `[longitude, latitude]` pairs, converted from TomTom's `{latitude, longitude}` objects                         |
+| Field                      | Meaning                                                                                                                                               |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `eventId`                  | `{cityId}:{routeId}:{observedAt}`, so a repeated reading gets the same id and is dropped                                                              |
+| `schemaVersion`            | Version of the message format                                                                                                                         |
+| `source`                   | `live`, `fixture` (recorded responses replayed in development) or `loadtest`. Fixture readings stay out of the history                                |
+| `cityId`, `routeId`        | Which route. All ids are strings                                                                                                                      |
+| `observedAt`               | TomTom's `date` response header: TomTom's clock when it answered. The response carries no measurement time. Fixture readings use the time of the read |
+| `route`                    | Name without TomTom's `CW_AU_` prefix, length, current and typical travel time, delay, and whether it's passable                                      |
+| `segments[].id`            | TomTom's segment id, a string because the number exceeds JavaScript's safe integer range                                                              |
+| `segments[]` speeds        | Current, average and typical speed in km/h, and current speed as a percentage of free-flow speed                                                      |
+| `segments[].confidencePct` | TomTom's confidence in the reading, 0–100                                                                                                             |
+| `segments[].coordinates`   | GeoJSON `[longitude, latitude]` pairs, converted from TomTom's `{latitude, longitude}` objects                                                        |
 
 The state message is the observation plus what the backend derives:
 
@@ -243,7 +243,7 @@ Owners, dates and implementation details for each item are in [`docs/WORK-PLAN.m
 
 - [ ] **Compose:** `mosquitto` with its config and access rules, `migrate`, `adapter-aarhus`, `backend` and `frontend`, with healthchecks.
 
-- [ ] **Adapter:** move `src/lib/traffic/tomtom-service.ts` into it, poll each route every minute, and publish observations and the Last Will status.
+- [ ] **Adapter:** copy `src/lib/traffic/tomtom-service.ts` into it, poll each route every minute, and publish observations and the Last Will status.
 
 - [ ] **Database:** city ids, a latest-state table, and 15-minute averaged history instead of hourly samples.
 

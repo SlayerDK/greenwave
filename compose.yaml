@@ -45,6 +45,23 @@ services:
       timeout: 20s
       retries: 5
 
+  # CITY_ID and ROUTE_IDS use adapter/src/env.ts's defaults. It reads nothing
+  # from Postgres, so it does not wait for migrate. Never run it while the host
+  # adapter (pnpm --filter @greenwave/adapter dev) runs: they share a client id.
+  adapter-aarhus:
+    build: { context: ., dockerfile: adapter/Dockerfile }
+    init: true # forwards SIGTERM to node and reaps children
+    environment:
+      ADAPTER_SOURCE: ${ADAPTER_SOURCE:?choose tomtom or fixture in .env}
+      TOMTOM_API_KEY: ${TOMTOM_API_KEY:-}
+      MQTT_URL: mqtt://mosquitto:1883
+      MQTT_ADAPTER_PASSWORD: ${MQTT_ADAPTER_PASSWORD:?set it in .env}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      mosquitto: { condition: service_healthy }
+    restart: unless-stopped
+    stop_grace_period: 10s
+
   # One-shot: applies pending migrations and exits 0, so it shows as exited.
   # Never give it restart:. Services that use the database wait for it with
   # depends_on: { migrate: { condition: service_completed_successfully } }.

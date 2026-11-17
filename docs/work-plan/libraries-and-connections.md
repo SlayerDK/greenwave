@@ -12,7 +12,7 @@ Reference for every work package. · [← Work plan](../WORK-PLAN.md)
 | Prisma, `@prisma/adapter-pg`, `pg`                  | 7.10.x  | in use; pin 7.10, since npm's `latest` is an 8.0 RC · [docs](https://www.prisma.io/docs)                     | `database/`                       |
 | Zod                                                 | 4.6     | in use                                                                                                       | contracts, service settings       |
 | pino                                                | 10.4    | `pnpm add pino --filter <service>`; `pino-pretty` locally · [getpino.io](https://getpino.io)                 | services                          |
-| croner                                              | 11      | `pnpm add croner --filter @greenwave/predictor` · [GitHub](https://github.com/Hexagon/croner)                | predictor                         |
+| croner                                              | 11      | in the catalog; `pnpm add croner@catalog: --filter <package>` · [GitHub](https://github.com/Hexagon/croner)  | adapter, predictor                |
 | tsx                                                 | 4.23    | in use; `pnpm add -D tsx --filter <service>`                                                                 | runs services, `tsx watch` in dev |
 | Vitest                                              | 4.1     | in use · [projects guide](https://vitest.dev/guide/projects)                                                 | tests                             |
 | Next.js 16, Mapbox GL, react-map-gl, TanStack Query | in use  | read `node_modules/next/dist/docs/` before changing Next code (`AGENTS.md`)                                  | frontend                          |
@@ -45,19 +45,20 @@ Frontend 3000, Postgres 5432, MQTT 1883, MQTT over WebSocket 9001. Inside Compos
 
 Each implementation plan adds its variables to `.env.example`; this table is the target contract, not a claim that they are implemented already.
 
-| Variable                                                          | Used by                                   | Value                                                                                                        |
-| ----------------------------------------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `DATABASE_URL`                                                    | frontend, backend, predictor, migrate     | `postgres:5432` in Compose, `localhost` in `.env` for `pnpm dev`                                             |
-| `MQTT_URL`                                                        | adapter, backend                          | `mqtt://mosquitto:1883`                                                                                      |
-| `MQTT_WS_URL`                                                     | frontend, handed to the browser           | `ws://localhost:9001`                                                                                        |
-| `MQTT_*_PASSWORD`                                                 | `mosquitto-init` and the matching service | random strings                                                                                               |
-| `CITY_ID`, `ROUTE_IDS`, `POLL_INTERVAL_SECONDS`, `ADAPTER_SOURCE` | adapter                                   | `aarhus`, the 13 ids, `60`, `fixture` in development                                                         |
-| `BACKEND_CLIENT_ID`                                               | backend                                   | fixed `backend-1` in development and Compose; one backend only ([04](../implementation-plans/04-backend.md)) |
-| `CITY_IDS`, `FORECAST_TAU_MINUTES`, `HISTORY_DAYS`                | predictor                                 | `aarhus`, from the backtest (`60` until then), `28`                                                          |
-| `SKIP_ENV_VALIDATION`                                             | frontend image build only                 | `1` in the `Dockerfile`'s builder stage                                                                      |
-| `TOMTOM_API_KEY`                                                  | adapter, frozen Vercel app                | only where the live adapter runs or fixtures are recorded                                                    |
-| `MAPBOX_PUBLIC_TOKEN`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`    | frontend                                  | as today                                                                                                     |
-| `CRON_SECRET`                                                     | frozen Vercel app only                    | leaves the app's env in [WP8](wp8-clean-up.md)                                                               |
+| Variable                                                       | Used by                                   | Value                                                                                                        |
+| -------------------------------------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `DATABASE_URL`                                                 | frontend, backend, predictor, migrate     | `postgres:5432` in Compose, `localhost` in `.env` for `pnpm dev`                                             |
+| `MQTT_URL`                                                     | adapter, backend                          | `mqtt://mosquitto:1883`                                                                                      |
+| `MQTT_WS_URL`                                                  | frontend, handed to the browser           | `ws://localhost:9001`                                                                                        |
+| `MQTT_*_PASSWORD`                                              | `mosquitto-init` and the matching service | random strings                                                                                               |
+| `ADAPTER_SOURCE`                                               | adapter                                   | required: `fixture` in development, `tomtom` for live data                                                   |
+| `CITY_ID`, `ROUTE_IDS`, `LOG_LEVEL`                            | adapter                                   | optional; default `aarhus`, the 13 ids, `info` ([design](../designs/adapter.md#configuration))               |
+| `BACKEND_CLIENT_ID`                                            | backend                                   | fixed `backend-1` in development and Compose; one backend only ([04](../implementation-plans/04-backend.md)) |
+| `CITY_IDS`, `FORECAST_TAU_MINUTES`, `HISTORY_DAYS`             | predictor                                 | `aarhus`, from the backtest (`60` until then), `28`                                                          |
+| `SKIP_ENV_VALIDATION`                                          | frontend image build only                 | `1` in the `Dockerfile`'s builder stage                                                                      |
+| `TOMTOM_API_KEY`                                               | adapter, frozen Vercel app                | only where the live adapter runs or fixtures are recorded                                                    |
+| `MAPBOX_PUBLIC_TOKEN`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` | frontend                                  | as today                                                                                                     |
+| `CRON_SECRET`                                                  | frozen Vercel app only                    | leaves the app's env in [WP8](wp8-clean-up.md)                                                               |
 
 ## Startup order
 

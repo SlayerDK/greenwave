@@ -1,7 +1,7 @@
 # Aarhus adapter (`adapter-aarhus`)
 
 - **Author:** Christian
-- **Status:** Proposed
+- **Status:** Implemented (2026-11-17)
 - **Date:** 2026-11-16, revised 2026-11-17 after review
 
 ---
@@ -292,17 +292,17 @@ The package is `@greenwave/adapter` in `adapter/`. Its code lives in
 rule and the shared `tsconfig` includes assume that layout. After this table,
 files are named without the `adapter/src/` prefix.
 
-| File                               | Job                                                                             | Sees TomTom's format | Knows MQTT |
-| ---------------------------------- | ------------------------------------------------------------------------------- | -------------------- | ---------- |
-| `adapter/src/env.ts`               | Parse and validate the environment once at start-up, with Aarhus defaults       | no                   | no         |
-| `adapter/src/tomtom-schema.ts`     | TomTom's Zod schemas and types, `TrafficError` (as the frontend's `schema.ts`)  | yes                  | no         |
-| `adapter/src/tomtom.ts`            | HTTP client and the live reader                                                 | yes                  | no         |
-| `adapter/src/normalize.ts`         | TomTom route details → `Observation`; `toPositions`, `toRouteLabel`             | yes                  | no         |
-| `adapter/src/fixtures.ts`          | Load the recorded responses, vary their speeds, the fixture reader              | yes                  | no         |
-| `adapter/src/poll.ts`              | One poll: connection check, parallel reads, publish, summary                    | no                   | no ¹       |
-| `adapter/src/mqtt.ts`              | Connect with the Last Will, keep `online` published, publish helper             | no                   | yes        |
-| `adapter/src/main.ts`              | Wire it together; pick the reader; the croner schedule; SIGTERM/SIGINT handling | no ²                 | yes        |
-| `adapter/fixtures/route-{id}.json` | 13 recorded TomTom responses, as TomTom sent them                               | data                 | no         |
+| File                               | Job                                                                            | Sees TomTom's format | Knows MQTT |
+| ---------------------------------- | ------------------------------------------------------------------------------ | -------------------- | ---------- |
+| `adapter/src/env.ts`               | Parse and validate the environment once at start-up, with Aarhus defaults      | no                   | no         |
+| `adapter/src/tomtom-schema.ts`     | TomTom's Zod schemas and types, `TrafficError` (as the frontend's `schema.ts`) | yes                  | no         |
+| `adapter/src/tomtom.ts`            | HTTP client and the live reader                                                | yes                  | no         |
+| `adapter/src/normalize.ts`         | TomTom route details → `Observation`; `toPositions`, `toRouteLabel`            | yes                  | no         |
+| `adapter/src/fixtures.ts`          | Load the recorded responses, vary their speeds, the fixture reader             | yes                  | no         |
+| `adapter/src/poll.ts`              | One poll: connection check, parallel reads, publish, summary; the schedule     | no                   | no ¹       |
+| `adapter/src/mqtt.ts`              | Connect with the Last Will, keep `online` published, publish helper            | no                   | yes        |
+| `adapter/src/main.ts`              | Wire it together; pick the reader; start the schedule; SIGTERM/SIGINT handling | no ²                 | yes        |
+| `adapter/fixtures/route-{id}.json` | 13 recorded TomTom responses, as TomTom sent them                              | data                 | no         |
 
 ¹ `poll.ts` receives `publish` and `isConnected` as plain functions, so it
 never imports MQTT.js.
@@ -332,19 +332,25 @@ same path from here on.
 
 ### Schedule
 
-`main.ts` starts one [croner](https://github.com/Hexagon/croner) job, already
+`main.ts` calls `schedulePolls(poll, { onSkip, onBug })` from `poll.ts`,
+which starts one [croner](https://github.com/Hexagon/croner) job, already
 planned for the predictor:
 
 ```text
-job = new Cron("* * * * *", { protect: onSkip, catch: onBug }, runPoll)
+job = new Cron("* * * * *", { catch: onBug }, () => polling ? onSkip() : runPoll())
 ```
 
 - **`"* * * * *"`** fires at second 0 of every minute, on the wall clock, so
   polls do not drift (Goal 8).
-- **`protect: onSkip`** stops croner from starting a run while the previous
-  one is still going, and calls `onSkip`, which logs
-  `poll skipped: previous poll still running` at `warn`. Skipped runs are
-  dropped, not queued.
+- **A `polling` flag, not croner's `protect`.** A boundary that finds the
+  previous poll still running calls `onSkip`, which logs
+  `poll skipped: previous poll still running` at `warn`, and returns. Skipped
+  runs are dropped, not queued. The first draft used croner's `protect`
+  option; the CUJ 5 run showed that croner 11 keeps re-checking a skipped
+  boundary every 30 seconds (its longest timer), calls `onSkip` again each
+  time, and starts a catch-up poll at the next 30-second tick once the long
+  poll ends (one poll at 15:44:30). `poll.test.ts` pins the corrected
+  behaviour with fake timers.
 - **`catch: onBug`** receives any error that escapes `runPoll`. Errors on one
   route never reach it ([One poll](#one-poll)), so anything that does is a bug
   outside the per-route code: `onBug` logs it at `fatal` and exits with
@@ -612,10 +618,13 @@ A, B, C and E were decided by the author during this design; D confirms what
 - **Pros**: No new dependency; any interval in seconds; full control over
   skip handling.
 - **Cons**: About 20 lines of timer code, plus a fake-timer test
-  (`scheduler.test.ts`), to do what croner's `protect` option already does.
+  (`scheduler.test.ts`), to do what croner's `protect` option was expected
+  to do.
 - **Reason for Rejection**: Rejected by author in favour of croner: it is
-  already planned for the predictor, has overlap protection with a skip
-  callback built in, and removes a module and a test. The cost, polling at
+  already planned for the predictor and removes a module. (Its `protect`
+  option turned out to start a catch-up poll off the boundary, so the overlap
+  guard is a `polling` flag in `poll.ts` after all: see
+  [Schedule](#schedule).) The cost, polling at
   a fixed minute instead of a configurable number of seconds, matches the
   project's decision to poll every minute.
 
@@ -935,8 +944,8 @@ directories (`CLAUDE.md` → _Layout_).
   5.  `connection = await connectAdapter(…)`; if it rejects, log the message
       at `fatal` and exit 1.
   6.  `poll = createPoll(…)`;
-      `job = new Cron("* * * * *", { protect: onSkip, catch: onBug }, poll)`,
-      as in Technical Plan → [Schedule](#schedule). `onSkip` logs at `warn`.
+      `job = schedulePolls(poll, { onSkip, onBug })`, as in Technical Plan →
+      [Schedule](#schedule). `onSkip` logs at `warn`.
       `onBug` logs at `fatal` and calls `process.exit(1)`, so the Last Will
       fires and Compose restarts the container.
   7.  Log `info` "started" with `cityId`, `source` and the number of routes,
@@ -970,12 +979,14 @@ directories (`CLAUDE.md` → _Layout_).
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `adapter/src/env.test.ts`       | `tomtom` without a key fails; `fixture` without one passes; with nothing else set, `CITY_ID` is `aarhus`, `ROUTE_IDS` is `AARHUS_ROUTE_IDS` and `LOG_LEVEL` is `info`; an override `" 1, 2 ,3"` → `["1","2","3"]`; an empty or non-numeric `ROUTE_IDS` fails; `CITY_ID` `"Aarhus"` fails                                                                                                                                                                                                                                                                                                                               |
 | `adapter/src/tomtom.test.ts`    | Ported from `frontend/src/lib/traffic/tomtom-service.test.ts` with `fetch` stubbed, minus the cache cases: key sent as the `key` query parameter; validated payload returned; `observedAt` from the `date` header; local clock when there is no header; the 401 and 404 error envelopes; 429 → `rate_limited`; shape drift → `invalid_response` naming the path; network failure → `network`; a 200 whose body is not JSON rejects, not with a `TrafficError`; `createTomTomReader` returns an `Observation` with `source: "live"`                                                                                     |
-| `adapter/src/normalize.test.ts` | On `route-56634.json` and `route-313727.json`: passes `observationSchema`; equal to itself after `JSON.stringify` → `JSON.parse` → `observationSchema.parse` (Goal 4); every segment id equals the raw file's `segmentIdStr` (164 of 165 differ from `String(segmentId)` after `JSON.parse` on 56634); the first coordinate is longitude first; `CW_AU_` trimmed; `eventId` is `aarhus:56634:<observedAt>`; a speed of `12.5` → `TrafficError` `invalid_response` naming the segment's path                                                                                                                            |
+| `adapter/src/normalize.test.ts` | On `route-56634.json` and `route-313727.json`: passes `observationSchema`; equal to itself after `JSON.stringify` → `JSON.parse` → `observationSchema.parse` (Goal 4); every segment id equals the raw file's `segmentIdStr` (165 of 166 differ from `String(segmentId)` after `JSON.parse` on 56634); the first coordinate is longitude first; `CW_AU_` trimmed; `eventId` is `aarhus:56634:<observedAt>`; a speed of `12.5` → `TrafficError` `invalid_response` naming the segment's path                                                                                                                            |
 | `adapter/src/fixtures.test.ts`  | With `random = () => 0` every speed is 0.9× and with `() => 0.999` about 1.1×, rounded to integers; ids, geometry and route fields unchanged; the reader gives `source: "fixture"` and `observedAt` from `now` on each read; a missing file rejects and names it; all 13 committed files load (`AARHUS_ROUTE_IDS`) and each produces an `Observation` that passes `observationSchema`; in every committed file each `"segmentId": <digits>` has the same digits as the `segmentIdStr` after it (proves no file was re-serialized)                                                                                      |
 | `adapter/src/poll.test.ts`      | Uses `shared/src/fixtures/observation-56634.json`, with the route id changed per route. Disconnected → `{ status: "skipped" }`, `readObservation` never called; one `TrafficError` (`network`) → 12 published, 1 failed, logged at `warn`; an `unauthorized` `TrafficError` → logged at `error` with `check TOMTOM_API_KEY`; a `TypeError` from `readObservation` → that route failed, logged at `error`, the other 12 published; payloads parse with `observationSchema` and go to `observationTopic(cityId, routeId)`; a rejected publish → counted as failed, the rest published; `published + failed` is always 13 |
 
-The removed `scheduler.test.ts` is not written: croner's `protect` is the
-library's job, and `poll.test.ts` covers the adapter's own logic.
+The removed `scheduler.test.ts` is not written. `poll.test.ts` also covers
+`schedulePolls`: with fake timers, a poll that runs from 42:00 to 44:01 skips
+43:00 and 44:00 and the next poll starts at 45:00, not off the boundary; an
+error that escapes the poll reaches `onBug`.
 
 #### 13. `adapter/Dockerfile` (Create)
 
@@ -1146,7 +1157,7 @@ everything in `shared/` (the contracts are used as they are) and in
   | 5    | `poll.test.ts` (disconnected → skipped); CUJ 5 runs                                   |
   | 6    | `fixtures.test.ts`; CUJ 1 run                                                         |
   | 7    | CUJ 1 and 4 runs                                                                      |
-  | 8    | croner's `protect` (library behaviour, not retested); CUJ 1 message times at second 0 |
+  | 8    | `poll.test.ts` (`schedulePolls` with fake timers); CUJ 1 message times at second 0    |
   | 9    | CUJ 1 (host) and CUJ 4 (Compose)                                                      |
   | 10   | CUJ 1 run with `LOG_LEVEL=debug`                                                      |
 
