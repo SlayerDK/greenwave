@@ -1,0 +1,12 @@
+# Anonymous browsers and the healthcheck.
+topic read greenwave/v1/+/routes/+/state
+topic read greenwave/v1/+/adapter/status
+topic read $SYS/broker/uptime
+
+user adapter-aarhus
+topic write greenwave/v1/aarhus/routes/+/observations
+topic write greenwave/v1/aarhus/adapter/status
+
+user backend
+topic read greenwave/v1/+/routes/+/observations
+topic write greenwave/v1/+/routes/+/state

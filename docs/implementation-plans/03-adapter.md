@@ -1,6 +1,6 @@
 # 03 · Adapter: `adapter-aarhus`
 
-**Compose service `adapter-aarhus`, package `@greenwave/adapter` in `adapter/`.** [WP3](../work-plan/wp3-adapter.md) · Bjoern · 9–11 Nov · Needs [00](00-foundation.md), [01](01-broker.md), [02](02-migrate.md) · Unblocks [04](04-backend.md) end to end, [07](07-loadgen.md). · [← Plans](README.md)
+**Compose service `adapter-aarhus`, package `@greenwave/adapter` in `adapter/`.** [WP3](../work-plan/wp3-adapter.md) · Christian · 9–11 Nov · Needs [00](00-foundation.md), [01](01-broker.md), [02](02-migrate.md) · Unblocks [04](04-backend.md) end to end, [07](07-loadgen.md). · [← Plans](README.md)
 
 ## Goal
 
@@ -193,17 +193,21 @@ adapter/
     },
   });
 
-  // On every connect, not just the first: if the connection dropped, the broker
-  // may already have published the Last Will, and this puts "online" back.
-  client.on(
-    "connect",
-    () =>
-      void client.publishAsync(statusTopic(env.CITY_ID), onlineStatus(), {
-        qos: 1,
-        retain: true,
-      }),
-  );
+  const publishOnline = () =>
+    client.publishAsync(statusTopic(env.CITY_ID), onlineStatus(), {
+      qos: 1,
+      retain: true,
+    });
+
+  // The initial connect event already fired before connectAsync resolved.
+  // Publish explicitly now, and publish again on later reconnects.
+  client.on("connect", () => {
+    void publishOnline().catch(logMqttError);
+  });
+  await publishOnline();
   ```
+
+  `logMqttError` records publication failures without exposing credentials. Verify online status on the first connection as well as after a Last Will/reconnect.
 
   Publish each observation with `client.publishAsync(observationTopic(cityId, routeId), JSON.stringify(observation), { qos: 1 })`. While disconnected, MQTT.js queues publishes in memory and sends them on reconnect.
 

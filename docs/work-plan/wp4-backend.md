@@ -1,6 +1,6 @@
 # WP4 · Backend
 
-**Christian · Mon 9 – Fri 13 Nov; row lock Tue 17 – Wed 18 Nov.** Needs WP1 and WP2. · [← Work plan](../WORK-PLAN.md)
+**Bjoern · Mon 9 – Fri 13 Nov.** Needs WP1 and WP2. · [← Work plan](../WORK-PLAN.md)
 
 > **Implementation plan:** [04 · Backend](../implementation-plans/04-backend.md). It has the step-by-step detail for handing this off; this file keeps the owner, dates and summary.
 
@@ -11,29 +11,13 @@
   - `nextFlag(previous, on, observedAt)` for both flags: switches after `FLAG_SWITCH_READINGS` readings in a row
   - `isNewer`
 - [ ] Every 10 s, log messages processed, duplicates, and lag p50/p95 (now − `observedAt`). WP7 uses these.
-- [ ] Week 47: `SELECT … FOR UPDATE` on the route-state row, so `--scale backend=3` keeps streaks correct.
+- [ ] One backend, one observation at a time, fixed `BACKEND_CLIENT_ID=backend-1`; verify both restart and container recreation. No shared subscription or multi-worker row-lock task.
 
-```ts
-const client = await mqtt.connectAsync(env.MQTT_URL, {
-  protocolVersion: 5,
-  clientId: `backend-${os.hostname()}`, // stable across restarts of one container
-  clean: false,
-  properties: { sessionExpiryInterval: 3600, receiveMaximum: 32 },
-  username: "backend",
-  password: env.MQTT_BACKEND_PASSWORD,
-});
+Use [04's MQTT wiring](../implementation-plans/04-backend.md#4--mqtt-mqttts-maints): create the client with `manualConnect: true`, install `handleMessage` and connect/reconnect subscription handlers, then call `connect()`. Do not attach the handler after awaiting connection: queued readings can replay before it exists.
 
-// MQTT.js sends the PUBACK when `done` is called, so ack only after the commit.
-// One message at a time, which is also the backpressure.
-client.handleMessage = (packet, done) => {
-  processObservation(packet).then(
-    () => done(),
-    (error) => handleFailure(error, done),
-  );
-};
+`processMessage` validates and commits, returning a state or `null`. When there is state, enqueue its QoS 1 publication with explicit rejection handling, then call `done()` after the commit. Never await that publication's PUBACK before `done()`, because the same inbound packet pump must be released to process it.
 
-await client.subscribeAsync(SHARED_OBSERVATIONS, { qos: 1 });
-```
+Integration tests use only `TEST_DATABASE_URL` targeting a disposable `greenwave_test` database, never the ordinary development/recorder URL. See 04's test guard and MQTT lifecycle cases.
 
 `handleFailure`: invalid JSON or schema → log and `done()` (it would fail again every time). Database error → log and `process.exit(1)`; Compose restarts it and the broker redelivers from the persistent session.
 
@@ -41,7 +25,7 @@ await client.subscribeAsync(SHARED_OBSERVATIONS, { qos: 1 });
 
 1. Insert the receipt (`createMany`, `skipDuplicates`). No row inserted → duplicate, stop.
 2. Upsert the route; `createMany` its segments with `skipDuplicates`, so geometry is stored once.
-3. Lock and read the route state.
+3. Read the route state; the single consumer serializes observations.
 4. If the reading is newer: classify segments, update both flags, write route and segment state.
 5. Unless `source` is `fixture`, add the reading to its 15-minute bucket in one statement. Out-of-order readings still count; only the state must be newest.
 
@@ -55,16 +39,8 @@ await tx.$executeRaw`
     "currentSpeedSum" = traffic_segment_history."currentSpeedSum" + EXCLUDED."currentSpeedSum", ...`;
 ```
 
-After the commit, if the state changed:
-
-```ts
-await client.publishAsync(stateTopic(cityId, routeId), JSON.stringify(state), {
-  qos: 1,
-  retain: true,
-  properties: { messageExpiryInterval: 300 },
-});
-```
+After the commit, if the state changed, enqueue `publishAsync(stateTopic(cityId, routeId), JSON.stringify(state), { qos: 1, retain: true, properties: { messageExpiryInterval: 300 } })` without awaiting it inside `handleMessage`. Attach the fatal error handler, then release the incoming acknowledgement as above.
 
 A crash between commit and publish loses that one publish; the next minute's reading republishes.
 
-**Done when** restarting the backend under a running adapter loses and doubles nothing (receipts = messages published), and the backend section has a draft.
+**Done when** restart and container recreation resume the same session; the receipt delta matches the known unique observations sent during the short outage, and history does not double-count duplicates. Apply the replay limits in [01](../implementation-plans/01-broker.md#operations-and-limits). The backend section has a draft.

@@ -1,30 +1,17 @@
-# WP7 · Load and resilience tests
+# WP7 · Resilience evidence and scalability reasoning
 
-**Bjoern · Mon 16 – Fri 27 Nov.** Needs WP3 and WP4. · [← Work plan](../WORK-PLAN.md)
+**Bjoern · Mon 16 – Fri 27 Nov.** Needs WP3, WP4, and WP5 for map checks. · [← Work plan](../WORK-PLAN.md)
 
-> **Implementation plan:** [07 · Load generator](../implementation-plans/07-loadgen.md). It has the step-by-step detail for handing this off; this file keeps the owner, dates and summary.
+> **Implementation plan:** [07 · Verification](../implementation-plans/07-loadgen.md). The legacy filename is retained for links; no load-generator service is required.
 
-- [ ] `loadgen/` (_new_), MQTT user `loadgen`: publishes copies of a fixture observation for synthetic cities `load-01`…`load-NN`, each with a fresh `eventId`, `observedAt` = now and `source: "loadtest"`, at `RATE` messages a second for `DURATION`. The backend still writes their history, so the test covers the full write path.
-- [ ] A `loadtest` Compose profile, as its own project so its data lands in separate volumes:
+The 9 Nov scope decision keeps one backend and a normal subscription. No synthetic-city ramp, three-worker comparison, loadgen/monitor accounts or CSV/chart subsystem.
 
-  ```bash
-  docker compose -p greenwave-loadtest --profile loadtest up --scale backend=3
-  ```
+- [ ] Record a short baseline from existing adapter/backend logs; distinguish fixtures from real TomTom data.
+- [ ] Verify role-limited MQTT access, retained state/expiry, adapter Last Will and reconnect.
+- [ ] Verify stale Postgres/retained state does not remain green on the map.
+- [ ] Compare known unique event IDs with receipt deltas after a short backend stop/restart and after container recreation using the same `backend-1` identity.
+- [ ] Keep the database integration-test evidence for duplicate and out-of-order observations; fixtures alone do not prove the history path.
+- [ ] Explain 100× route/city growth and 100× viewer growth, likely bottlenecks and replay limits. Label estimates as estimates; do not claim measured capacity or horizontal scaling.
+- [ ] Connect the results to at least two relevant Lab 7 architecture concerns.
 
-- [ ] Measure, each to CSV: messages sent/s (loadgen), processed and lag (backend log), DB commits/s (`xact_commit` in `pg_stat_database`, every 10 s), broker load (`$SYS/broker/load/messages/received/1min`, as `monitor`).
-
-## Scenarios
-
-1. Aarhus as is: 13 messages a minute.
-2. A ramp with one backend: 10, 25, 50, 100, 200 msg/s, until lag keeps growing.
-3. The same ramp with `--scale backend=3` on the shared subscription.
-4. A backend restart under load: receipts = messages published, no bucket counted twice.
-
-## Resilience checks (also in the demo)
-
-- `mosquitto_sub -v -t 'greenwave/v1/#' -u backend -P …` shows every message; anonymous clients see only state and status.
-- `docker compose kill adapter-aarhus`: status `offline` within about 20 s, and the map shows its banner.
-- `docker compose restart backend`: nothing lost or doubled.
-- Adapter and backend stopped for 5 minutes: retained state expires, and a new map shows no live state.
-
-**Done when** the CSVs and two or three charts exist, and the scalability and load-test sections have drafts.
+**Done when** commands, expected/observed results and limits are recorded under `docs/report/verification/`, and the resilience/scalability report section has a draft. [07](../implementation-plans/07-loadgen.md) defines the cases and acceptance boundaries.

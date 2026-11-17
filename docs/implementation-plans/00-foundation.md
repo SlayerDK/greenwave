@@ -259,7 +259,7 @@ shared/src/
   export const statusTopic = (cityId: string) =>
     `${ROOT}/${cityId}/adapter/status`;
 
-  /** The backend's shared subscription: the broker hands each message to one copy. */
+  /** Legacy foundation export, not the approved single-backend subscription. */
   export const SHARED_OBSERVATIONS = `$share/backend/${ROOT}/+/routes/+/observations`;
   export const ALL_STATES = `${ROOT}/+/routes/+/state`;
   export const ALL_STATUSES = `${ROOT}/+/adapter/status`;
@@ -267,6 +267,8 @@ shared/src/
   /** The browser learns which city went offline from the topic alone. */
   export const cityOfStatusTopic = (topic: string) => topic.split("/")[2];
   ```
+
+Scope revision, 9 Nov: the topic snippet above records the merged foundation. [04](04-backend.md) now uses the existing `observationTopic("+", "+")` builder for a normal subscription with fixed client ID `backend-1`. Do not copy `SHARED_OBSERVATIONS` into the backend. Unused loadgen workspace patterns and the legacy topic export do not require a load-generator service; removing obsolete shared exports later follows the usual two-reviewer rule.
 
 - [x] `observation.ts`: exactly the message in `ARCHITECTURE.md`. Every speed, length and time is an integer in the TomTom payload, so they are `z.int()`.
 
@@ -307,7 +309,7 @@ shared/src/
       source: z.enum(["live", "fixture", "loadtest"]),
       cityId: topicLevel,
       routeId: topicLevel,
-      observedAt: z.iso.datetime(), // UTC "Z"; milliseconds allowed (the load generator needs them)
+      observedAt: z.iso.datetime(), // UTC "Z"; milliseconds allowed
       route: observationRouteSchema,
       segments: z.array(observationSegmentSchema).min(1),
     })
@@ -366,7 +368,7 @@ shared/src/
 
 - [x] `status.ts`: `adapterStatusSchema = z.object({ status: z.enum(["online", "offline"]), at: z.iso.datetime() })`, plus `onlineStatus(at = new Date())` and `offlineStatus(at = new Date())` returning the JSON string. For the Last Will, `at` is when the will was registered, at connect time.
 - [x] `index.ts` re-exports all of the above.
-- [x] `fixtures/observation-56634.json`: `frontend/src/lib/traffic/fixtures/route-details.json` converted to an observation (`[longitude, latitude]`, `segmentIdStr` → `id`). The TomTom fixture has no response date, so `observedAt` is `2026-10-19T09:41:00Z`, the time `ARCHITECTURE.md` shows for this route, and `source` is `live` as there. Use a script that keeps big integers exact (Python's `json` does; JavaScript's `JSON.parse` does not, so read `segmentIdStr`, never `segmentId`). [03](03-adapter.md) writes the real converter; this file feeds the contract tests and is [07](07-loadgen.md)'s message template.
+- [x] `fixtures/observation-56634.json`: `frontend/src/lib/traffic/fixtures/route-details.json` converted to an observation (`[longitude, latitude]`, `segmentIdStr` → `id`). The TomTom fixture has no response date, so `observedAt` is `2026-10-19T09:41:00Z`, the time `ARCHITECTURE.md` shows for this route, and `source` is `live` as there. Use a script that keeps big integers exact (Python's `json` does; JavaScript's `JSON.parse` does not, so read `segmentIdStr`, never `segmentId`). [03](03-adapter.md) writes the real converter; this file feeds the contract tests and can supply [07](07-loadgen.md)'s bounded verification inputs.
 
 ## Step 3 · The schema (PR 2)
 

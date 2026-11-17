@@ -1,6 +1,6 @@
 # WP3 · Adapter
 
-**Bjoern · Mon 9 – Wed 11 Nov.** Needs WP1's contracts and WP2's broker. · [← Work plan](../WORK-PLAN.md)
+**Christian · Mon 9 – Wed 11 Nov.** Needs WP1's contracts and WP2's broker. · [← Work plan](../WORK-PLAN.md)
 
 > **Implementation plan:** [03 · Adapter](../implementation-plans/03-adapter.md). It has the step-by-step detail for handing this off; this file keeps the owner, dates and summary.
 

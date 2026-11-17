@@ -14,12 +14,12 @@ with a `package.json` is a pnpm workspace package named `@greenwave/<directory>`
 compose.yaml   pnpm-workspace.yaml   package.json   tsconfig.base.json   (and the lint/test configs)
 shared/      @greenwave/shared     MQTT topics, message schemas, congestion rules (no container)
 database/    @greenwave/database   Prisma schema, migrations, client, seed        → migrate
-broker/      Mosquitto config and ACL (not a pnpm package)                        → mosquitto
-adapter/  backend/  predictor/  loadgen/                                          → one container each
+broker/      Mosquitto config, ACL and verification (not a pnpm package)                        → mosquitto
+adapter/  backend/  predictor/                                          → one container each
 frontend/    @greenwave/frontend   the Next.js app; its rules are in frontend/CLAUDE.md
 ```
 
-Directories other than `frontend/` and `database/` arrive with their plans.
+The foundation includes `frontend/`, `shared/` and `database/`; `broker/` now implements plan 01. The remaining directories arrive with their plans. The required pipeline uses one Aarhus adapter, one broker and one backend with fixed MQTT client ID `backend-1` and a normal subscription. No load-generator/monitor service or multiple backend workers are required. Scope and all nine learning-goal evidence requirements are in `docs/WORK-PLAN.md`.
 
 - **Containers share code only through `shared/` and `database/`.** Nothing imports across container
   directories.
@@ -46,7 +46,8 @@ Run every check from the root.
 | `pnpm test`                    | Vitest, one project per package                                        |
 | `pnpm analyze`                 | fallow full sweep                                                      |
 | `pnpm analyze:ci`              | fallow changed-file gate (pre-push + CI)                               |
-| `pnpm db:up` / `db:down`       | Local Postgres container                                               |
+| `pnpm db:up` / `db:down`       | Local Postgres and MQTT broker                                         |
+| `pnpm broker:verify`           | Isolated real-broker acceptance checks                                 |
 | `pnpm db:migrate` / `db:seed`  | Prisma migrate / seed                                                  |
 | `pnpm db:generate`             | Prisma client (also runs on `pnpm install`)                            |
 | `pnpm db:import-traffic-stats` | Load the Traffic Stats export                                          |
