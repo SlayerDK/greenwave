@@ -185,7 +185,7 @@ describe("createMessageHandler", () => {
     await vi.waitFor(() => expect(onFatal).toHaveBeenCalledWith(failure));
   });
 
-  it("stops after the reading in flight, leaving later ones for redelivery", async () => {
+  it("stops after the reading in flight, releasing later ones without a PUBACK", async () => {
     const commit = deferred<ProcessResult>({ status: "current", state });
     const { handler, deliver, processObservation } = setup({
       transaction: () => commit.promise,
@@ -204,8 +204,10 @@ describe("createMessageHandler", () => {
     commit.release();
     await stopping;
 
-    expect(first).toHaveBeenCalledOnce();
-    expect(second).not.toHaveBeenCalled();
+    // The first gets its PUBACK; an error skips the second's, so the broker
+    // redelivers it, while MQTT.js moves on to the packets behind it.
+    expect(first).toHaveBeenCalledExactlyOnceWith();
+    expect(second).toHaveBeenCalledExactlyOnceWith(expect.any(Error));
     expect(processObservation).toHaveBeenCalledOnce();
   });
 });

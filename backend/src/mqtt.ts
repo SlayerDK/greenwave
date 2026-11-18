@@ -4,7 +4,7 @@ import {
   STATE_TTL_SECONDS,
   stateTopic,
 } from "@greenwave/shared";
-import mqtt from "mqtt";
+import mqtt, { ErrorWithReasonCode } from "mqtt";
 import type { Logger } from "pino";
 import type { BackendEnv } from "./env";
 import { createMessageHandler } from "./message-handler";
@@ -70,19 +70,28 @@ export const startMqtt = ({
       .subscribeAsync(observationTopic("+", "+"), { qos: 1 })
       .catch(onFatal);
   });
-  // Without a listener, Node would crash on the first socket error.
-  client.on("error", (error) => logger.error({ err: error }, "MQTT error"));
+  // Without a listener, Node would crash on the first socket error. A network
+  // error only logs: MQTT.js reconnects. A reason code means the broker refused
+  // us (a bad password, not authorised) or the protocol broke. After a refused
+  // CONNACK MQTT.js stops reconnecting, and the metrics timer would keep the
+  // idle process alive, so exit and let Compose restart it.
+  client.on("error", (error) => {
+    if (error instanceof ErrorWithReasonCode) return onFatal(error);
+    logger.error({ err: error }, "MQTT error");
+  });
   client.on("offline", () => logger.warn("broker offline"));
   client.connect();
 
   return {
     /**
-     * Forced: a message left unacknowledged blocks MQTT.js's inbound queue, so
-     * a graceful end could wait forever for the last state's PUBACK.
+     * Graceful: the last PUBACK and state are still corked on the socket, which
+     * a forced end would destroy unsent. This one sends them, waits for the
+     * states' PUBACKs, then sends DISCONNECT. No timer: if the broker is down
+     * this waits, and a second signal ends it.
      */
     stop: async () => {
       await handler.stop();
-      await client.endAsync(true);
+      await client.endAsync();
     },
   };
 };

@@ -12,7 +12,7 @@ const metricsTimer = metrics.start();
 
 /** Exits 1: Compose restarts the container and the broker redelivers. */
 const fatal = (error: unknown) => {
-  logger.fatal({ err: error }, "backend processing failed");
+  logger.fatal({ err: error }, "fatal error, exiting");
   process.exit(1);
 };
 

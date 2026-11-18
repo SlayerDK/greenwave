@@ -20,6 +20,9 @@ type HandlerDeps = {
 
 type Packet = Pick<IPublishPacket, "topic" | "payload">;
 
+/** MQTT.js's callback: called with an error, it skips the PUBACK. */
+type Done = (error?: Error) => void;
+
 /**
  * MQTT.js handles inbound packets one at a time: the next one, a PUBACK
  * included, waits until `done` is called. So `done` follows the commit, and
@@ -62,7 +65,7 @@ export const createMessageHandler = ({
     return parsed.data;
   };
 
-  const handle = async (packet: Packet, done: () => void) => {
+  const handle = async (packet: Packet, done: Done) => {
     const observation = parse(packet);
     if (!observation) return done();
 
@@ -81,13 +84,17 @@ export const createMessageHandler = ({
   };
 
   return {
-    handleMessage: (packet: Packet, done: () => void) => {
-      // Left unacknowledged, so the broker redelivers it after the restart.
-      if (stopping) return;
+    handleMessage: (packet: Packet, done: Done) => {
+      // Released without a PUBACK, so the broker redelivers it after the
+      // restart. Releasing it lets MQTT.js reach the states' PUBACKs behind it.
+      if (stopping) return done(new Error("backend stopping"));
 
       inFlight = handle(packet, done).catch(onFatal);
     },
-    /** Takes no new message, and resolves once the one in flight is committed. */
+    /**
+     * Releases new messages without a PUBACK, and resolves once the one in
+     * flight is committed.
+     */
     stop: async () => {
       stopping = true;
       await inFlight;
