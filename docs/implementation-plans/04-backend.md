@@ -88,9 +88,9 @@ export const toBucketStart = (observedAt: Date) => { … };
 
 ### 3 · The transaction (`process-observation.ts`)
 
-One interactive transaction per message: `prisma.$transaction(async (tx) => …)`. It returns the state to publish, or `null`.
+One interactive transaction per message: `prisma.$transaction(async (tx) => …)`. It returns `{ status: "duplicate" }`, `{ status: "stale" }` (an older reading, counted in the history only) or `{ status: "current", state }`.
 
-1. **Receipt.** `tx.trafficObservationReceipt.createMany({ data: [{ eventId }], skipDuplicates: true })`. A count of 0 is a duplicate: count it and return `null`.
+1. **Receipt.** `tx.trafficObservationReceipt.createMany({ data: [{ eventId }], skipDuplicates: true })`. A count of 0 is a duplicate: return `duplicate`.
 2. **Route.** Upsert `traffic_route` (name, `lengthM`).
 3. **Single writer.** One backend processes one observation at a time. Keep the transaction and atomic history upserts; do not add a worker pool or multi-worker row-lock exercise. A future multi-worker design needs its own concurrency review.
 4. **Geometry.** `tx.trafficSegment.createMany({ data, skipDuplicates: true })` with `ordinal` = the index in the message. Geometry is stored once.
@@ -182,11 +182,11 @@ client.connect();
 
 Use the existing `observationTopic` export from `@greenwave/shared`. Do not use its legacy `SHARED_OBSERVATIONS` export; no shared-contract code change is required to select a normal subscription.
 
-- [ ] `processMessage`: `JSON.parse` → `observationSchema.safeParse` → `processObservation`; return its state or `null`. Do not publish or await a publication inside this function. `fatalMqttError` logs a failed subscription/publication and exits 1 so Compose restarts the process; do not leave rejected promises unhandled.
-- [ ] Install `handleMessage` and connection listeners before `client.connect()`. A resumed persistent session can replay immediately after CONNACK; attaching the handler after `await connectAsync()` can acknowledge queued readings with the default no-op handler.
-- [ ] Never await a QoS 1 publication's PUBACK before calling `done()`: MQTT.js processes inbound packets serially and needs that callback to process the PUBACK. Queue the state publication, attach failure handling, then release the observation acknowledgement after the DB commit. Source: [MQTT.js 5.16 packet pump](https://raw.githubusercontent.com/mqttjs/MQTT.js/v5.16.0/src/lib/client.ts) and [QoS 1 handler](https://raw.githubusercontent.com/mqttjs/MQTT.js/v5.16.0/src/lib/handlers/publish.ts).
+- [x] `processMessage` (`createMessageHandler` in `message-handler.ts`): `JSON.parse` → `observationSchema.safeParse` → `processObservation`. Do not publish or await a publication inside this function. `fatalMqttError` logs a failed subscription/publication and exits 1 so Compose restarts the process; do not leave rejected promises unhandled.
+- [x] Install `handleMessage` and connection listeners before `client.connect()`. A resumed persistent session can replay immediately after CONNACK; attaching the handler after `await connectAsync()` can acknowledge queued readings with the default no-op handler.
+- [x] Never await a QoS 1 publication's PUBACK before calling `done()`: MQTT.js processes inbound packets serially and needs that callback to process the PUBACK. Queue the state publication, attach failure handling, then release the observation acknowledgement after the DB commit. Source: [MQTT.js 5.16 packet pump](https://raw.githubusercontent.com/mqttjs/MQTT.js/v5.16.0/src/lib/client.ts) and [QoS 1 handler](https://raw.githubusercontent.com/mqttjs/MQTT.js/v5.16.0/src/lib/handlers/publish.ts).
 - [x] `handleFailure`: invalid JSON or schema → log with the topic and the first issue, count it, and call `done()`; it would fail again every time. Anything else (the database) → log and `process.exit(1)`. Compose restarts the container and the broker redelivers the unacknowledged message from the persistent session.
-- [ ] A crash between commit and publish loses that one publish. The next minute's reading republishes; accept it.
+- [x] A crash between commit and publish loses that one publish. The next minute's reading republishes; accept it.
 - [x] `SIGTERM`: stop taking messages, wait for the one in flight, `endAsync()`, `prisma.$disconnect()`.
 - [x] Log every message at `debug` with its `eventId`, so a reading can be traced through adapter, backend and browser.
 
@@ -236,8 +236,8 @@ Use the existing `observationTopic` export from `@greenwave/shared`. Do not use 
 - `rules.test.ts`: every rule above, including the length weighting (one long heavy segment beats many short free ones), the flag sequences, `isNewer` with equal timestamps (not newer), and `toBucketStart` at :14:59.999 and :15:00.
 - `state-message.test.ts`: the result parses with `stateSchema`; the flags render as ISO strings or `null`.
 - `process-observation.test.ts` uses an explicitly separate local database named `greenwave_test` via `TEST_DATABASE_URL` (add an empty optional entry to `.env.example`). Never fall back to `DATABASE_URL` or the recorder database. The harness must reject a URL whose database name is not `greenwave_test` before migrations or truncation, create its Prisma client with that test URL, and initialize only that disposable test database. Truncate the six tables only there. If the test URL is absent, report the integration tests as skipped, not as evidence that they passed.
-  - the same observation twice: second call returns `null`, one receipt, `sampleCount` 1;
-  - an older reading after a newer one: state unchanged, history `sampleCount` 2 in its own bucket;
+  - the same observation twice: second call returns `duplicate`, one receipt, `sampleCount` 1;
+  - an older reading after a newer one: `stale`, state unchanged, history `sampleCount` 2 in its own bucket;
   - a `fixture` reading: state written, no history rows;
   - three congested readings: `congestedSince` equals the first one's `observedAt`.
 
@@ -254,10 +254,10 @@ Use the existing `observationTopic` export from `@greenwave/shared`. Do not use 
 ## Done when
 
 - [ ] With the adapter in fixture mode, every minute: 13 receipts, 13 retained state messages (`mosquitto_sub -t 'greenwave/v1/+/routes/+/state' -v` as anonymous), and no history rows (fixtures). With `ADAPTER_SOURCE=tomtom`, history buckets fill: `sampleCount` reaches 15 per quarter hour.
-- [ ] `docker compose restart backend` under a running adapter loses and doubles nothing: receipts = observations published, and no bucket's `sampleCount` exceeds the readings in it.
-- [ ] `docker compose up -d --force-recreate backend` resumes client ID `backend-1` and processes queued observations exactly once in the database, within the documented replay limits. [07](07-loadgen.md) records the restart/recreation evidence.
+- [x] `docker compose restart backend` under a running adapter loses and doubles nothing: receipts = observations published, and no bucket's `sampleCount` exceeds the readings in it.
+- [x] `docker compose up -d --force-recreate backend` resumes client ID `backend-1` and processes queued observations exactly once in the database, within the documented replay limits. [07](07-loadgen.md) records the restart/recreation evidence.
 - [ ] M2 (Mon 16 Nov): real readings reach the browser map every minute, with [05](05-frontend.md).
-- [ ] The backend section of the report has a draft ([WP9](../work-plan/wp9-report-and-demo.md)).
+- [x] The backend section of the report has a draft ([`docs/report/backend.md`](../report/backend.md), for [WP9](../work-plan/wp9-report-and-demo.md)).
 
 ## Not in this plan
 
