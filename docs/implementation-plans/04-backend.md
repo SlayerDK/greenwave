@@ -182,12 +182,12 @@ client.connect();
 
 Use the existing `observationTopic` export from `@greenwave/shared`. Do not use its legacy `SHARED_OBSERVATIONS` export; no shared-contract code change is required to select a normal subscription.
 
-- [x] `processMessage` (`createMessageHandler` in `message-handler.ts`): `JSON.parse` → `observationSchema.safeParse` → `processObservation`. Do not publish or await a publication inside this function. `fatalMqttError` logs a failed subscription/publication and exits 1 so Compose restarts the process; do not leave rejected promises unhandled.
+- [x] `processMessage` (`createMessageHandler` in `message-handler.ts`): `JSON.parse` → `observationSchema.safeParse` → `processObservation`. Do not publish or await a publication inside this function. `fatalMqttError` logs a failed subscription/publication, or a refused CONNACK (MQTT.js stops reconnecting after one), and exits 1 so Compose restarts the process; do not leave rejected promises unhandled.
 - [x] Install `handleMessage` and connection listeners before `client.connect()`. A resumed persistent session can replay immediately after CONNACK; attaching the handler after `await connectAsync()` can acknowledge queued readings with the default no-op handler.
 - [x] Never await a QoS 1 publication's PUBACK before calling `done()`: MQTT.js processes inbound packets serially and needs that callback to process the PUBACK. Queue the state publication, attach failure handling, then release the observation acknowledgement after the DB commit. Source: [MQTT.js 5.16 packet pump](https://raw.githubusercontent.com/mqttjs/MQTT.js/v5.16.0/src/lib/client.ts) and [QoS 1 handler](https://raw.githubusercontent.com/mqttjs/MQTT.js/v5.16.0/src/lib/handlers/publish.ts).
 - [x] `handleFailure`: invalid JSON or schema → log with the topic and the first issue, count it, and call `done()`; it would fail again every time. Anything else (the database) → log and `process.exit(1)`. Compose restarts the container and the broker redelivers the unacknowledged message from the persistent session.
 - [x] A crash between commit and publish loses that one publish. The next minute's reading republishes; accept it.
-- [x] `SIGTERM`: stop taking messages, wait for the one in flight, `endAsync()`, `prisma.$disconnect()`.
+- [x] `SIGTERM`: stop taking messages (release each later one with `done(error)`, which skips its PUBACK without stalling the packet pump), wait for the one in flight, a graceful `endAsync()` (a forced one destroys the corked PUBACK and state), `prisma.$disconnect()`.
 - [x] Log every message at `debug` with its `eventId`, so a reading can be traced through adapter, backend and browser.
 
 ### Metrics
