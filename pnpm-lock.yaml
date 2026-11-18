@@ -306,6 +306,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 24.19.2
+      pino-pretty:
+        specifier: 'catalog:'
+        version: 13.2.0
       tsx:
         specifier: 'catalog:'
         version: 4.23.15

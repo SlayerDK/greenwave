@@ -3,7 +3,7 @@ import type {
   Prisma,
   TrafficCongestion,
 } from "@greenwave/database";
-import type { Observation } from "@greenwave/shared";
+import type { Observation, RouteState } from "@greenwave/shared";
 import {
   classifySegments,
   isNewer,
@@ -17,6 +17,13 @@ import { toRouteState } from "./state-message";
 
 type Transaction = Prisma.TransactionClient;
 type ClassifiedSegments = ReturnType<typeof classifySegments>;
+
+export type ProcessResult =
+  /** The receipt already exists: a redelivery of a reading already written. */
+  | { status: "duplicate" }
+  /** Older than the stored state: counted in the history, state left alone. */
+  | { status: "stale" }
+  | { status: "current"; state: RouteState };
 
 const ensureRouteAndSegments = async (
   tx: Transaction,
@@ -36,7 +43,6 @@ const ensureRouteAndSegments = async (
       lengthM: observation.route.lengthM,
     },
   });
-  await tx.$executeRaw`SELECT 1 FROM traffic_route WHERE "cityId" = ${cityId} AND id = ${routeId} FOR UPDATE`;
   await tx.trafficSegment.createMany({
     data: observation.segments.map((segment, ordinal) => ({
       cityId,
@@ -120,21 +126,28 @@ const upsertRouteState = async (
   });
 };
 
+/**
+ * One array per column, for the `unnest` inserts below. `lvl` is typed through
+ * the Prisma enum: it goes into SQL as text, which would bypass the drift guard.
+ */
+const toSegmentColumns = (classified: ClassifiedSegments) => ({
+  ids: classified.map((segment) => segment.id),
+  cur: classified.map((segment) => segment.currentSpeedKmh),
+  avg: classified.map((segment) => segment.averageSpeedKmh),
+  typ: classified.map((segment) => segment.typicalSpeedKmh),
+  rel: classified.map((segment) => segment.relativeSpeedPct),
+  conf: classified.map((segment) => segment.confidencePct),
+  lvl: classified.map((segment): TrafficCongestion => segment.congestion),
+});
+
+type SegmentColumns = ReturnType<typeof toSegmentColumns>;
+
 const writeSegmentState = async (
   tx: Transaction,
   observation: Observation,
   observedAt: Date,
-  classified: ClassifiedSegments,
+  { ids, cur, avg, typ, rel, conf, lvl }: SegmentColumns,
 ) => {
-  const ids = classified.map((segment) => segment.id);
-  const cur = classified.map((segment) => segment.currentSpeedKmh);
-  const avg = classified.map((segment) => segment.averageSpeedKmh);
-  const typ = classified.map((segment) => segment.typicalSpeedKmh);
-  const rel = classified.map((segment) => segment.relativeSpeedPct);
-  const conf = classified.map((segment) => segment.confidencePct);
-  const lvl: TrafficCongestion[] = classified.map(
-    (segment) => segment.congestion,
-  );
   await tx.$executeRaw`
     INSERT INTO traffic_segment_state ("cityId", "routeId", "segmentId", "observedAt", "currentSpeedKmh",
       "averageSpeedKmh", "typicalSpeedKmh", "relativeSpeedPct", "confidencePct", congestion)
@@ -146,14 +159,13 @@ const writeSegmentState = async (
       "averageSpeedKmh" = EXCLUDED."averageSpeedKmh", "typicalSpeedKmh" = EXCLUDED."typicalSpeedKmh",
       "relativeSpeedPct" = EXCLUDED."relativeSpeedPct", "confidencePct" = EXCLUDED."confidencePct",
       congestion = EXCLUDED.congestion`;
-  return { ids, cur, avg, typ, rel };
 };
 
 const writeSegmentHistory = async (
   tx: Transaction,
   observation: Observation,
   observedAt: Date,
-  values: Awaited<ReturnType<typeof writeSegmentState>>,
+  { ids, cur, avg, typ, rel }: SegmentColumns,
 ) => {
   if (observation.source === "fixture") return;
 
@@ -161,7 +173,7 @@ const writeSegmentHistory = async (
     INSERT INTO traffic_segment_history ("bucketStart", "cityId", "routeId", "segmentId", "sampleCount",
       "currentSpeedSum", "averageSpeedSum", "typicalSpeedSum", "relativeSpeedSum")
     SELECT ${toBucketStart(observedAt)}, ${observation.cityId}, ${observation.routeId}, s.id, 1, s.cur, s.avg, s.typ, s.rel
-    FROM unnest(${values.ids}::text[], ${values.cur}::int[], ${values.avg}::int[], ${values.typ}::int[], ${values.rel}::int[]) AS s(id, cur, avg, typ, rel)
+    FROM unnest(${ids}::text[], ${cur}::int[], ${avg}::int[], ${typ}::int[], ${rel}::int[]) AS s(id, cur, avg, typ, rel)
     ON CONFLICT ("bucketStart", "cityId", "routeId", "segmentId") DO UPDATE SET
       "sampleCount" = traffic_segment_history."sampleCount" + 1,
       "currentSpeedSum" = traffic_segment_history."currentSpeedSum" + EXCLUDED."currentSpeedSum",
@@ -170,19 +182,27 @@ const writeSegmentHistory = async (
       "relativeSpeedSum" = traffic_segment_history."relativeSpeedSum" + EXCLUDED."relativeSpeedSum"`;
 };
 
+/**
+ * One transaction per observation. Every new reading counts in the history,
+ * even one that arrives late; only a newer one moves the state.
+ */
 export const processObservation = async (
   prisma: DatabaseClient,
   observation: Observation,
 ) =>
-  prisma.$transaction(async (tx) => {
+  prisma.$transaction(async (tx): Promise<ProcessResult> => {
     const receipt = await tx.trafficObservationReceipt.createMany({
       data: [{ eventId: observation.eventId }],
       skipDuplicates: true,
     });
-    if (receipt.count === 0) return null;
+    if (receipt.count === 0) return { status: "duplicate" };
 
     await ensureRouteAndSegments(tx, observation);
     const observedAt = new Date(observation.observedAt);
+    const classified = classifySegments(observation.segments);
+    const columns = toSegmentColumns(classified);
+    await writeSegmentHistory(tx, observation, observedAt, columns);
+
     const stored = await tx.trafficRouteState.findUnique({
       where: {
         cityId_routeId: {
@@ -191,21 +211,22 @@ export const processObservation = async (
         },
       },
     });
-    if (!isNewer(observedAt, stored?.observedAt)) return null;
+    if (!isNewer(observedAt, stored?.observedAt)) return { status: "stale" };
 
-    const classified = classifySegments(observation.segments);
     const flags = {
       congested: getCongestedFlag(stored, classified, observedAt),
       slower: getSlowerFlag(stored, observation, observedAt),
     };
     await upsertRouteState(tx, observation, observedAt, flags);
-    const values = await writeSegmentState(
-      tx,
-      observation,
-      observedAt,
-      classified,
-    );
-    await writeSegmentHistory(tx, observation, observedAt, values);
+    await writeSegmentState(tx, observation, observedAt, columns);
 
-    return toRouteState(observation, classified, flags.congested, flags.slower);
+    return {
+      status: "current",
+      state: toRouteState(
+        observation,
+        classified,
+        flags.congested,
+        flags.slower,
+      ),
+    };
   });

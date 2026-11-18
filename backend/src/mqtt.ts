@@ -1,65 +1,51 @@
 import type { DatabaseClient } from "@greenwave/database";
 import {
-  observationSchema,
-  SHARED_OBSERVATIONS,
+  observationTopic,
   STATE_TTL_SECONDS,
   stateTopic,
 } from "@greenwave/shared";
-import mqtt, { type IPublishPacket, type MqttClient } from "mqtt";
-import os from "node:os";
+import mqtt from "mqtt";
 import type { Logger } from "pino";
 import type { BackendEnv } from "./env";
+import { createMessageHandler } from "./message-handler";
 import type { Metrics } from "./metrics";
 import { processObservation } from "./process-observation";
 
-export const startMqtt = async (
-  prisma: DatabaseClient,
-  env: BackendEnv,
-  logger: Logger,
-  metrics: Metrics,
-) => {
-  const client = await mqtt.connectAsync(env.MQTT_URL, {
+/**
+ * Connects only after the handler is installed: a resumed session replays its
+ * queue right after the CONNACK, and MQTT.js's default handler would
+ * acknowledge those readings without processing them. The connect options
+ * hold the password, so they are never logged.
+ */
+export const startMqtt = ({
+  env,
+  prisma,
+  logger,
+  metrics,
+  onFatal,
+}: {
+  env: BackendEnv;
+  prisma: DatabaseClient;
+  logger: Logger;
+  metrics: Metrics;
+  onFatal: (error: unknown) => void;
+}) => {
+  const client = mqtt.connect(env.MQTT_URL, {
+    manualConnect: true,
     protocolVersion: 5,
-    clientId: env.BACKEND_CLIENT_ID ?? `backend-${os.hostname()}`,
+    clientId: env.BACKEND_CLIENT_ID,
     clean: false,
     properties: { sessionExpiryInterval: 3600, receiveMaximum: 32 },
     username: "backend",
     password: env.MQTT_BACKEND_PASSWORD,
   });
 
-  client.handleMessage = (packet: IPublishPacket, done) => {
-    const handleMessage = async () => {
-      let parsed: unknown;
-      try {
-        parsed = JSON.parse(packet.payload.toString());
-      } catch {
-        metrics.invalidMessage();
-        logger.warn({ topic: packet.topic }, "invalid JSON observation");
-        done();
-        return;
-      }
-      const result = observationSchema.safeParse(parsed);
-      if (!result.success) {
-        metrics.invalidMessage();
-        logger.warn(
-          { topic: packet.topic, issue: result.error.issues[0] },
-          "invalid observation",
-        );
-        done();
-        return;
-      }
-      logger.debug({ eventId: result.data.eventId }, "processing observation");
-      const state = await processObservation(prisma, result.data);
-      if (!state) {
-        metrics.duplicateMessage();
-        done();
-        return;
-      }
-      metrics.processedMessage(
-        Date.now() - new Date(result.data.observedAt).getTime(),
-      );
+  const handler = createMessageHandler({
+    processObservation: (observation) =>
+      processObservation(prisma, observation),
+    publishState: async (state) => {
       await client.publishAsync(
-        stateTopic(result.data.cityId, result.data.routeId),
+        stateTopic(state.cityId, state.routeId),
         JSON.stringify(state),
         {
           qos: 1,
@@ -67,22 +53,36 @@ export const startMqtt = async (
           properties: { messageExpiryInterval: STATE_TTL_SECONDS },
         },
       );
-      metrics.publishedMessage();
-      done();
-    };
-    handleMessage().catch((error: unknown) => {
-      logger.error(
-        { err: error, topic: packet.topic },
-        "backend processing failed",
-      );
-      process.exit(1);
-    });
+    },
+    metrics,
+    logger,
+    onFatal,
+  });
+  client.handleMessage = handler.handleMessage;
+
+  // A normal subscription, renewed on every connect in case the session expired.
+  client.on("connect", ({ sessionPresent }) => {
+    logger.info(
+      { clientId: env.BACKEND_CLIENT_ID, sessionPresent },
+      "connected",
+    );
+    client
+      .subscribeAsync(observationTopic("+", "+"), { qos: 1 })
+      .catch(onFatal);
+  });
+  // Without a listener, Node would crash on the first socket error.
+  client.on("error", (error) => logger.error({ err: error }, "MQTT error"));
+  client.on("offline", () => logger.warn("broker offline"));
+  client.connect();
+
+  return {
+    /**
+     * Forced: a message left unacknowledged blocks MQTT.js's inbound queue, so
+     * a graceful end could wait forever for the last state's PUBACK.
+     */
+    stop: async () => {
+      await handler.stop();
+      await client.endAsync(true);
+    },
   };
-
-  await client.subscribeAsync(SHARED_OBSERVATIONS, { qos: 1 });
-  return client;
-};
-
-export const stopMqtt = async (client: MqttClient) => {
-  await client.endAsync();
 };

@@ -3,6 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "tsx watch --env-file=../.env src/main.ts | pino-pretty",
+    "start": "node --import tsx src/main.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -14,6 +16,7 @@
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "pino-pretty": "catalog:",
     "tsx": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"

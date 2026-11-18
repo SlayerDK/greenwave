@@ -2,17 +2,22 @@ import { z } from "zod";
 
 const envSchema = z.object({
   DATABASE_URL: z.string().min(1),
-  MQTT_URL: z.string().url(),
+  MQTT_URL: z.url(),
   MQTT_BACKEND_PASSWORD: z.string().min(1),
-  BACKEND_CLIENT_ID: z.string().min(1).optional(),
+  /** The persistent session's name: a new one after recreation would lose the queue. */
+  BACKEND_CLIENT_ID: z.string().min(1).default("backend-1"),
+  LOG_LEVEL: z
+    .enum(["fatal", "error", "warn", "info", "debug", "trace"])
+    .default("info"),
 });
 
-export const readEnv = () =>
-  envSchema.parse({
-    DATABASE_URL: process.env.DATABASE_URL,
-    MQTT_URL: process.env.MQTT_URL,
-    MQTT_BACKEND_PASSWORD: process.env.MQTT_BACKEND_PASSWORD,
-    BACKEND_CLIENT_ID: process.env.BACKEND_CLIENT_ID,
-  });
+export type BackendEnv = z.infer<typeof envSchema>;
 
-export type BackendEnv = ReturnType<typeof readEnv>;
+/** Exits with every problem listed, rather than a ZodError's stack. */
+export const readEnv = (): BackendEnv => {
+  const parsed = envSchema.safeParse(process.env);
+  if (parsed.success) return parsed.data;
+
+  process.stderr.write(`${z.prettifyError(parsed.error)}\n`);
+  process.exit(1);
+};

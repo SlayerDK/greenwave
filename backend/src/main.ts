@@ -2,23 +2,38 @@ import { createPrismaClient } from "@greenwave/database";
 import pino from "pino";
 import { readEnv } from "./env";
 import { Metrics } from "./metrics";
-import { startMqtt, stopMqtt } from "./mqtt";
+import { startMqtt } from "./mqtt";
 
-const logger = pino();
 const env = readEnv();
+const logger = pino({ level: env.LOG_LEVEL });
 const prisma = createPrismaClient(env.DATABASE_URL);
 const metrics = new Metrics(logger);
 const metricsTimer = metrics.start();
-const client = await startMqtt(prisma, env, logger, metrics);
 
-let stopping = false;
-const shutdown = async () => {
-  if (stopping) return;
-  stopping = true;
-  clearInterval(metricsTimer);
-  await stopMqtt(client);
-  await prisma.$disconnect();
+/** Exits 1: Compose restarts the container and the broker redelivers. */
+const fatal = (error: unknown) => {
+  logger.fatal({ err: error }, "backend processing failed");
+  process.exit(1);
 };
 
-process.once("SIGTERM", () => void shutdown());
-process.once("SIGINT", () => void shutdown());
+const connection = startMqtt({ env, prisma, logger, metrics, onFatal: fatal });
+
+let stopping = false;
+
+/**
+ * The first signal waits for the message in flight to commit, then
+ * disconnects. A second one exits at once.
+ */
+const shutdown = async () => {
+  if (stopping) process.exit(1);
+  stopping = true;
+
+  clearInterval(metricsTimer);
+  await connection.stop();
+  await prisma.$disconnect();
+  process.exit(0);
+};
+
+// `void`: Node ignores a handler's promise.
+process.on("SIGTERM", () => void shutdown());
+process.on("SIGINT", () => void shutdown());
