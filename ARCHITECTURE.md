@@ -4,7 +4,7 @@ Live traffic for Aarhus's main roads on a Mapbox map, with every road segment co
 
 The project started as adaptive traffic-light control (presentation 1). With real TomTom data from Aarhus Kommune it works with real-time data instead: it shows the current traffic state and predicts the future state.
 
-> **Status (2026-11-17):** target design with a merged workspace/contracts/database foundation; the broker is implemented on 10 Nov and the Aarhus adapter on 17 Nov ([design](docs/designs/adapter.md)), but the backend/live-frontend pipeline is not implemented yet. [`docs/WORK-PLAN.md`](docs/WORK-PLAN.md) says who builds what before the hand-in on 4 December 2026. Today the app is a single Next.js proof of concept that calls TomTom's API directly over HTTP (see `README.md`). Its Vercel cron records the traffic history until the hand-in.
+> **Status (2026-11-18):** target design with a merged workspace/contracts/database foundation; the broker is implemented on 10 Nov, the Aarhus adapter on 17 Nov ([design](docs/designs/adapter.md)) and the backend on 18 Nov, but the live frontend is not implemented yet. [`docs/WORK-PLAN.md`](docs/WORK-PLAN.md) says who builds what before the hand-in on 4 December 2026. Today the app is a single Next.js proof of concept that calls TomTom's API directly over HTTP (see `README.md`). Its Vercel cron records the traffic history until the hand-in.
 
 At a glance:
 

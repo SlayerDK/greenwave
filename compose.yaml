@@ -72,6 +72,23 @@ services:
     depends_on:
       postgres: { condition: service_healthy }
 
+  # One instance, keeping its session across restarts and recreation. Never run
+  # it while a host backend (pnpm --filter @greenwave/backend dev) runs: they
+  # share the client id, and each would keep taking the session from the other.
+  backend:
+    build: { context: ., dockerfile: backend/Dockerfile }
+    init: true # forwards SIGTERM to node and reaps children
+    environment:
+      DATABASE_URL: postgresql://greenwave:greenwave@postgres:5432/greenwave
+      MQTT_URL: mqtt://mosquitto:1883
+      BACKEND_CLIENT_ID: backend-1
+      MQTT_BACKEND_PASSWORD: ${MQTT_BACKEND_PASSWORD:?set it in .env}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      mosquitto: { condition: service_healthy }
+      migrate: { condition: service_completed_successfully }
+    restart: unless-stopped
+
 volumes:
   postgres-data:
   mosquitto-secrets:

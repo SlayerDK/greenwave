@@ -4,18 +4,18 @@
 
 > **Implementation plan:** [04 · Backend](../implementation-plans/04-backend.md). It has the step-by-step detail for handing this off; this file keeps the owner, dates and summary.
 
-- [ ] `backend/` (_new_): connect, subscribe, process one observation per transaction, publish the state.
-- [ ] Pure, unit-tested rules:
+- [x] `backend/` (_new_): connect, subscribe, process one observation per transaction, publish the state.
+- [x] Pure, unit-tested rules:
   - `routeIsCongested`: ≥ `CONGESTED_LENGTH_SHARE` of the length is moderate, heavy or closed
   - `routeIsSlowerThanUsual`: `travelTimeSec ≥ SLOWER_THAN_USUAL_RATIO × typicalTravelTimeSec`
   - `nextFlag(previous, on, observedAt)` for both flags: switches after `FLAG_SWITCH_READINGS` readings in a row
   - `isNewer`
-- [ ] Every 10 s, log messages processed, duplicates, and lag p50/p95 (now − `observedAt`). WP7 uses these.
-- [ ] One backend, one observation at a time, fixed `BACKEND_CLIENT_ID=backend-1`; verify both restart and container recreation. No shared subscription or multi-worker row-lock task.
+- [x] Every 10 s, log messages processed, duplicates, and lag p50/p95 (now − `observedAt`). WP7 uses these.
+- [x] One backend, one observation at a time, fixed `BACKEND_CLIENT_ID=backend-1`; verify both restart and container recreation. No shared subscription or multi-worker row-lock task.
 
 Use [04's MQTT wiring](../implementation-plans/04-backend.md#4--mqtt-mqttts-maints): create the client with `manualConnect: true`, install `handleMessage` and connect/reconnect subscription handlers, then call `connect()`. Do not attach the handler after awaiting connection: queued readings can replay before it exists.
 
-`processMessage` validates and commits, returning a state or `null`. When there is state, enqueue its QoS 1 publication with explicit rejection handling, then call `done()` after the commit. Never await that publication's PUBACK before `done()`, because the same inbound packet pump must be released to process it.
+`processMessage` validates and commits; a newer reading returns the state to publish. When there is state, enqueue its QoS 1 publication with explicit rejection handling, then call `done()` after the commit. Never await that publication's PUBACK before `done()`, because the same inbound packet pump must be released to process it.
 
 Integration tests use only `TEST_DATABASE_URL` targeting a disposable `greenwave_test` database, never the ordinary development/recorder URL. See 04's test guard and MQTT lifecycle cases.
 
