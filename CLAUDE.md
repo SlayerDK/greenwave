@@ -19,7 +19,7 @@ adapter/  backend/  predictor/                                          → one 
 frontend/    @greenwave/frontend   the Next.js app; its rules are in frontend/CLAUDE.md
 ```
 
-The foundation includes `frontend/`, `shared/` and `database/`; `broker/` now implements plan 01. The remaining directories arrive with their plans. The required pipeline uses one Aarhus adapter, one broker and one backend with fixed MQTT client ID `backend-1` and a normal subscription. No load-generator/monitor service or multiple backend workers are required. Scope and all nine learning-goal evidence requirements are in `docs/WORK-PLAN.md`.
+The foundation includes `frontend/`, `shared/` and `database/`; `broker/` now implements plan 01, and `adapter/` plan 03 (specified by `docs/designs/adapter.md`). The remaining directories arrive with their plans. The required pipeline uses one Aarhus adapter, one broker and one backend with fixed MQTT client ID `backend-1` and a normal subscription. No load-generator/monitor service or multiple backend workers are required. Scope and all nine learning-goal evidence requirements are in `docs/WORK-PLAN.md`.
 
 - **Containers share code only through `shared/` and `database/`.** Nothing imports across container
   directories.

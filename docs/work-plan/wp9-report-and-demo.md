@@ -34,4 +34,4 @@ Live on Christian's laptop on Fri 4 Dec, unless the 30 Nov meeting moves it:
 4. Kill the adapter: the map shows it offline. A short backend restart/recreation resumes the same session; show the known event IDs accounted for within the documented limits.
 5. Show the measured baseline/failure results, explain scalability limits, and show the prediction backtest table. No multi-worker scaling claim.
 
-Fallbacks: the backup video from Wed 2 Dec, and `ADAPTER_SOURCE=fixture` if TomTom is unreachable (Mapbox tiles still need the internet).
+Fallbacks: the backup video from Wed 2 Dec, and `ADAPTER_SOURCE=fixture`, announced as a replay, if TomTom is unreachable (Mapbox tiles still need the internet).
