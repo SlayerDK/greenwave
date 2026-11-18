@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="680" height="560" viewBox="0 0 680 560" role="img" aria-labelledby="title desc">
   <title id="title">GreenWave live pipeline</title>
-  <desc id="desc">Each city's adapter polls that city's HTTP traffic API and publishes normalized observations over MQTT to one Mosquitto broker. The backend, which can run as several copies, subscribes, applies the business rules, writes to Postgres and publishes processed state back to the broker. The Next.js frontend renders the map from Postgres and receives live state from the broker over a WebSocket.</desc>
+  <desc id="desc">Each city's adapter polls that city's HTTP traffic API and publishes normalized observations over MQTT to one Mosquitto broker. The single backend uses a normal subscription and a fixed MQTT identity, subscribes, applies the business rules, writes to Postgres and publishes processed state back to the broker. The Next.js frontend renders the map from Postgres and receives live state from the broker over a WebSocket.</desc>
   <style>
     .bg { fill: #ffffff; }
     text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; }
@@ -81,7 +81,7 @@
 
   <g class="svc">
     <rect x="130" y="348" width="180" height="56" rx="8"/>
-    <text class="th" x="220" y="366" text-anchor="middle" dominant-baseline="central">Backend ×N</text>
+    <text class="th" x="220" y="366" text-anchor="middle" dominant-baseline="central">Backend ×1</text>
     <text class="ts" x="220" y="384" text-anchor="middle" dominant-baseline="central">rules, state, history</text>
   </g>
   <g class="svc">

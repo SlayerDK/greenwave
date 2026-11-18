@@ -19,14 +19,11 @@ catalog:
   "@prisma/adapter-pg": 7.10.0
   pg: ^8.23.0
   vitest: ^4.1.11
-  # For the services and the live map (plans 03–05). fallow flags each
-  # suppression below as stale once its first package uses it: delete it then.
-  # fallow-ignore-next-line unused-catalog-entry
+  # For the services and the live map (plans 03–06).
   mqtt: ^5.16.0
-  # fallow-ignore-next-line unused-catalog-entry
   pino: ^10.4.0
-  # fallow-ignore-next-line unused-catalog-entry
   pino-pretty: ^13
+  croner: ^11.0.1
 
 allowBuilds:
   "@prisma/engines": true

@@ -17,6 +17,51 @@ services:
       timeout: 5s
       retries: 10
 
+  mosquitto-init:
+    image: eclipse-mosquitto:2.1.2-alpine
+    entrypoint: ["/bin/sh", "/init.sh"]
+    user: root
+    environment:
+      MQTT_ADAPTER_PASSWORD: ${MQTT_ADAPTER_PASSWORD:?set it in .env}
+      MQTT_BACKEND_PASSWORD: ${MQTT_BACKEND_PASSWORD:?set it in .env}
+    volumes:
+      - ./broker/init.sh:/init.sh:ro
+      - mosquitto-secrets:/mosquitto/secrets
+
+  mosquitto:
+    image: eclipse-mosquitto:2.1.2-alpine
+    restart: unless-stopped
+    depends_on:
+      mosquitto-init: { condition: service_completed_successfully }
+    ports: ["127.0.0.1:1883:1883", "127.0.0.1:9001:9001"]
+    volumes:
+      - ./broker/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - ./broker/acl:/mosquitto/config/acl:ro
+      - mosquitto-secrets:/mosquitto/secrets:ro
+      - mosquitto-data:/mosquitto/data
+    healthcheck:
+      test: ["CMD-SHELL", "mosquitto_sub -t '$$SYS/broker/uptime' -C 1 -W 15"]
+      interval: 10s
+      timeout: 20s
+      retries: 5
+
+  # CITY_ID and ROUTE_IDS use adapter/src/env.ts's defaults. It reads nothing
+  # from Postgres, so it does not wait for migrate. Never run it while the host
+  # adapter (pnpm --filter @greenwave/adapter dev) runs: they share a client id.
+  adapter-aarhus:
+    build: { context: ., dockerfile: adapter/Dockerfile }
+    init: true # forwards SIGTERM to node and reaps children
+    environment:
+      ADAPTER_SOURCE: ${ADAPTER_SOURCE:?choose tomtom or fixture in .env}
+      TOMTOM_API_KEY: ${TOMTOM_API_KEY:-}
+      MQTT_URL: mqtt://mosquitto:1883
+      MQTT_ADAPTER_PASSWORD: ${MQTT_ADAPTER_PASSWORD:?set it in .env}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      mosquitto: { condition: service_healthy }
+    restart: unless-stopped
+    stop_grace_period: 10s
+
   # One-shot: applies pending migrations and exits 0, so it shows as exited.
   # Never give it restart:. Services that use the database wait for it with
   # depends_on: { migrate: { condition: service_completed_successfully } }.
@@ -41,3 +86,5 @@ services:
 
 volumes:
   postgres-data:
+  mosquitto-secrets:
+  mosquitto-data:

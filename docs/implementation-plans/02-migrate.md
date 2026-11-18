@@ -1,6 +1,6 @@
 # 02 · Migrate, and the Dockerfile pattern
 
-**Compose service `migrate` (one-shot), built from `database/Dockerfile`, plus the Dockerfile pattern the adapter, backend, predictor and loadgen copy.** [WP2](../work-plan/wp2-compose-and-broker.md) · Bjoern · 2–6 Nov · Needs [00](00-foundation.md) · Unblocks [03](03-adapter.md), [04](04-backend.md), [06](06-predictor.md), [07](07-loadgen.md). · [← Plans](README.md)
+**Compose service `migrate` (one-shot), built from `database/Dockerfile`, plus the Dockerfile pattern the adapter, backend and predictor copy.** [WP2](../work-plan/wp2-compose-and-broker.md) · Bjoern · 2–6 Nov · Needs [00](00-foundation.md) · Unblocks [03](03-adapter.md), [04](04-backend.md), [06](06-predictor.md), [07](07-loadgen.md). · [← Plans](README.md)
 
 > **Status, Mon 9 Nov:** implemented on branch `wp2-migrate`, off `main` after [00](00-foundation.md) merged. Every test below passed. The pattern's open questions are settled: the selective `COPY`s work, and `--ignore-scripts` keeps the schema engine. Where the implementation had to differ from what this plan first said, the text below now says what was done and why (marked _Changed in implementation_). Only M1's `mosquitto` half is left, for [01](01-broker.md).
 

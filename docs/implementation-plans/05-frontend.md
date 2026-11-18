@@ -236,7 +236,7 @@ After A, the app makes no TomTom call from `/map`; the cron path is the last one
 
 - [ ] Delete `src/lib/traffic/tomtom-service.ts` (+ test), `history-service.ts` (+ test), `src/app/api/cron/traffic-history/` (+ test), `trafficMutations` (`mutations.ts`), and whatever of `schema.ts` and the fixtures only they used.
 - [ ] `src/proxy.ts`: drop `api/cron` from the matcher, its comment, and the test that guards it (`src/proxy.test.ts`).
-- [ ] `src/lib/config/env.ts`, the root `.env.example` and the frontend's `compose.yaml` block: remove `TOMTOM_API_KEY` and `CRON_SECRET` from the app (the adapter keeps its own key).
+- [ ] `src/lib/config/env.ts` and the frontend's `compose.yaml` block: remove `TOMTOM_API_KEY` and `CRON_SECRET` from the app. Remove `CRON_SECRET` from the root `.env.example` too, but keep `TOMTOM_API_KEY` there: the adapter reads it.
 - [ ] Keep `.github/workflows/traffic-history.yml`, `vercel.json` and `build-vercel`: the frozen Vercel deployment has its own copy of the cron route and keeps recording until after the hand-in (WP8 part 2).
 - [ ] Rewrite the traffic sections of `frontend/CLAUDE.md`: the map reads Postgres; the live hook writes into the query cache from MQTT (the hooks layer now holds one `useQuery` with `skipToken` fed by a subscription, not a fetch); the services own TomTom. Keep the Traffic stats section.
 

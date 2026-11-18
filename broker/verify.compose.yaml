@@ -1,0 +1,9 @@
+# Test-only overrides. Requires Compose 2.24.4+ for !override.
+services:
+  postgres:
+    container_name: !reset null
+    ports: !reset []
+  mosquitto:
+    ports: !override
+      - "127.0.0.1::1883"
+      - "127.0.0.1::9001"
