@@ -253,7 +253,7 @@ Use the existing `observationTopic` export from `@greenwave/shared`. Do not use 
 
 ## Done when
 
-- [ ] With the adapter in fixture mode, every minute: 13 receipts, 13 retained state messages (`mosquitto_sub -t 'greenwave/v1/+/routes/+/state' -v` as anonymous), and no history rows (fixtures). With `ADAPTER_SOURCE=tomtom`, history buckets fill: `sampleCount` reaches 15 per quarter hour.
+- [x] With the adapter in fixture mode, every minute: 13 receipts, 13 retained state messages (`mosquitto_sub -t 'greenwave/v1/+/routes/+/state' -v` as anonymous), and no history rows (fixtures). With `ADAPTER_SOURCE=tomtom`, history buckets fill: `sampleCount` reaches 15 per quarter hour.
 - [x] `docker compose restart backend` under a running adapter loses and doubles nothing: receipts = observations published, and no bucket's `sampleCount` exceeds the readings in it.
 - [x] `docker compose up -d --force-recreate backend` resumes client ID `backend-1` and processes queued observations exactly once in the database, within the documented replay limits. [07](07-loadgen.md) records the restart/recreation evidence.
 - [ ] M2 (Mon 16 Nov): real readings reach the browser map every minute, with [05](05-frontend.md).
