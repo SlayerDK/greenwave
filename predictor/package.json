@@ -1,0 +1,20 @@
+{
+  "name": "@greenwave/predictor",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx --env-file=../.env src/main.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@greenwave/database": "workspace:*",
+    "@greenwave/shared": "workspace:*",
+    "croner": "catalog:",
+    "tsx": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:"
+  }
+}

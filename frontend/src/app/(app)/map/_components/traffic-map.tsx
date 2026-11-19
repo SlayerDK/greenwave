@@ -35,11 +35,13 @@ export const TrafficMap = ({
   featureCollection,
   routes,
   mapboxToken,
+  speedLabel = "Current",
 }: {
   featureCollection: TrafficFeatureCollection;
   /** Only so the popup can name the road a clicked segment belongs to. */
   routes: SerializedRouteTraffic[];
   mapboxToken: string;
+  speedLabel?: "Current" | "Predicted";
 }) => {
   const [selection, setSelection] = useState<Selection | null>(null);
 
@@ -54,6 +56,7 @@ export const TrafficMap = ({
           selection={selection}
           features={featureCollection.features}
           routes={routes}
+          speedLabel={speedLabel}
           onClose={() => setSelection(null)}
         />
       )}

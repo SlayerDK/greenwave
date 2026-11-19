@@ -4,12 +4,16 @@ import { RefreshTrafficButton } from "@/app/(app)/map/_components/refresh-traffi
 import { RouteSummaryList } from "@/app/(app)/map/_components/route-summary-list";
 import { CongestionLegend } from "@/components/traffic/congestion-legend";
 import { useNetworkTraffic } from "@/hooks/traffic/use-traffic";
+import { type SerializedForecast } from "@/lib/forecasts/serialization";
 import {
   mergeFeatureCollections,
   type NetworkTraffic,
   type RouteFailure,
+  type TrafficFeatureCollection,
 } from "@/lib/traffic/serialization";
+import { classifyCongestion } from "@greenwave/shared";
 import dynamic from "next/dynamic";
+import { useState } from "react";
 
 /**
  * `ssr: false` has to be declared from a client component — Next rejects it in
@@ -32,13 +36,16 @@ const describeFailures = (failures: RouteFailure[]) =>
 
 export const TrafficMapPanel = ({
   initialTraffic,
+  initialForecast,
   mapboxToken,
 }: {
   initialTraffic: NetworkTraffic;
+  initialForecast: SerializedForecast | null;
   mapboxToken: string;
 }) => {
   const query = useNetworkTraffic(initialTraffic);
   const traffic = query.data ?? initialTraffic;
+  const [forecastIndex, setForecastIndex] = useState(0);
 
   /**
    * One source for every route, merged here rather than served that way so the
@@ -51,6 +58,58 @@ export const TrafficMapPanel = ({
   );
 
   const routeCount = traffic.routes.length + traffic.failures.length;
+  const forecastSlot = initialForecast?.slotStarts[forecastIndex] ?? null;
+  const forecastBySegment = new Map(
+    (initialForecast?.segments ?? []).map((segment) => [
+      segment.segmentId,
+      segment,
+    ]),
+  );
+
+  const forecastFeatureCollection: TrafficFeatureCollection | null =
+    initialForecast && forecastSlot
+      ? {
+          ...featureCollection,
+          features: featureCollection.features.map((feature) => {
+            const forecast = forecastBySegment.get(
+              feature.properties.segmentIdStr,
+            );
+            if (!forecast) return feature;
+
+            const currentSpeed = forecast.speedsKmh[forecastIndex] ?? 0;
+            const relativeSpeed =
+              forecast.relativeSpeedPcts[forecastIndex] ?? 0;
+
+            return {
+              ...feature,
+              properties: {
+                ...feature.properties,
+                currentSpeed,
+                relativeSpeed,
+                congestion: classifyCongestion({
+                  currentSpeed,
+                  relativeSpeed,
+                }),
+              },
+            };
+          }),
+        }
+      : null;
+
+  const forecastTime = forecastSlot
+    ? new Intl.DateTimeFormat("da-DK", {
+        timeZone: "Europe/Copenhagen",
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(new Date(forecastSlot))
+    : null;
+  const generatedTime = initialForecast
+    ? new Intl.DateTimeFormat("da-DK", {
+        timeZone: "Europe/Copenhagen",
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(new Date(initialForecast.generatedAt))
+    : null;
 
   return (
     <div className="flex flex-col gap-4">
@@ -81,21 +140,82 @@ export const TrafficMapPanel = ({
         </p>
       )}
 
-      <div className="grid gap-4 lg:grid-cols-[2fr_1fr]">
-        <div className="h-[70vh] min-h-96 overflow-hidden rounded-lg border">
-          <TrafficMap
-            featureCollection={featureCollection}
-            routes={traffic.routes}
-            mapboxToken={mapboxToken}
+      {initialForecast && forecastSlot && (
+        <div className="rounded-lg border p-3">
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <p className="text-sm font-medium">Prediction horizon</p>
+            <p className="text-xs text-muted-foreground">
+              Forecast made at {generatedTime}
+            </p>
+          </div>
+          <input
+            aria-label="Prediction horizon"
+            className="w-full"
+            type="range"
+            min={0}
+            max={Math.max(0, initialForecast.slotStarts.length - 1)}
+            value={forecastIndex}
+            onChange={(event) =>
+              setForecastIndex(Number(event.currentTarget.value))
+            }
           />
+          <p className="mt-1 text-sm text-muted-foreground">
+            Predicted for {forecastTime}
+          </p>
         </div>
+      )}
 
-        <div className="max-h-[70vh] overflow-y-auto">
-          <RouteSummaryList routes={traffic.routes} />
-        </div>
+      <div className="grid gap-4 lg:grid-cols-2">
+        <section className="min-w-0">
+          <div className="mb-2 flex items-center justify-between">
+            <h2 className="font-semibold">Live traffic</h2>
+            <span className="text-xs text-muted-foreground">Actual</span>
+          </div>
+          <div className="h-[70vh] min-h-96 overflow-hidden rounded-lg border">
+            <TrafficMap
+              featureCollection={featureCollection}
+              routes={traffic.routes}
+              mapboxToken={mapboxToken}
+              speedLabel="Current"
+            />
+          </div>
+        </section>
+
+        <section className="min-w-0">
+          <div className="mb-2 flex items-center justify-between">
+            <h2 className="font-semibold">Predicted traffic</h2>
+            <span className="text-xs text-muted-foreground">
+              {forecastTime ?? "Unavailable"}
+            </span>
+          </div>
+          <div className="h-[70vh] min-h-96 overflow-hidden rounded-lg border">
+            {forecastFeatureCollection ? (
+              <TrafficMap
+                featureCollection={forecastFeatureCollection}
+                routes={traffic.routes}
+                mapboxToken={mapboxToken}
+                speedLabel="Predicted"
+              />
+            ) : (
+              <div className="flex size-full items-center justify-center bg-muted/30 p-6 text-center">
+                <p className="text-sm text-muted-foreground">
+                  No prediction is available yet. The predictor will publish
+                  this map every 15 minutes.
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
       </div>
 
-      <CongestionLegend />
+      <div className="grid gap-4 lg:grid-cols-2">
+        <div className="max-h-64 overflow-y-auto">
+          <RouteSummaryList routes={traffic.routes} />
+        </div>
+        <div className="flex items-center">
+          <CongestionLegend />
+        </div>
+      </div>
     </div>
   );
 };

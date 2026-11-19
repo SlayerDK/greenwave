@@ -24,11 +24,13 @@ export const SegmentPopup = ({
   features,
   routes,
   onClose,
+  speedLabel = "Current",
 }: {
   selection: Selection;
   features: TrafficFeatureCollection["features"];
   routes: SerializedRouteTraffic[];
   onClose: () => void;
+  speedLabel?: "Current" | "Predicted";
 }) => {
   const feature = findSegment(features, selection.segmentIdStr);
   if (!feature) return null;
@@ -49,7 +51,7 @@ export const SegmentPopup = ({
       subtitle={routeName}
       onClose={onClose}
     >
-      <PopupRow label="Current">{segment.currentSpeed} km/h</PopupRow>
+      <PopupRow label={speedLabel}>{segment.currentSpeed} km/h</PopupRow>
       <PopupRow label="Typical">{segment.typicalSpeed} km/h</PopupRow>
       <PopupRow label="Of free flow">{segment.relativeSpeed}%</PopupRow>
       <PopupRow label="Length">{segment.segmentLength} m</PopupRow>

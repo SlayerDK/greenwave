@@ -89,6 +89,17 @@ services:
       migrate: { condition: service_completed_successfully }
     restart: unless-stopped
 
+  predictor:
+    build: { context: ., dockerfile: predictor/Dockerfile }
+    init: true
+    environment:
+      DATABASE_URL: postgresql://greenwave:greenwave@postgres:5432/greenwave
+      CITY_IDS: aarhus
+      FORECAST_TAU_MINUTES: ${FORECAST_TAU_MINUTES:-60}
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+    restart: unless-stopped
+
 volumes:
   postgres-data:
   mosquitto-secrets:

@@ -271,6 +271,35 @@ model TrafficRouteHistory {
   @@map("traffic_route_history")
 }
 
+/// One predictor run. slotStarts are UTC starts of the forecast quarter hours.
+model TrafficForecastRun {
+  id          String   @id @default(cuid())
+  cityId      String
+  generatedAt DateTime @db.Timestamptz(3)
+  slotStarts  DateTime[] @db.Timestamptz(3)
+  tauMinutes  Int
+
+  segments TrafficSegmentForecast[]
+
+  @@index([cityId, generatedAt])
+  @@map("traffic_forecast_run")
+}
+
+/// Forecast arrays for one live segment, aligned by index with a run's slotStarts.
+model TrafficSegmentForecast {
+  runId             String
+  cityId            String
+  routeId           String
+  segmentId         String
+  relativeSpeedPcts Int[]
+  speedsKmh         Int[]
+
+  run TrafficForecastRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@id([runId, cityId, routeId, segmentId])
+  @@map("traffic_segment_forecast")
+}
+
 /// One TomTom Traffic Stats export: a typical weekday averaged over `dayCount`
 /// days. Per-slot values everywhere below are scalar lists aligned with
 /// `slotStartMinutes` — index i of every list is the same time slot. The
