@@ -1,14 +1,12 @@
 "use client";
 
-import { RefreshTrafficButton } from "@/app/(app)/map/_components/refresh-traffic-button";
 import { RouteSummaryList } from "@/app/(app)/map/_components/route-summary-list";
 import { CongestionLegend } from "@/components/traffic/congestion-legend";
-import { useNetworkTraffic } from "@/hooks/traffic/use-traffic";
+import { useLiveTraffic } from "@/hooks/traffic/use-live-traffic";
 import { type SerializedForecast } from "@/lib/forecasts/serialization";
 import {
   mergeFeatureCollections,
-  type NetworkTraffic,
-  type RouteFailure,
+  type LiveNetworkTraffic,
   type TrafficFeatureCollection,
 } from "@/lib/traffic/serialization";
 import { classifyCongestion } from "@greenwave/shared";
@@ -30,21 +28,18 @@ const TrafficMap = dynamic(
   },
 );
 
-/** Named by id: a route that failed never delivered its name. */
-const describeFailures = (failures: RouteFailure[]) =>
-  failures.map(({ routeId }) => routeId).join(", ");
-
 export const TrafficMapPanel = ({
   initialTraffic,
   initialForecast,
+  mqttUrl,
   mapboxToken,
 }: {
-  initialTraffic: NetworkTraffic;
+  initialTraffic: LiveNetworkTraffic;
   initialForecast: SerializedForecast | null;
+  mqttUrl: string;
   mapboxToken: string;
 }) => {
-  const query = useNetworkTraffic(initialTraffic);
-  const traffic = query.data ?? initialTraffic;
+  const { traffic, offlineCities } = useLiveTraffic(initialTraffic, mqttUrl);
   const [forecastIndex, setForecastIndex] = useState(0);
 
   /**
@@ -57,7 +52,6 @@ export const TrafficMapPanel = ({
     traffic.routes.map((route) => route.featureCollection),
   );
 
-  const routeCount = traffic.routes.length + traffic.failures.length;
   const forecastSlot = initialForecast?.slotStarts[forecastIndex] ?? null;
   const forecastBySegment = new Map(
     (initialForecast?.segments ?? []).map((segment) => [
@@ -115,28 +109,21 @@ export const TrafficMapPanel = ({
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <p className="text-sm text-muted-foreground">
-          {traffic.routes.length} of {routeCount} routes ·{" "}
-          {featureCollection.features.length} segments
+          {traffic.routes.length} routes · {featureCollection.features.length}{" "}
+          segments
         </p>
-        <RefreshTrafficButton
-          onRefresh={() => void query.refetch()}
-          isFetching={query.isFetching}
-        />
       </div>
 
-      {/* Left beside the map rather than replacing it: stale segments beat a
-          blank canvas, and TomTom rate-limits legitimately. */}
-      {query.isError && (
+      {offlineCities.length > 0 && (
         <p className="text-sm text-destructive">
-          Could not refresh traffic data. Showing the last successful reading.
-          Try Refresh again in a moment.
+          The Aarhus adapter is offline. The map shows the last readings it
+          sent.
         </p>
       )}
 
-      {traffic.failures.length > 0 && (
-        <p className="text-sm text-destructive">
-          {traffic.failures.length} of {routeCount} routes are unavailable (
-          {describeFailures(traffic.failures)}). The rest are shown below.
+      {traffic.routes.length === 0 && (
+        <p className="text-sm text-muted-foreground">
+          No live data yet. Start the adapter and the backend.
         </p>
       )}
 

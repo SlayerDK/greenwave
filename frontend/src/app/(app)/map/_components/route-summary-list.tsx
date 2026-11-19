@@ -1,4 +1,4 @@
-import { type SerializedRouteTraffic } from "@/lib/traffic/serialization";
+import { type SerializedLiveRoute } from "@/lib/traffic/serialization";
 
 /**
  * The data describes Danish roads, so the clock that matters is theirs — and
@@ -25,7 +25,7 @@ const formatDelay = (seconds: number) => {
 export const RouteSummaryList = ({
   routes,
 }: {
-  routes: SerializedRouteTraffic[];
+  routes: SerializedLiveRoute[];
 }) => (
   <ul className="divide-y rounded-lg border">
     {routes.map(({ summary }) => (
@@ -33,9 +33,21 @@ export const RouteSummaryList = ({
         <p className="text-sm font-medium">{summary.routeName}</p>
         <p className="text-xs text-muted-foreground">
           {formatDelay(summary.delayTime)} ·{" "}
-          {timeFormat.format(new Date(summary.fetchedAt))}
+          {timeFormat.format(new Date(summary.observedAt))}
           {summary.passable ? "" : " · impassable"}
         </p>
+        {summary.congestedSince && (
+          <p className="text-xs text-muted-foreground">
+            Congested since{" "}
+            {timeFormat.format(new Date(summary.congestedSince))}
+          </p>
+        )}
+        {summary.slowerThanUsualSince && (
+          <p className="text-xs text-muted-foreground">
+            Slower than usual since{" "}
+            {timeFormat.format(new Date(summary.slowerThanUsualSince))}
+          </p>
+        )}
       </li>
     ))}
   </ul>

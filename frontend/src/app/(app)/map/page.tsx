@@ -19,6 +19,7 @@ export default async function MapPage() {
       <TrafficMapPanel
         initialTraffic={traffic}
         initialForecast={forecast}
+        mqttUrl={env.MQTT_WS_URL}
         mapboxToken={env.MAPBOX_PUBLIC_TOKEN}
       />
     </div>

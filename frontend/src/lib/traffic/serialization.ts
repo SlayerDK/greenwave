@@ -1,8 +1,10 @@
+import type { NetworkRouteFromDb } from "@/lib/traffic/queries";
 import {
   type TomTomPoint,
   type TomTomRouteDetails,
   type TomTomSegment,
 } from "@/lib/traffic/schema";
+import type { RouteState } from "@greenwave/shared";
 import { classifyCongestion, type CongestionLevel } from "@greenwave/shared";
 import {
   type Feature,
@@ -220,3 +222,146 @@ export const serializeNetworkTraffic = (outcomes: readonly RouteOutcome[]) => ({
 });
 
 export type NetworkTraffic = ReturnType<typeof serializeNetworkTraffic>;
+
+export type SerializedLiveRoute = {
+  summary: {
+    cityId: string;
+    routeId: number;
+    routeName: string;
+    passable: boolean;
+    routeLength: number;
+    travelTime: number;
+    typicalTravelTime: number;
+    delayTime: number;
+    observedAt: string;
+    congestedSince: string | null;
+    slowerThanUsualSince: string | null;
+  };
+  featureCollection: TrafficFeatureCollection;
+};
+
+export type LiveNetworkTraffic = { routes: SerializedLiveRoute[] };
+
+const serializeLiveRoute = (
+  row: NetworkRouteFromDb,
+): SerializedLiveRoute | null => {
+  if (!row.state) return null;
+  const segments = row.segments.filter(
+    (
+      segment,
+    ): segment is typeof segment & {
+      state: NonNullable<typeof segment.state>;
+    } => segment.state !== null,
+  );
+
+  return {
+    summary: {
+      cityId: row.cityId,
+      routeId: Number(row.id),
+      routeName: row.name,
+      passable: row.state.passable,
+      routeLength: row.lengthM,
+      travelTime: row.state.travelTimeSec,
+      typicalTravelTime: row.state.typicalTravelTimeSec,
+      delayTime: row.state.delaySec,
+      observedAt: row.state.observedAt.toISOString(),
+      congestedSince: row.state.congestedSince?.toISOString() ?? null,
+      slowerThanUsualSince:
+        row.state.slowerThanUsualSince?.toISOString() ?? null,
+    },
+    featureCollection: {
+      type: "FeatureCollection",
+      bbox: computeBbox(
+        row.segments.map((segment) => segment.coordinates as Position[]),
+      ),
+      features: segments.map((segment) => ({
+        type: "Feature",
+        id: segment.id,
+        geometry: {
+          type: "LineString",
+          coordinates: segment.coordinates as Position[],
+        },
+        properties: {
+          segmentIdStr: segment.id,
+          routeId: Number(row.id),
+          congestion: segment.state.congestion,
+          currentSpeed: segment.state.currentSpeedKmh,
+          typicalSpeed: segment.state.typicalSpeedKmh,
+          averageSpeed: segment.state.averageSpeedKmh,
+          relativeSpeed: segment.state.relativeSpeedPct,
+          segmentLength: segment.lengthM,
+          confidence: segment.state.confidencePct,
+        },
+      })),
+    },
+  };
+};
+
+export const serializeNetworkFromDb = (
+  rows: readonly NetworkRouteFromDb[],
+): LiveNetworkTraffic => ({
+  routes: rows.flatMap((row) => {
+    const route = serializeLiveRoute(row);
+    return route ? [route] : [];
+  }),
+});
+
+export const applyRouteState = (
+  network: LiveNetworkTraffic,
+  state: RouteState,
+): LiveNetworkTraffic => {
+  const routeId = Number(state.routeId);
+  const existing = network.routes.find(
+    (route) => route.summary.routeId === routeId,
+  );
+  if (
+    !existing ||
+    new Date(state.observedAt) <= new Date(existing.summary.observedAt)
+  ) {
+    return network;
+  }
+
+  const segments = new Map(
+    state.segments.map((segment) => [segment.id, segment]),
+  );
+  return {
+    routes: network.routes.map((route) =>
+      route.summary.routeId !== routeId
+        ? route
+        : {
+            summary: {
+              ...route.summary,
+              routeName: state.route.name,
+              passable: state.route.passable,
+              routeLength: state.route.lengthM,
+              travelTime: state.route.travelTimeSec,
+              typicalTravelTime: state.route.typicalTravelTimeSec,
+              delayTime: state.route.delaySec,
+              observedAt: state.observedAt,
+              congestedSince: state.route.congestedSince,
+              slowerThanUsualSince: state.route.slowerThanUsualSince,
+            },
+            featureCollection: {
+              ...route.featureCollection,
+              features: route.featureCollection.features.map((feature) => {
+                const next = segments.get(feature.properties.segmentIdStr);
+                return next
+                  ? {
+                      ...feature,
+                      properties: {
+                        ...feature.properties,
+                        congestion: next.congestion,
+                        currentSpeed: next.currentSpeedKmh,
+                        typicalSpeed: next.typicalSpeedKmh,
+                        averageSpeed: next.averageSpeedKmh,
+                        relativeSpeed: next.relativeSpeedPct,
+                        confidence: next.confidencePct,
+                      },
+                    }
+                  : feature;
+              }),
+            },
+          },
+    ),
+  };
+};

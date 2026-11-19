@@ -12,12 +12,12 @@ CREATE INDEX "traffic_forecast_run_cityId_generatedAt_idx"
 ON "traffic_forecast_run"("cityId", "generatedAt");
 
 CREATE TABLE "traffic_segment_forecast" (
-    "runId" TEXT NOT NOT NULL,
-    "cityId" TEXT NOT NOT NULL,
+    "runId" TEXT NOT NULL,
+    "cityId" TEXT NOT NULL,
     "routeId" TEXT NOT NULL,
     "segmentId" TEXT NOT NULL,
-    "relativeSpeedPcts" INTEGER[],
-    "speedsKmh" INTEGER[],
+    "relativeSpeedPcts" INTEGER[] NOT NULL,
+    "speedsKmh" INTEGER[] NOT NULL,
 
     CONSTRAINT "traffic_segment_forecast_pkey"
     PRIMARY KEY ("runId", "cityId", "routeId", "segmentId")

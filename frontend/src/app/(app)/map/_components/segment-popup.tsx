@@ -10,7 +10,7 @@ import {
   SegmentPopupFrame,
 } from "@/components/traffic/segment-popup-frame";
 import {
-  type SerializedRouteTraffic,
+  type SerializedLiveRoute,
   type TrafficFeatureCollection,
 } from "@/lib/traffic/serialization";
 
@@ -28,7 +28,7 @@ export const SegmentPopup = ({
 }: {
   selection: Selection;
   features: TrafficFeatureCollection["features"];
-  routes: SerializedRouteTraffic[];
+  routes: SerializedLiveRoute[];
   onClose: () => void;
   speedLabel?: "Current" | "Predicted";
 }) => {

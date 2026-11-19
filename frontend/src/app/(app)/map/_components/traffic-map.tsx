@@ -10,7 +10,7 @@ import {
   type MapHit,
 } from "@/components/traffic/traffic-line-map";
 import {
-  type SerializedRouteTraffic,
+  type SerializedLiveRoute,
   type TrafficFeatureCollection,
 } from "@/lib/traffic/serialization";
 import { useState } from "react";
@@ -39,7 +39,7 @@ export const TrafficMap = ({
 }: {
   featureCollection: TrafficFeatureCollection;
   /** Only so the popup can name the road a clicked segment belongs to. */
-  routes: SerializedRouteTraffic[];
+  routes: SerializedLiveRoute[];
   mapboxToken: string;
   speedLabel?: "Current" | "Predicted";
 }) => {
