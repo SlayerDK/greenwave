@@ -79,8 +79,11 @@ export const recordSample = (
     board.set(id, score);
   }
 
+  // Whole km/h for every method, as the forecast stores: actual speeds are
+  // mostly whole numbers, so scoring one method unrounded would skew the MAE.
   score.absoluteError +=
-    Math.abs(sample.predicted.kmh - sample.actual.kmh) * sample.lengthM;
+    Math.abs(Math.round(sample.predicted.kmh) - sample.actual.kmh) *
+    sample.lengthM;
   if (levelOf(sample.predicted) === levelOf(sample.actual)) {
     score.correctLength += sample.lengthM;
   }
@@ -128,28 +131,36 @@ const scoreTarget = (
       lengthM,
     });
 
+  // With no current reading the formula is the profile alone, clamped and
+  // rounded exactly as our method is, so the two differ only by the deviation.
+  const predictFrom = (
+    current: Prediction | null,
+    tauMinutes: number,
+  ): Prediction => ({
+    kmh: forecastValue({
+      horizonMinutes,
+      tauMinutes,
+      profileAtTarget: targetProfile.kmh,
+      profileNow: origin.profile.kmh,
+      current: current?.kmh ?? null,
+      maximum: profile.maxKmh,
+    }),
+    rel: forecastValue({
+      horizonMinutes,
+      tauMinutes,
+      profileAtTarget: targetProfile.rel,
+      profileNow: origin.profile.rel,
+      current: current?.rel ?? null,
+      maximum: profile.maxRel,
+    }),
+  });
+
   record("persistence", "", origin.bucket);
-  record("profile", "", targetProfile);
+  record("profile", "", predictFrom(null, 1));
   record("tomtom-typical", "", typicalPrediction(actual));
 
   for (const tauMinutes of BACKTEST_TAUS) {
-    const shared = { horizonMinutes, tauMinutes };
-    record("ours", tauMinutes, {
-      kmh: forecastValue({
-        ...shared,
-        profileAtTarget: targetProfile.kmh,
-        profileNow: origin.profile.kmh,
-        current: origin.bucket.kmh,
-        maximum: profile.maxKmh,
-      }),
-      rel: forecastValue({
-        ...shared,
-        profileAtTarget: targetProfile.rel,
-        profileNow: origin.profile.rel,
-        current: origin.bucket.rel,
-        maximum: profile.maxRel,
-      }),
-    });
+    record("ours", tauMinutes, predictFrom(origin.bucket, tauMinutes));
   }
 };
 

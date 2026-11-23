@@ -28,7 +28,7 @@ Prediction meets the live pipeline only in Postgres: it never touches MQTT.
 | ---------------------- | ------------------------------------ |
 | `DATABASE_URL`         | `postgres:5432` in Compose           |
 | `CITY_IDS`             | `aarhus`. Keeps `load-*` cities out  |
-| `FORECAST_TAU_MINUTES` | from the backtest; `60` until then   |
+| `FORECAST_TAU_MINUTES` | `15`, chosen by the 23 Nov backtest  |
 | `HISTORY_DAYS`         | `28`: how far back the profile looks |
 
 ## Files

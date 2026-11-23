@@ -12,7 +12,8 @@ export const env = z
           .map((city) => city.trim())
           .filter(Boolean),
       ),
-    FORECAST_TAU_MINUTES: z.coerce.number().int().positive().default(60),
+    // The lowest error in docs/report/backtest-2026-11-23.csv.
+    FORECAST_TAU_MINUTES: z.coerce.number().int().positive().default(15),
     HISTORY_DAYS: z.coerce.number().int().positive().default(28),
     LOG_LEVEL: z.string().default("info"),
   })

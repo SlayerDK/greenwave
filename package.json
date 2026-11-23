@@ -18,6 +18,7 @@
     "db:generate": "pnpm --filter @greenwave/database generate",
     "db:seed": "pnpm --filter @greenwave/database seed",
     "db:import-traffic-stats": "pnpm --filter @greenwave/frontend import-traffic-stats",
+    "db:import-history": "pnpm --filter @greenwave/predictor import-history",
     "build-vercel": "prisma generate && prisma migrate deploy && next build",
     "preinstall": "npx only-allow pnpm",
     "postinstall": "pnpm --filter @greenwave/database generate",

@@ -7,6 +7,7 @@
     "start": "node --import tsx src/main.ts",
     "backtest": "tsx --env-file=../.env src/backtest.ts",
     "link-routes": "tsx --env-file=../.env scripts/link-traffic-stats-routes.ts",
+    "import-history": "tsx --env-file=../.env scripts/import-history.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
