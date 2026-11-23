@@ -4,17 +4,22 @@
   "type": "module",
   "scripts": {
     "dev": "tsx --env-file=../.env src/main.ts",
+    "start": "node --import tsx src/main.ts",
+    "backtest": "tsx --env-file=../.env src/backtest.ts",
+    "link-routes": "tsx --env-file=../.env scripts/link-traffic-stats-routes.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@greenwave/database": "workspace:*",
     "@greenwave/shared": "workspace:*",
     "croner": "catalog:",
+    "pino": "catalog:",
     "tsx": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

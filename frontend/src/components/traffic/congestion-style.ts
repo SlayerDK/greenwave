@@ -31,6 +31,9 @@ export type CongestionStyle = (typeof CONGESTION_STYLE)[number];
 /** Only reachable if `classifyCongestion` gains a level this file has not. */
 const UNKNOWN_COLOR = "#94a3b8";
 
+/** A reading too old to trust, or a segment with no forecast. */
+export const STALE_STYLE = { color: "#6b7280", label: "No recent data" };
+
 export const congestionLabel = (level: CongestionLevel): string =>
   CONGESTION_STYLE.find((entry) => entry.level === level)?.label ?? "Unknown";
 
@@ -45,11 +48,17 @@ export const trafficLineLayer: LayerProps = {
   type: "line",
   layout: { "line-cap": "round", "line-join": "round" },
   paint: {
+    // `/history` features carry no `stale`, hence the `false` fallback.
     "line-color": [
-      "match",
-      ["get", "congestion"],
-      ...CONGESTION_STYLE.flatMap(({ level, color }) => [level, color]),
-      UNKNOWN_COLOR,
+      "case",
+      ["boolean", ["get", "stale"], false],
+      STALE_STYLE.color,
+      [
+        "match",
+        ["get", "congestion"],
+        ...CONGESTION_STYLE.flatMap(({ level, color }) => [level, color]),
+        UNKNOWN_COLOR,
+      ],
     ],
     "line-width": ["interpolate", ["linear"], ["zoom"], 10, 2, 15, 6],
     // Positive offsets sit right of the drawing direction — the side Danish

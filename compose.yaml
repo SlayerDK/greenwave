@@ -96,6 +96,27 @@ services:
       DATABASE_URL: postgresql://greenwave:greenwave@postgres:5432/greenwave
       CITY_IDS: aarhus
       FORECAST_TAU_MINUTES: ${FORECAST_TAU_MINUTES:-60}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+    restart: unless-stopped
+
+  # MQTT_WS_URL is the browser's address, so never mosquitto:9001, which only
+  # resolves inside the Docker network. Variables are listed rather than using
+  # env_file, which would also hand the app the MQTT passwords.
+  frontend:
+    build: { context: ., dockerfile: frontend/Dockerfile }
+    init: true
+    environment:
+      DATABASE_URL: postgresql://greenwave:greenwave@postgres:5432/greenwave
+      BETTER_AUTH_URL: http://localhost:3000
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?set it in .env}
+      MAPBOX_PUBLIC_TOKEN: ${MAPBOX_PUBLIC_TOKEN:?set it in .env}
+      MQTT_WS_URL: ws://localhost:9001
+      # Still required by env.ts until phase D removes them; any value works here.
+      TOMTOM_API_KEY: ${TOMTOM_API_KEY:-unused}
+      CRON_SECRET: ${CRON_SECRET:-unused-in-compose-0000}
+    ports: ["3000:3000"]
     depends_on:
       migrate: { condition: service_completed_successfully }
     restart: unless-stopped

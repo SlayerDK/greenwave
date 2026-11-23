@@ -244,7 +244,7 @@ After A, the app makes no TomTom call from `/map`; the cron path is the last one
 
 ## Pitfalls
 
-- **Never `useQuery` over an action**, and never a poll: CLAUDE.md. The only data source after first paint is MQTT.
+- **Never `useQuery` over an action**, and never a poll of traffic: CLAUDE.md. Live traffic after first paint comes only from MQTT. The one exception is the forecast, which exists only in Postgres: `useLatestForecast` reads `/api/forecast` a minute after each predictor run.
 - **`initialData` cannot overwrite a cache entry that already has data.** If the RSC re-renders (navigation back to `/map`) the cache keeps its newer MQTT data. That is what we want; do not "fix" it with `invalidateQueries`.
 - **Do not `import mqtt` at module level** in a client component: it would run during SSR and enter the first bundle.
 - **`MQTT_WS_URL` is the browser's address.** In Compose it is `ws://localhost:9001`, never `ws://mosquitto:9001`, which only resolves inside the Docker network.

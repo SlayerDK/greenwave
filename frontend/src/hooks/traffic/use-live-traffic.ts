@@ -2,15 +2,11 @@
 
 import {
   applyRouteState,
+  parseLiveMessage,
+  updateOfflineCities,
   type LiveNetworkTraffic,
 } from "@/lib/traffic/serialization";
-import {
-  ALL_STATES,
-  ALL_STATUSES,
-  adapterStatusSchema,
-  cityOfStatusTopic,
-  stateSchema,
-} from "@greenwave/shared";
+import { ALL_STATES, ALL_STATUSES } from "@greenwave/shared";
 import { skipToken, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
@@ -41,35 +37,17 @@ export const useLiveTraffic = (
       client = connected;
       connected.subscribe([ALL_STATES, ALL_STATUSES], { qos: 0 });
       connected.on("message", (topic, payload) => {
-        if (payload.length === 0) return;
-        let value: unknown;
-        try {
-          value = JSON.parse(payload.toString());
-        } catch {
-          return;
+        const message = parseLiveMessage(topic, payload.toString());
+        if (message?.kind === "state") {
+          queryClient.setQueryData<LiveNetworkTraffic>(
+            LIVE_TRAFFIC_QUERY_KEY,
+            (old) => old && applyRouteState(old, message.route),
+          );
+        } else if (message) {
+          setOfflineCities((cities) =>
+            updateOfflineCities(cities, message.cityId, message.offline),
+          );
         }
-
-        if (topic.endsWith("/state")) {
-          const parsed = stateSchema.safeParse(value);
-          if (parsed.success) {
-            queryClient.setQueryData<LiveNetworkTraffic>(
-              LIVE_TRAFFIC_QUERY_KEY,
-              (old) => (old ? applyRouteState(old, parsed.data) : old),
-            );
-          }
-          return;
-        }
-
-        const parsed = adapterStatusSchema.safeParse(value);
-        if (!parsed.success) return;
-        const cityId = cityOfStatusTopic(topic);
-        setOfflineCities((cities) =>
-          parsed.data.status === "offline"
-            ? cities.includes(cityId)
-              ? cities
-              : [...cities, cityId]
-            : cities.filter((city) => city !== cityId),
-        );
       });
     });
 
@@ -79,5 +57,5 @@ export const useLiveTraffic = (
     };
   }, [mqttUrl, queryClient]);
 
-  return { ...query, traffic: query.data ?? initialData, offlineCities };
+  return { traffic: query.data ?? initialData, offlineCities };
 };

@@ -271,6 +271,17 @@ model TrafficRouteHistory {
   @@map("traffic_route_history")
 }
 
+/// Which Traffic Stats route a live route corresponds to. No relation: the
+/// Traffic Stats import replaces its routes wholesale, which would cascade.
+model TrafficStatsRouteLink {
+  cityId       String
+  routeId      String
+  statsRouteId Int
+
+  @@id([cityId, routeId])
+  @@map("traffic_stats_route_link")
+}
+
 /// One predictor run. slotStarts are UTC starts of the forecast quarter hours.
 model TrafficForecastRun {
   id          String   @id @default(cuid())
