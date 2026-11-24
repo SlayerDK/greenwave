@@ -1,9 +1,18 @@
+import type { NetworkRouteFromDb } from "@/lib/traffic/queries";
 import {
   type TomTomPoint,
   type TomTomRouteDetails,
   type TomTomSegment,
 } from "@/lib/traffic/schema";
-import { classifyCongestion, type CongestionLevel } from "@greenwave/shared";
+import type { RouteState } from "@greenwave/shared";
+import {
+  adapterStatusSchema,
+  cityOfStatusTopic,
+  classifyCongestion,
+  STATE_TTL_SECONDS,
+  stateSchema,
+  type CongestionLevel,
+} from "@greenwave/shared";
 import {
   type Feature,
   type FeatureCollection,
@@ -53,6 +62,8 @@ export type TrafficSegmentProperties = {
   relativeSpeed: number;
   segmentLength: number;
   confidence: number;
+  /** Drawn grey: the reading is too old, or the segment has no forecast. */
+  stale?: boolean;
 };
 
 /**
@@ -123,8 +134,6 @@ export const computeBbox = (
 /**
  * Route metadata stays beside the collection rather than becoming a foreign
  * member on it, so what reaches a map source is plainly RFC 7946 conformant.
- *
- * Intentionally unannotated: `SerializedRouteTraffic` is derived from it.
  */
 export const serializeRouteTraffic = (
   details: TomTomRouteDetails,
@@ -156,8 +165,6 @@ export const serializeRouteTraffic = (
     featureCollection,
   };
 };
-
-export type SerializedRouteTraffic = ReturnType<typeof serializeRouteTraffic>;
 
 /**
  * Unions the routes' own boxes rather than re-walking every coordinate: each
@@ -205,9 +212,6 @@ export type RouteOutcome =
 
 export type RouteFailure = { routeId: number; error: string };
 
-/**
- * Intentionally unannotated: `NetworkTraffic` is derived from it.
- */
 export const serializeNetworkTraffic = (outcomes: readonly RouteOutcome[]) => ({
   routes: outcomes.flatMap((outcome) =>
     outcome.ok
@@ -219,4 +223,241 @@ export const serializeNetworkTraffic = (outcomes: readonly RouteOutcome[]) => ({
   ),
 });
 
-export type NetworkTraffic = ReturnType<typeof serializeNetworkTraffic>;
+export type SerializedLiveRoute = {
+  summary: {
+    cityId: string;
+    routeId: number;
+    routeName: string;
+    passable: boolean;
+    routeLength: number;
+    travelTime: number;
+    typicalTravelTime: number;
+    delayTime: number;
+    observedAt: string;
+    congestedSince: string | null;
+    slowerThanUsualSince: string | null;
+  };
+  featureCollection: TrafficFeatureCollection;
+};
+
+export type LiveNetworkTraffic = { routes: SerializedLiveRoute[] };
+
+const serializeLiveRoute = (
+  row: NetworkRouteFromDb,
+): SerializedLiveRoute | null => {
+  if (!row.state) return null;
+  const segments = row.segments.filter(
+    (
+      segment,
+    ): segment is typeof segment & {
+      state: NonNullable<typeof segment.state>;
+    } => segment.state !== null,
+  );
+
+  return {
+    summary: {
+      cityId: row.cityId,
+      routeId: Number(row.id),
+      routeName: row.name,
+      passable: row.state.passable,
+      routeLength: row.lengthM,
+      travelTime: row.state.travelTimeSec,
+      typicalTravelTime: row.state.typicalTravelTimeSec,
+      delayTime: row.state.delaySec,
+      observedAt: row.state.observedAt.toISOString(),
+      congestedSince: row.state.congestedSince?.toISOString() ?? null,
+      slowerThanUsualSince:
+        row.state.slowerThanUsualSince?.toISOString() ?? null,
+    },
+    featureCollection: {
+      type: "FeatureCollection",
+      bbox: computeBbox(
+        segments.map((segment) => segment.coordinates as Position[]),
+      ),
+      features: segments.map((segment) => ({
+        type: "Feature",
+        id: segment.id,
+        geometry: {
+          type: "LineString",
+          coordinates: segment.coordinates as Position[],
+        },
+        properties: {
+          segmentIdStr: segment.id,
+          routeId: Number(row.id),
+          congestion: segment.state.congestion,
+          currentSpeed: segment.state.currentSpeedKmh,
+          typicalSpeed: segment.state.typicalSpeedKmh,
+          averageSpeed: segment.state.averageSpeedKmh,
+          relativeSpeed: segment.state.relativeSpeedPct,
+          segmentLength: segment.lengthM,
+          confidence: segment.state.confidencePct,
+        },
+      })),
+    },
+  };
+};
+
+export const serializeNetworkFromDb = (
+  rows: readonly NetworkRouteFromDb[],
+): LiveNetworkTraffic => ({
+  routes: rows.flatMap((row) => {
+    const route = serializeLiveRoute(row);
+    return route ? [route] : [];
+  }),
+});
+
+/**
+ * A state message carries its own geometry, so it builds a whole route: one
+ * that was missing from the first paint can join the map without a reload.
+ */
+export const serializeRouteState = (state: RouteState): SerializedLiveRoute => {
+  const routeId = Number(state.routeId);
+
+  return {
+    summary: {
+      cityId: state.cityId,
+      routeId,
+      routeName: state.route.name,
+      passable: state.route.passable,
+      routeLength: state.route.lengthM,
+      travelTime: state.route.travelTimeSec,
+      typicalTravelTime: state.route.typicalTravelTimeSec,
+      delayTime: state.route.delaySec,
+      observedAt: new Date(state.observedAt).toISOString(),
+      congestedSince: state.route.congestedSince
+        ? new Date(state.route.congestedSince).toISOString()
+        : null,
+      slowerThanUsualSince: state.route.slowerThanUsualSince
+        ? new Date(state.route.slowerThanUsualSince).toISOString()
+        : null,
+    },
+    featureCollection: {
+      type: "FeatureCollection",
+      bbox: computeBbox(state.segments.map((segment) => segment.coordinates)),
+      features: state.segments.map((segment) => ({
+        type: "Feature",
+        id: segment.id,
+        geometry: { type: "LineString", coordinates: segment.coordinates },
+        properties: {
+          segmentIdStr: segment.id,
+          routeId,
+          congestion: segment.congestion,
+          currentSpeed: segment.currentSpeedKmh,
+          typicalSpeed: segment.typicalSpeedKmh,
+          averageSpeed: segment.averageSpeedKmh,
+          relativeSpeed: segment.relativeSpeedPct,
+          segmentLength: segment.lengthM,
+          confidence: segment.confidencePct,
+        },
+      })),
+    },
+  };
+};
+
+/**
+ * Replaces a route only with a newer reading and appends one it has not seen.
+ * Returns the same object for a no-op, so React and mapbox do no work.
+ */
+export const applyRouteState = (
+  network: LiveNetworkTraffic,
+  next: SerializedLiveRoute,
+): LiveNetworkTraffic => {
+  const isSameRoute = ({ summary }: SerializedLiveRoute) =>
+    summary.cityId === next.summary.cityId &&
+    summary.routeId === next.summary.routeId;
+
+  const existing = network.routes.find(isSameRoute);
+  if (!existing) return { routes: [...network.routes, next] };
+
+  const isNewer =
+    new Date(next.summary.observedAt) > new Date(existing.summary.observedAt);
+  if (!isNewer) return network;
+
+  return {
+    routes: network.routes.map((route) => (isSameRoute(route) ? next : route)),
+  };
+};
+
+const parseJson = (text: string): unknown => {
+  try {
+    return JSON.parse(text);
+  } catch {
+    return undefined;
+  }
+};
+
+/**
+ * Broker input is untrusted, so anything malformed is null. That includes the
+ * empty payload of a cleared retained topic.
+ */
+export const parseLiveMessage = (topic: string, text: string) => {
+  const value = parseJson(text);
+
+  if (topic.endsWith("/state")) {
+    const state = stateSchema.safeParse(value);
+    return state.success
+      ? { kind: "state" as const, route: serializeRouteState(state.data) }
+      : null;
+  }
+
+  const status = adapterStatusSchema.safeParse(value);
+  return status.success
+    ? {
+        kind: "status" as const,
+        cityId: cityOfStatusTopic(topic),
+        offline: status.data.status === "offline",
+      }
+    : null;
+};
+
+/** Returns the same array when nothing changed, so React skips the render. */
+export const updateOfflineCities = (
+  cities: string[],
+  cityId: string,
+  offline: boolean,
+) => {
+  if (cities.includes(cityId) === offline) return cities;
+
+  return offline
+    ? [...cities, cityId]
+    : cities.filter((city) => city !== cityId);
+};
+
+/** Exactly `STATE_TTL_SECONDS` old still counts as fresh. */
+export const isRouteStale = (observedAt: string, now: number) =>
+  now - new Date(observedAt).getTime() > STATE_TTL_SECONDS * 1000;
+
+/**
+ * A string so the clock's tick changes it only when a route actually crosses
+ * the threshold. Otherwise every tick would re-upload ~1,100 segments to mapbox.
+ */
+export const staleRouteKey = (
+  routes: readonly SerializedLiveRoute[],
+  now: number,
+) =>
+  routes
+    .filter(({ summary }) => isRouteStale(summary.observedAt, now))
+    .map(({ summary }) => summary.routeId)
+    .join(",");
+
+export const toLiveFeatureCollection = (
+  routes: readonly SerializedLiveRoute[],
+  staleKey: string,
+) => {
+  const staleRouteIds = new Set(
+    staleKey.split(",").filter(Boolean).map(Number),
+  );
+
+  return mergeFeatureCollections(
+    routes.map(({ summary, featureCollection }) => ({
+      ...featureCollection,
+      features: featureCollection.features.map((feature) => ({
+        ...feature,
+        properties: {
+          ...feature.properties,
+          stale: staleRouteIds.has(summary.routeId),
+        },
+      })),
+    })),
+  );
+};

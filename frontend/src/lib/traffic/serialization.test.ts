@@ -1,12 +1,22 @@
 import edwinRahrsFixture from "@/lib/traffic/fixtures/route-details-313727.json";
 import routeDetailsFixture from "@/lib/traffic/fixtures/route-details.json";
+import { type NetworkRouteFromDb } from "@/lib/traffic/queries";
 import { tomtomRouteDetailsSchema } from "@/lib/traffic/schema";
 import {
+  applyRouteState,
+  isRouteStale,
   mergeFeatureCollections,
+  parseLiveMessage,
+  serializeNetworkFromDb,
   serializeNetworkTraffic,
+  serializeRouteState,
   serializeRouteTraffic,
+  staleRouteKey,
+  toLiveFeatureCollection,
   toRouteLabel,
+  updateOfflineCities,
 } from "@/lib/traffic/serialization";
+import { STATE_TTL_SECONDS, type RouteState } from "@greenwave/shared";
 import { describe, expect, it } from "vitest";
 
 const FETCHED_AT = "2026-09-28T12:00:00.000Z";
@@ -186,5 +196,203 @@ describe("serializeNetworkTraffic", () => {
 
     expect(network.routes).toEqual([]);
     expect(network.failures).toHaveLength(1);
+  });
+});
+
+const OBSERVED_AT = "2026-11-23T10:00:00.000Z";
+const COORDINATES: [number, number][] = [
+  [10.21815, 56.18899],
+  [10.21801, 56.18894],
+];
+
+const routeState = (
+  observedAt = OBSERVED_AT,
+  routeId = "56634",
+): RouteState => ({
+  eventId: `aarhus:${routeId}:${observedAt}`,
+  schemaVersion: 1,
+  source: "fixture",
+  cityId: "aarhus",
+  routeId,
+  observedAt,
+  route: {
+    name: "Ringvejen sydgående",
+    lengthM: 9637,
+    travelTimeSec: 1017,
+    typicalTravelTimeSec: 977,
+    delaySec: 323,
+    passable: true,
+    congestedSince: OBSERVED_AT,
+    slowerThanUsualSince: null,
+  },
+  segments: [
+    {
+      id: "1170420026289651713",
+      lengthM: 10,
+      currentSpeedKmh: 38,
+      averageSpeedKmh: 35,
+      typicalSpeedKmh: 35,
+      relativeSpeedPct: 88,
+      confidencePct: 100,
+      coordinates: COORDINATES,
+      congestion: "light",
+    },
+  ],
+});
+
+const routeRow = {
+  cityId: "aarhus",
+  id: "56634",
+  name: "Ringvejen sydgående",
+  lengthM: 9637,
+  state: {
+    passable: true,
+    travelTimeSec: 1017,
+    typicalTravelTimeSec: 977,
+    delaySec: 323,
+    observedAt: new Date(OBSERVED_AT),
+    congestedSince: new Date(OBSERVED_AT),
+    slowerThanUsualSince: null,
+  },
+  segments: [
+    {
+      id: "1170420026289651713",
+      lengthM: 10,
+      coordinates: COORDINATES,
+      state: {
+        congestion: "light",
+        currentSpeedKmh: 38,
+        typicalSpeedKmh: 35,
+        averageSpeedKmh: 35,
+        relativeSpeedPct: 88,
+        confidencePct: 100,
+      },
+    },
+  ],
+} as unknown as NetworkRouteFromDb;
+
+describe("serializeRouteState", () => {
+  it("builds the same route as the first paint from Postgres", () => {
+    const [fromDb] = serializeNetworkFromDb([routeRow]).routes;
+
+    expect(serializeRouteState(routeState())).toEqual(fromDb);
+  });
+
+  it("keeps coordinates as [longitude, latitude] and sets the bbox", () => {
+    const route = serializeRouteState(routeState());
+
+    expect(route.featureCollection.features[0].geometry.coordinates).toEqual(
+      COORDINATES,
+    );
+    expect(route.featureCollection.bbox).toEqual([
+      10.21801, 56.18894, 10.21815, 56.18899,
+    ]);
+  });
+});
+
+describe("applyRouteState", () => {
+  const current = serializeRouteState(routeState());
+  const network = { routes: [current] };
+
+  it("replaces a route with a newer reading", () => {
+    const next = serializeRouteState(routeState("2026-11-23T10:01:00.000Z"));
+
+    expect(applyRouteState(network, next).routes).toEqual([next]);
+  });
+
+  it("returns the same object for an older or equal reading", () => {
+    const older = serializeRouteState(routeState("2026-11-23T09:59:00.000Z"));
+
+    expect(applyRouteState(network, older)).toBe(network);
+    expect(applyRouteState(network, current)).toBe(network);
+  });
+
+  it("appends a route the first paint did not have", () => {
+    const unknown = serializeRouteState(routeState(OBSERVED_AT, "313727"));
+
+    expect(applyRouteState(network, unknown).routes).toEqual([
+      current,
+      unknown,
+    ]);
+    expect(applyRouteState({ routes: [] }, current).routes).toEqual([current]);
+  });
+});
+
+describe("parseLiveMessage", () => {
+  const stateTopic = "greenwave/v1/aarhus/routes/56634/state";
+  const statusTopic = "greenwave/v1/aarhus/adapter/status";
+
+  it("turns a valid state into a route", () => {
+    const message = parseLiveMessage(stateTopic, JSON.stringify(routeState()));
+
+    expect(message).toEqual({
+      kind: "state",
+      route: serializeRouteState(routeState()),
+    });
+  });
+
+  it("ignores a cleared topic, broken JSON and a wrong shape", () => {
+    expect(parseLiveMessage(stateTopic, "")).toBeNull();
+    expect(parseLiveMessage(stateTopic, "{not json")).toBeNull();
+    expect(parseLiveMessage(stateTopic, '{"routeId":1}')).toBeNull();
+    expect(parseLiveMessage(statusTopic, "{}")).toBeNull();
+  });
+
+  it("reads which city's adapter went offline", () => {
+    const message = parseLiveMessage(
+      statusTopic,
+      JSON.stringify({
+        schemaVersion: 1,
+        cityId: "aarhus",
+        status: "offline",
+        at: OBSERVED_AT,
+      }),
+    );
+
+    expect(message).toEqual({
+      kind: "status",
+      cityId: "aarhus",
+      offline: true,
+    });
+  });
+});
+
+describe("updateOfflineCities", () => {
+  it("adds and removes a city", () => {
+    expect(updateOfflineCities([], "aarhus", true)).toEqual(["aarhus"]);
+    expect(updateOfflineCities(["aarhus"], "aarhus", false)).toEqual([]);
+  });
+
+  it("returns the same array when nothing changed", () => {
+    const cities = ["aarhus"];
+
+    expect(updateOfflineCities(cities, "aarhus", true)).toBe(cities);
+    expect(updateOfflineCities(cities, "odense", false)).toBe(cities);
+  });
+});
+
+describe("stale routes", () => {
+  const observed = Date.parse(OBSERVED_AT);
+  const ttlMs = STATE_TTL_SECONDS * 1000;
+
+  it("is fresh at exactly the TTL and stale one second past it", () => {
+    expect(isRouteStale(OBSERVED_AT, observed + ttlMs)).toBe(false);
+    expect(isRouteStale(OBSERVED_AT, observed + ttlMs + 1000)).toBe(true);
+  });
+
+  it("marks only the stale route's features", () => {
+    const old = serializeRouteState(routeState(OBSERVED_AT, "56634"));
+    const fresh = serializeRouteState(
+      routeState("2026-11-23T10:05:00.000Z", "313727"),
+    );
+    const routes = [old, fresh];
+    const key = staleRouteKey(routes, observed + ttlMs + 1000);
+    const { features } = toLiveFeatureCollection(routes, key);
+
+    expect(key).toBe("56634");
+    expect(features.map((item) => item.properties.stale)).toEqual([
+      true,
+      false,
+    ]);
   });
 });

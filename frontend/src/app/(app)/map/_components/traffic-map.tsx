@@ -1,6 +1,8 @@
 "use client";
 
+import { MapSyncBinding } from "@/app/(app)/map/_components/map-sync-binding";
 import { SegmentPopup } from "@/app/(app)/map/_components/segment-popup";
+import { type MapSync } from "@/app/(app)/map/_lib/map-sync";
 import {
   clickedSegmentSchema,
   type Selection,
@@ -10,7 +12,7 @@ import {
   type MapHit,
 } from "@/components/traffic/traffic-line-map";
 import {
-  type SerializedRouteTraffic,
+  type SerializedLiveRoute,
   type TrafficFeatureCollection,
 } from "@/lib/traffic/serialization";
 import { useState } from "react";
@@ -35,11 +37,15 @@ export const TrafficMap = ({
   featureCollection,
   routes,
   mapboxToken,
+  mapSync,
+  speedLabel = "Current",
 }: {
   featureCollection: TrafficFeatureCollection;
   /** Only so the popup can name the road a clicked segment belongs to. */
-  routes: SerializedRouteTraffic[];
+  routes: SerializedLiveRoute[];
   mapboxToken: string;
+  mapSync: MapSync;
+  speedLabel?: "Current" | "Predicted";
 }) => {
   const [selection, setSelection] = useState<Selection | null>(null);
 
@@ -49,11 +55,13 @@ export const TrafficMap = ({
       mapboxToken={mapboxToken}
       onHit={(hit) => setSelection(toSelection(hit))}
     >
+      <MapSyncBinding mapSync={mapSync} />
       {selection && (
         <SegmentPopup
           selection={selection}
           features={featureCollection.features}
           routes={routes}
+          speedLabel={speedLabel}
           onClose={() => setSelection(null)}
         />
       )}

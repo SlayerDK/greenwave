@@ -1,18 +1,15 @@
 import "server-only";
 
 import { requireAuth } from "@/lib/auth/session";
+import { prisma } from "@/lib/config/prisma";
+import { trafficQueries } from "@/lib/traffic/queries";
 import {
-  serializeNetworkTraffic,
-  type NetworkTraffic,
+  serializeNetworkFromDb,
+  type LiveNetworkTraffic,
 } from "@/lib/traffic/serialization";
-import { readMonitoredRoutes } from "@/lib/traffic/tomtom-service";
 
-/**
- * An unreachable route comes back as a `failures` entry (see `readRoute` in
- * tomtom-service.ts), so `map/error.tsx` is reached only by a genuine fault.
- */
-export const getNetworkTraffic = async (): Promise<NetworkTraffic> => {
+export const getNetworkTraffic = async (): Promise<LiveNetworkTraffic> => {
   await requireAuth();
 
-  return serializeNetworkTraffic(await readMonitoredRoutes());
+  return serializeNetworkFromDb(await trafficQueries.network(prisma, "aarhus"));
 };

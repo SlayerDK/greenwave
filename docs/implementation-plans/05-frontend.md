@@ -227,7 +227,7 @@ Needs [06](06-predictor.md)'s `TrafficForecastRun` and `TrafficSegmentForecast`.
 - [ ] `src/lib/forecasts/` as a domain: `queries.ts` (the newest run for the city, with its segment rows), `serialization.ts` (`serializeForecast`, deriving `SerializedForecast`), `data-access.ts` (`getLatestForecast()` behind `requireAuth()`, `null` when there is none). No fallow change: the `data` zone's patterns already match `src/lib/*/`.
 - [ ] Payload: `generatedAt`, `slotStarts: string[]`, and per segment `{ routeId, segmentId, relativeSpeedPcts: number[], speedsKmh: number[] }` aligned with `slotStarts`. About 1,100 × at most 95 integers, the same pattern `/history` uses.
 - [ ] `map/page.tsx` reads it in parallel with the network (`Promise.all`) and passes it to the panel.
-- [ ] The slider: "Now" plus every remaining slot until local midnight, labelled in Copenhagen time. At "Now" the map is live; at a slot, segments recolour from `classifyCongestion({ currentSpeed: speedsKmh[i], relativeSpeed: relativeSpeedPcts[i] })`, live updates keep landing in the cache but are not drawn, and the popup shows the predicted km/h. A label says "Forecast made at 14:17". A segment with no forecast is drawn in the stale colour. Use the URL (`nuqs`, already installed) for the slot, so a reload keeps it.
+- [ ] The horizon control lists every remaining slot until local midnight, labelled in Copenhagen time. Keep the live map as the actual reading at all times and add a separate predicted map beside it; the control recolours only the predicted map from `classifyCongestion({ currentSpeed: speedsKmh[i], relativeSpeed: relativeSpeedPcts[i] })`. The predicted popup shows predicted km/h. A label says "Forecast made at 14:17". A segment with no forecast is drawn in the stale colour. Use synchronized initial bounds and keep pan/zoom visually aligned where practical. Use the URL (`nuqs`, already installed) for the horizon, so a reload keeps it.
 - [ ] Hide the slider when there is no forecast or the newest is older than an hour.
 
 ## Phase D · Remove the proof of concept (Christian, 17–20 Nov)
@@ -244,7 +244,7 @@ After A, the app makes no TomTom call from `/map`; the cron path is the last one
 
 ## Pitfalls
 
-- **Never `useQuery` over an action**, and never a poll: CLAUDE.md. The only data source after first paint is MQTT.
+- **Never `useQuery` over an action**, and never a poll of traffic: CLAUDE.md. Live traffic after first paint comes only from MQTT. The one exception is the forecast, which exists only in Postgres: `useLatestForecast` reads `/api/forecast` a minute after each predictor run.
 - **`initialData` cannot overwrite a cache entry that already has data.** If the RSC re-renders (navigation back to `/map`) the cache keeps its newer MQTT data. That is what we want; do not "fix" it with `invalidateQueries`.
 - **Do not `import mqtt` at module level** in a client component: it would run during SSR and enter the first bundle.
 - **`MQTT_WS_URL` is the browser's address.** In Compose it is `ws://localhost:9001`, never `ws://mosquitto:9001`, which only resolves inside the Docker network.

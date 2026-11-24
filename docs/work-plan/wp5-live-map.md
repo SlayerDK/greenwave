@@ -52,5 +52,8 @@ useEffect(() => {
 - [ ] `getLatestForecast()` in a new `src/lib/forecasts/` domain (`queries.ts`, `data-access.ts`, `serialization.ts`), read by the map page.
 - [ ] The slider runs from "Now" through every remaining 15-minute slot until midnight. Forecast slots recolour segments with `classifyCongestion`; the popup shows predicted km/h, and a label says when the forecast was made.
 - [ ] Payload: `slotStarts` plus integer arrays per segment aligned with it (about 1,100 × ≤ 95), the same pattern `/history` uses.
+- [ ] Use the forecast as a separate right-hand map beside the live map. A horizon
+      control changes only the prediction map; the live map keeps the latest MQTT
+      reading. Pan and zoom should stay aligned between the two maps.
 
 **Done when** the map updates every minute without a reload, turns grey when the pipeline stops, the slider recolours it, and the frontend section has a draft.

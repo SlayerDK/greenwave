@@ -106,7 +106,7 @@ Meetings: 30-minute planning on Mondays, 15-minute check-in on Thursdays.
 | History          | 15-minute buckets, about 100,000 rows a day. Every Traffic Stats slot lines up with a quarter hour            |
 | Recording        | The Vercel cron, frozen from 2 Nov until after the hand-in. The new pipeline records nothing before 16 Nov    |
 | Prediction       | A typical-speed profile plus today's fading deviation, in TypeScript. Explainable, with two baselines to beat |
-| Forecasts on map | A slider over every 15-minute slot until midnight, local time                                                 |
+| Forecasts on map | A side-by-side live/prediction view with a horizon slider from 15 minutes to rest of day, local time          |
 | Route status     | Two flags: `congestedSince` (matches the colours) and `slowerThanUsualSince` (worse than a normal day)        |
 | TomTom polling   | Every minute. Development uses recorded fixtures                                                              |
 | Pipeline scale   | One backend, fixed MQTT identity and normal subscription; multiple workers are future work                    |

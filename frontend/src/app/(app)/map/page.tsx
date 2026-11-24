@@ -1,9 +1,16 @@
 import { TrafficMapPanel } from "@/app/(app)/map/_components/traffic-map-panel";
 import { env } from "@/lib/config/env";
+import { getLatestForecast } from "@/lib/forecasts/data-access";
 import { getNetworkTraffic } from "@/lib/traffic/data-access";
 
+/** Outside the component: render functions must stay pure for the compiler. */
+const readClock = () => Date.now();
+
 export default async function MapPage() {
-  const traffic = await getNetworkTraffic();
+  const [traffic, forecast] = await Promise.all([
+    getNetworkTraffic(),
+    getLatestForecast(),
+  ]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -14,6 +21,9 @@ export default async function MapPage() {
           than renamed to `NEXT_PUBLIC_`. */}
       <TrafficMapPanel
         initialTraffic={traffic}
+        initialForecast={forecast}
+        renderedAt={readClock()}
+        mqttUrl={env.MQTT_WS_URL}
         mapboxToken={env.MAPBOX_PUBLIC_TOKEN}
       />
     </div>
