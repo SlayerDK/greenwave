@@ -15,3 +15,9 @@ pnpm db:import-history
 ```
 
 The predictor learns from these rows on its next run, or at once with `docker compose restart predictor`.
+
+With these rows loaded into a database the stack has run against (the backend stores the segment lengths), this reproduces `docs/report/backtest-2026-11-23.csv`, the seven days 16–22 Nov:
+
+```bash
+pnpm --filter @greenwave/predictor backtest --days 7 --until 2026-11-23
+```

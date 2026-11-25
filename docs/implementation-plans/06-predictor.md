@@ -45,7 +45,7 @@ predictor/
     profile.ts         the profile query and the fallback order
     forecast.ts        the formula and the clamp (pure)
     run-forecast.ts    one run: read, compute, write, prune
-    backtest.ts        CLI: --days N
+    backtest.ts        CLI: --days N [--until YYYY-MM-DD]
     main.ts            croner
     slots.test.ts  profile.test.ts  forecast.test.ts
 ```
