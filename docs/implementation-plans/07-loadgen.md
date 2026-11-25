@@ -20,14 +20,14 @@ Provide reproducible evidence for one Aarhus adapter, one backend and one local 
 
 Use `docs/report/verification/` for the observed commands, short log extracts and results. This is evidence produced during implementation, not a new application subsystem. No mandatory CSV collector, synthetic-city generator, monitor account or chart pipeline.
 
-- [ ] **Baseline.** Run the adapter in fixture mode for a few complete ticks. Record the offered rate (13 route readings per minute), processed count, duplicates and lag from the existing logs. Show that real TomTom readings also traverse the implemented pipeline before claiming real-data end-to-end operation. Never present fixture throughput as measured live API performance.
-- [ ] **Permissions.** Run [01](01-broker.md)'s checks. Observe raw readings as `backend` on the observations filter; observe processed state/status anonymously. The restricted backend user no longer reads every topic.
-- [ ] **Adapter failure.** Kill `adapter-aarhus`. Record the actual Last Will delay and the map's offline banner. Reconnect and show that the retained status returns to online. Do not confuse a live connection with fresh successful API readings.
-- [ ] **Staleness.** Stop adapter and backend for more than `STATE_TTL_SECONDS` (300 seconds). A new subscriber receives no expired retained state; an open map and its initial Postgres state turn grey based on `observedAt`. Expiry alone does not notify an already-open browser.
-- [ ] **Backend restart.** After its subscription exists, stop the backend briefly while the adapter publishes known unique event IDs; restart it within one hour. Wait for the queue to drain and compare the new receipt IDs with that known set. Do not compare the total table count to only the latest run's publications.
-- [ ] **Container recreation.** Repeat with `docker compose up -d --force-recreate backend`. Confirm `backend-1` reconnects with the same session and every known event is accounted for. Never run two copies with that client ID.
-- [ ] **Duplicates and ordering.** Keep [04](04-backend.md)'s integration-test evidence that a repeated event creates no additional history sample and an older event does not replace newer state. Use a separate test database. Fixture-mode runtime traffic deliberately does not write history, so it cannot alone prove the history-write path.
-- [ ] **Broker restart.** Verify retained state and an established offline session survive a graceful restart, using [01](01-broker.md)'s bounded commands. Do not turn this into a claim of power-loss durability.
+- [ ] **Baseline.** Run the adapter in fixture mode for a few complete ticks. Record the offered rate (13 route readings per minute), processed count, duplicates and lag from the existing logs. Show that real TomTom readings also traverse the implemented pipeline before claiming real-data end-to-end operation. Never present fixture throughput as measured live API performance. _25 Nov: fixture baseline recorded; the live run got `unauthorized` from TomTom for every route, so real data through to the map is still to show._
+- [x] **Permissions.** Run [01](01-broker.md)'s checks. Observe raw readings as `backend` on the observations filter; observe processed state/status anonymously. The restricted backend user no longer reads every topic.
+- [x] **Adapter failure.** Kill `adapter-aarhus`. Record the actual Last Will delay and the map's offline banner. Reconnect and show that the retained status returns to online. Do not confuse a live connection with fresh successful API readings.
+- [x] **Staleness.** Stop adapter and backend for more than `STATE_TTL_SECONDS` (300 seconds). A new subscriber receives no expired retained state; an open map and its initial Postgres state turn grey based on `observedAt`. Expiry alone does not notify an already-open browser.
+- [x] **Backend restart.** After its subscription exists, stop the backend briefly while the adapter publishes known unique event IDs; restart it within one hour. Wait for the queue to drain and compare the new receipt IDs with that known set. Do not compare the total table count to only the latest run's publications.
+- [x] **Container recreation.** Repeat with `docker compose up -d --force-recreate backend`. Confirm `backend-1` reconnects with the same session and every known event is accounted for. Never run two copies with that client ID.
+- [x] **Duplicates and ordering.** Keep [04](04-backend.md)'s integration-test evidence that a repeated event creates no additional history sample and an older event does not replace newer state. Use a separate test database. Fixture-mode runtime traffic deliberately does not write history, so it cannot alone prove the history-write path.
+- [x] **Broker restart.** Verify retained state and an established offline session survive a graceful restart, using [01](01-broker.md)'s bounded commands. Do not turn this into a claim of power-loss durability.
 
 ## Scalability discussion
 
@@ -42,10 +42,10 @@ Relate the observed baseline and failures to at least two relevant Lab 7 concern
 
 ## Done when
 
-- [ ] Each required case has a command/input, expected result, observed result and limitation.
-- [ ] Short restart and recreation preserve the known unique observations within the documented limits; integration tests cover history deduplication and ordering.
-- [ ] The report separates measurements, estimates and unimplemented future work.
-- [ ] The resilience/scalability report section has a draft ([WP9](../work-plan/wp9-report-and-demo.md)).
+- [x] Each required case has a command/input, expected result, observed result and limitation.
+- [x] Short restart and recreation preserve the known unique observations within the documented limits; integration tests cover history deduplication and ordering.
+- [x] The report separates measurements, estimates and unimplemented future work.
+- [x] The resilience/scalability report section has a draft ([WP9](../work-plan/wp9-report-and-demo.md)).
 
 ## Not in this plan
 

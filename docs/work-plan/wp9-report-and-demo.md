@@ -4,19 +4,19 @@
 
 ## Report sections
 
-| Section                                          | Owner     | Draft by   |
-| ------------------------------------------------ | --------- | ---------- |
-| Architecture and MQTT design                     | Christian | Fri 6 Nov  |
-| The pivot: from traffic lights to real-time data | Christian | Fri 13 Nov |
-| [Broker draft](../report/broker.md)              | bd-nis    | Fri 13 Nov |
-| Deployment and migration                         | Bjoern    | Fri 13 Nov |
-| Adapter                                          | Christian | Fri 13 Nov |
-| Backend                                          | Bjoern    | Fri 20 Nov |
-| Frontend                                         | bd-nis    | Fri 20 Nov |
-| Prediction method                                | bd-nis    | Fri 20 Nov |
-| Resilience and scalability                       | Bjoern    | Fri 27 Nov |
-| Evaluation                                       | bd-nis    | Mon 30 Nov |
-| Discussion and conclusion                        | everyone  | Thu 3 Dec  |
+| Section                                                               | Owner     | Draft by   |
+| --------------------------------------------------------------------- | --------- | ---------- |
+| Architecture and MQTT design                                          | Christian | Fri 6 Nov  |
+| The pivot: from traffic lights to real-time data                      | Christian | Fri 13 Nov |
+| [Broker draft](../report/broker.md)                                   | bd-nis    | Fri 13 Nov |
+| Deployment and migration                                              | Bjoern    | Fri 13 Nov |
+| Adapter                                                               | Christian | Fri 13 Nov |
+| Backend                                                               | Bjoern    | Fri 20 Nov |
+| Frontend                                                              | bd-nis    | Fri 20 Nov |
+| Prediction method                                                     | bd-nis    | Fri 20 Nov |
+| [Resilience and scalability](../report/resilience-and-scalability.md) | Bjoern    | Fri 27 Nov |
+| Evaluation                                                            | bd-nis    | Mon 30 Nov |
+| Discussion and conclusion                                             | everyone  | Thu 3 Dec  |
 
 - Credit Asbjørn (Aarhus Kommune), with the contact email.
 - Explain the Vercel recorder as a temporary data collector still running at hand-in, and why ([WP0](wp0-recorder.md)).
