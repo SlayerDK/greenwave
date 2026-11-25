@@ -6,18 +6,18 @@ Owner: Bjoern. Evidence for [WP7](../../work-plan/wp7-load-tests.md) and [plan 0
 
 ## Results
 
-| #   | Case                    | Expected                                                                    | Observed                                                                                                                         | Result                   |
-| --- | ----------------------- | --------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| 1   | Baseline, fixture       | 13 readings a minute processed once, low lag                                | 8 polls, each 13 published, 0 failed; backend 13 processed, 0 duplicates, 0 invalid each minute; lag p50 0.38–1.07 s             | Pass                     |
-| 2   | Real TomTom data        | Live readings reach Postgres, the history and the map                       | TomTom answered `unauthorized` for all 13 routes; nothing published. Last real-data run: backend run 5, 18 Nov (not via the map) | **Not shown today**      |
-| 3   | Permissions             | Roles limited by the ACL                                                    | `pnpm broker:verify` 28/28 PASS; on the running stack, `backend` reads observations, anonymous and `adapter-aarhus` cannot       | Pass                     |
-| 4   | Adapter Last Will       | `offline` on kill, banner on the map, `online` after start                  | Last Will 0.55 s and 1.0 s after `kill`; banner on the open map; `online` 3.9 s and 8.5 s after `start`                          | Pass                     |
-| 5   | Staleness               | No expired retained state for a new subscriber; open and reloaded maps grey | 13 retained states at TTL −20 s, 0 at TTL +14 s; open map grey without reload; reloaded map grey                                 | Pass                     |
-| 6   | Backend stop/restart    | Every known event ID gets one receipt after the restart                     | 26 known IDs, the same 26 new receipts, `sessionPresent: true`, 0 duplicates                                                     | Pass                     |
-| 7   | Container recreation    | New container resumes `backend-1`'s session, nothing lost                   | Container `06a112f24bdf` → `a85b951a931b`, `sessionPresent: true`, all 13 IDs of the overlapping poll received once              | Pass                     |
-| 8   | Duplicates and ordering | A redelivery writes nothing new; a late reading leaves state alone          | 4 integration tests pass against `greenwave_test`; whole suite 260 tests in 34 files pass                                        | Pass                     |
-| 9   | Graceful broker restart | Retained state and an offline session's queue survive                       | Broker restored 14 retained messages, 1 client and 13 queued client messages; backend processed exactly those 13                 | Pass                     |
-| –   | Connection ≠ fresh data | An `online` adapter with failing API calls must not look fresh              | Adapter `online`, banner gone, every route stayed grey while TomTom refused the key                                              | Pass (found by accident) |
+| #   | Case                    | Expected                                                                    | Observed                                                                                                                                          | Result                   |
+| --- | ----------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| 1   | Baseline, fixture       | 13 readings a minute processed once, low lag                                | 8 polls, each 13 published, 0 failed; backend 13 processed, 0 duplicates, 0 invalid each minute; lag p50 0.38–1.07 s (1.40 s while the tests ran) | Pass                     |
+| 2   | Real TomTom data        | Live readings reach Postgres, the history and the map                       | TomTom answered `unauthorized` for all 13 routes; nothing published. Last real-data run: backend run 5, 18 Nov (not via the map)                  | **Not shown today**      |
+| 3   | Permissions             | Roles limited by the ACL                                                    | `pnpm broker:verify` 28/28 PASS; on the running stack, `backend` reads observations, anonymous and `adapter-aarhus` cannot                        | Pass                     |
+| 4   | Adapter Last Will       | `offline` on kill, banner on the map, `online` after start                  | Last Will 0.55 s and 1.0 s after `kill`; banner on the open map; `online` 3.9 s and 8.5 s after `start`                                           | Pass                     |
+| 5   | Staleness               | No expired retained state for a new subscriber; open and reloaded maps grey | 13 retained states at TTL −20 s, 0 at TTL +14 s; open map grey without reload; reloaded map grey                                                  | Pass                     |
+| 6   | Backend stop/restart    | Every known event ID gets one receipt after the restart                     | 26 known IDs, the same 26 new receipts, `sessionPresent: true`, 0 duplicates                                                                      | Pass                     |
+| 7   | Container recreation    | New container resumes `backend-1`'s session, nothing lost                   | Container `06a112f24bdf` → `a85b951a931b`, `sessionPresent: true`, all 13 IDs of the overlapping poll received once                               | Pass                     |
+| 8   | Duplicates and ordering | A redelivery writes nothing new; a late reading leaves state alone          | 4 integration tests pass against `greenwave_test`; whole suite 260 tests in 34 files pass                                                         | Pass                     |
+| 9   | Graceful broker restart | Retained state and an offline session's queue survive                       | Broker restored 14 retained messages, 1 client and 13 queued client messages; backend processed exactly those 13                                  | Pass                     |
+| –   | Connection ≠ fresh data | An `online` adapter with failing API calls must not look fresh              | Adapter `online`, banner gone, every route stayed grey while TomTom refused the key                                                               | Pass (found by accident) |
 
 Screenshots are in [`screenshots/`](screenshots/), cropped from a headless Edge session signed in as a throwaway local user and kept on `/map` through runs 4–5.
 
@@ -50,7 +50,7 @@ The comparison uses the receipts written in the window, never the table's total 
 
 ## 1 · Baseline (fixture)
 
-**Input:** the stack above, untouched from 14:30 to 14:37. `docker compose logs adapter-aarhus | grep '"poll"'`, `docker compose logs backend | grep '"metrics"'`, receipts per minute from Postgres.
+**Input:** the stack above from 14:30 to 14:37; run 4 B killed and restarted the adapter between the 14:31 and 14:32 polls. `docker compose logs adapter-aarhus | grep '"poll"'`, `docker compose logs backend | grep '"metrics"'`, receipts per minute from Postgres.
 
 | Poll     | Adapter (`published`, `failed`, ms) | Backend window (processed, duplicates, invalid, published) | Lag p50 / p95 (ms) |
 | -------- | ----------------------------------- | ---------------------------------------------------------- | ------------------ |
@@ -68,6 +68,7 @@ The comparison uses the receipts written in the window, never the table's total 
 - Postgres holds exactly 13 receipts for each minute 14:32–14:37. `traffic_segment_history` stayed at 2,084,706 rows through every fixture run: fixture readings write no history, as designed.
 - Lag is from `observedAt` to the commit. The 13 readings of a poll arrive within about 10 ms and are processed one at a time. In the 14:35 poll the receipts span 14:35:00.031–00.662, so the backend took about 53 ms per reading.
 - Sizes: the 13 observations of a poll total 236,791–236,797 bytes (as in the adapter's CUJ 1). The 13 retained states total 261,563 bytes, the largest 41,035 bytes; a state message carries the segments' coordinates too. The status message is 51 bytes.
+- Screenshot [1](screenshots/1-live-fixture.png): the open map during the fixture runs, every route coloured and no banner.
 - Idle snapshot (`docker stats`): backend 102 MiB, Postgres 261 MiB, frontend 127 MiB, adapter 44 MiB, Mosquitto 3.1 MiB; all below 0.1 % CPU between polls.
 
 **Limit:** fixture throughput on one laptop. It is not live API performance and not a capacity test.
@@ -93,7 +94,7 @@ docker compose exec -T mosquitto mosquitto_sub -V mqttv5 -t 'greenwave/v1/+/rout
 
 **Observed:**
 
-- `pnpm broker:verify` first failed before any check: `compose.yaml` gained the `frontend` service in `dba5573`, and Compose refuses to interpolate its required `BETTER_AUTH_SECRET` and `MAPBOX_PUBLIC_TOKEN` (or `ADAPTER_SOURCE`) from the verifier's empty env file. The verifier now sets placeholders for the three variables, since it never starts those services. After the fix, 28 of 28 checks passed, including the role/topic read and write denials (PUBACK 135), the WebSocket ACL, expiry, and the graceful-restart session.
+- `pnpm broker:verify` first failed before any check: `compose.yaml` requires the adapter's `ADAPTER_SOURCE` since `5ccb801` and the frontend's `BETTER_AUTH_SECRET` and `MAPBOX_PUBLIC_TOKEN` since `dba5573`, and Compose refuses to interpolate them from the verifier's empty env file. The verifier now sets placeholders for the three variables, since it never starts those services. After the fix, 28 of 28 checks passed, including the role/topic read and write denials (PUBACK 135), the WebSocket ACL, expiry, and the graceful-restart session.
 - `backend` received the 13 observations of 14:08:00 (`aarhus:56634:2026-11-25T14:08:00.002Z` … `aarhus:313729:…00.008Z`). Anonymous and `adapter-aarhus` received nothing in 70 s (`Timed out`, exit 27).
 - An anonymous subscriber received 13 retained states and 1 retained status, all with the retained flag set.
 
@@ -144,7 +145,7 @@ docker compose exec -T mosquitto mosquitto_sub -V mqttv5 -t 'greenwave/v1/+/rout
 
 - Broker: `Client backend-1 … disconnected.` at 14:11:21 (a normal DISCONNECT). On return: `disconnected: session taken over` for the stored session, then `New client connected … as backend-1 (p5, c0, k60, u'backend')`. `c0` means a clean start of 0: the session was resumed.
 - Backend: `connected`, `clientId: backend-1`, `sessionPresent: true` at 14:13:29.7; next metrics window `processed 26, duplicates 0, invalid 0, published 26`, lag p50 90,124 ms, p95 90,692 ms (the age of the queue).
-- The observer saw 26 event IDs while the backend was away: 13 at 14:12:00 and 13 at 14:13:00. Postgres wrote exactly those 26 receipts between 14:13:29.916 and 31.503 (`diff` empty), 61 ms per reading.
+- The observer saw 26 event IDs while the backend was away: 13 at 14:12:00 and 13 at 14:13:00. Postgres wrote exactly those 26 receipts between 14:13:29.916 and 31.503 (`diff` empty), 63 ms per reading.
 
 **Limit:** this holds only after `backend-1`'s first subscription, for the 3,600-second session expiry and up to the 1,000-message queue.
 
