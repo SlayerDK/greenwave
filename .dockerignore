@@ -7,4 +7,5 @@
 .env.*
 !.env.example
 frontend/traffic-history.geojson
+data
 docs

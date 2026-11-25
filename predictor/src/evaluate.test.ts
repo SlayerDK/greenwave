@@ -108,6 +108,49 @@ describe("recordSample", () => {
   });
 });
 
+describe("rounding", () => {
+  it("scores every method on the whole km/h the forecast would store", () => {
+    const board: Scoreboard = new Map();
+    recordSample(board, {
+      method: "m",
+      tau: "",
+      horizon: "15m",
+      predicted: { kmh: 40.4, rel: 80 },
+      actual: { kmh: 40, rel: 80 },
+      segmentKey: "a",
+      lengthM: 10,
+    });
+
+    expect(scoreOf(board, "m||15m").absoluteError).toBe(0);
+  });
+
+  it("rounds the profile baseline before scoring it", () => {
+    const board: Scoreboard = new Map();
+    const fractional = segment();
+    const profileCells = buildProfiles(
+      [40, 41, 42].map((slot) => ({
+        routeId: "1",
+        segmentId: "a",
+        dayType: "weekday" as const,
+        slot,
+        rel: 83.4,
+        kmh: 41.4,
+        maxRel: 100,
+        maxKmh: 50,
+        days: 3,
+      })),
+    ).get(segmentKey("1", "a"));
+    if (!profileCells) throw new Error("no profile");
+
+    evaluateDay(board, quarterHours, [
+      { ...fractional, profile: profileCells },
+    ]);
+
+    const profile = scoreOf(board, "profile||30m");
+    expect(profile.absoluteError / profile.length).toBe(9); // |41 − 50|
+  });
+});
+
 describe("toCsv", () => {
   it("writes the planned columns", () => {
     const board: Scoreboard = new Map();

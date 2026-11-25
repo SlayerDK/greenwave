@@ -91,10 +91,23 @@ const evaluateCityDay = async (
   );
 };
 
-const readArgs = (now: Date) => {
+const parseUntil = (until: string | undefined) => {
+  if (until === undefined) return new Date();
+  const date = new Date(until);
+  // The round trip rejects dates Date rolls over, such as 2026-11-31.
+  if (Number.isNaN(date.getTime()) || localDateOf(date) !== until) {
+    throw new Error("--until must be a date such as 2026-11-23");
+  }
+  return date;
+};
+
+const readArgs = () => {
   const { values } = parseArgs({
     options: {
       days: { type: "string", default: "7" },
+      // A fixed end date makes a reported run reproducible: the scored days
+      // are the ones before it, as they would be on that date.
+      until: { type: "string" },
       out: { type: "string" },
     },
   });
@@ -102,6 +115,7 @@ const readArgs = (now: Date) => {
   if (!Number.isInteger(days) || days < 1) {
     throw new Error("--days must be a positive whole number");
   }
+  const now = parseUntil(values.until);
   const defaultOutput = path.join(
     "..",
     "docs",
@@ -109,7 +123,7 @@ const readArgs = (now: Date) => {
     `backtest-${localDateOf(now)}.csv`,
   );
 
-  return { days, output: values.out ?? defaultOutput };
+  return { now, days, output: values.out ?? defaultOutput };
 };
 
 const writeReport = async (board: Scoreboard, output: string) => {
@@ -126,8 +140,7 @@ const writeReport = async (board: Scoreboard, output: string) => {
 };
 
 const main = async () => {
-  const now = new Date();
-  const { days, output } = readArgs(now);
+  const { now, days, output } = readArgs();
   const prisma = createPrismaClient(env.DATABASE_URL);
   const board: Scoreboard = new Map();
 

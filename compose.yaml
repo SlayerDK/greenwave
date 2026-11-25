@@ -95,7 +95,7 @@ services:
     environment:
       DATABASE_URL: postgresql://greenwave:greenwave@postgres:5432/greenwave
       CITY_IDS: aarhus
-      FORECAST_TAU_MINUTES: ${FORECAST_TAU_MINUTES:-60}
+      FORECAST_TAU_MINUTES: ${FORECAST_TAU_MINUTES:-15}
       LOG_LEVEL: ${LOG_LEVEL:-info}
     depends_on:
       migrate: { condition: service_completed_successfully }

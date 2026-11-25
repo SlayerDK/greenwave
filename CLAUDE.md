@@ -51,6 +51,7 @@ Run every check from the root.
 | `pnpm db:migrate` / `db:seed`  | Prisma migrate / seed                                                  |
 | `pnpm db:generate`             | Prisma client (also runs on `pnpm install`)                            |
 | `pnpm db:import-traffic-stats` | Load the Traffic Stats export                                          |
+| `pnpm db:import-history`       | Load the recorded traffic history (`data/traffic-history/`)            |
 
 pnpm only (`only-allow` preinstall hook). Husky runs lint-staged on `pre-commit` and `ls-lint` + `fallow audit` on `pre-push`.
 Run Prisma through these scripts or `pnpm --filter @greenwave/database exec prisma …`, never `npx prisma` at the root:
