@@ -15,6 +15,11 @@ const environment = {
   COMPOSE_PROFILES: "",
   MQTT_ADAPTER_PASSWORD: randomBytes(16).toString("hex"),
   MQTT_BACKEND_PASSWORD: randomBytes(16).toString("hex"),
+  // Compose interpolates every service, including those this check never
+  // starts; their required variables only need a value, never a real secret.
+  ADAPTER_SOURCE: "fixture",
+  BETTER_AUTH_SECRET: "unused-by-broker-verify",
+  MAPBOX_PUBLIC_TOKEN: "unused-by-broker-verify",
 };
 const envFile = join(temporary, "empty.env");
 const composeFile = join(root, "compose.yaml");
