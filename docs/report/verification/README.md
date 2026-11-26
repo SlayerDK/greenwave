@@ -1,6 +1,6 @@
 # WP7 verification runs, 25 November 2026
 
-Owner: Bjoern. Evidence for [WP7](../../work-plan/wp7-load-tests.md) and [plan 07](../../implementation-plans/07-loadgen.md): one Aarhus adapter, one broker, one backend and the map, running from `compose.yaml` at commit `9915dc8` (plus the `broker/verify.mjs` fix below). Every time is UTC. Every number below was observed in these runs unless it is marked as an estimate. The report section built on them is [resilience and scalability](../resilience-and-scalability.md).
+Owner: Bjoern. Evidence for [WP7](../../work-plan/wp7-load-tests.md) and [plan 07](../../implementation-plans/07-loadgen.md): one Aarhus adapter, one broker, one backend and the map, running from `compose.yaml` at commit `9915dc8` (plus the `broker/verify.mjs` fix below). Every time is UTC. Every number below was observed in these runs unless it is marked as an estimate or as recomputed. The report section built on them is [resilience and scalability](../resilience-and-scalability.md).
 
 **Environment:** Windows 11 laptop, Docker Desktop 28.3.2, Compose 2.39.1, Node 26.10.0, pnpm 12.6.0; images rebuilt from the commit before the runs. Services: `postgres`, `mosquitto`, `migrate`, `backend`, `adapter-aarhus` with `ADAPTER_SOURCE=fixture` (except where noted), and `frontend`. Local Postgres only, never the Neon database behind the Vercel history recorder.
 
@@ -67,7 +67,7 @@ The comparison uses the receipts written in the window, never the table's total 
 
 - Postgres holds exactly 13 receipts for each minute 14:32–14:37. `traffic_segment_history` stayed at 2,084,706 rows through every fixture run: fixture readings write no history, as designed.
 - Lag is from `observedAt` to the commit. The 13 readings of a poll arrive within about 10 ms and are processed one at a time. In the 14:35 poll the receipts span 14:35:00.031–00.662, so the backend took about 53 ms per reading.
-- Sizes: the 13 observations of a poll total 236,791–236,797 bytes (as in the adapter's CUJ 1). The 13 retained states total 261,563 bytes, the largest 41,035 bytes; a state message carries the segments' coordinates too. The status message is 51 bytes.
+- Sizes: the 13 observations of a poll total 236,791–236,797 bytes (as in the adapter's CUJ 1). The 13 retained states total 261,563 bytes, the largest 41,035 bytes; a state message carries the segments' coordinates too, and they are 28 % of the states' bytes. That share was recomputed on 26 November, not read off the broker: the 13 states rebuilt from the adapter's fixture with the backend's `classifySegments` total 261,288 bytes, 74,191 of them coordinates, within 0.2 % of the observed total. The status message is 51 bytes.
 - Screenshot [1](screenshots/1-live-fixture.png): the open map during the fixture runs, every route coloured and no banner.
 - Idle snapshot (`docker stats`): backend 102 MiB, Postgres 261 MiB, frontend 127 MiB, adapter 44 MiB, Mosquitto 3.1 MiB; all below 0.1 % CPU between polls.
 
@@ -122,15 +122,15 @@ docker compose exec -T mosquitto mosquitto_sub -V mqttv5 -t 'greenwave/v1/+/rout
 
 **Observed:**
 
-| Time         | Observation                                                                                                                                |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| 14:21:10.799 | The adapter's own `offline` (a graceful stop, not the will)                                                                                |
-| 14:21:12.6   | Banner on the open map                                                                                                                     |
-| 14:25:40.6   | New subscriber: 13 retained states                                                                                                         |
-| 14:25:48     | Open map still coloured: readings 4 min 48 s old                                                                                           |
-| 14:26:15.4   | New subscriber: **0** retained states; the status, which has no expiry, still `offline`                                                    |
-| 14:26:48     | Open map: every route grey ("No recent data"), no message received ([screenshot 3](screenshots/3-open-map-after-ttl.png))                  |
-| 14:27:09     | Reloaded map: grey from the Postgres initial state, banner from the retained status ([screenshot 4](screenshots/4-reloaded-after-ttl.png)) |
+| Time         | Observation                                                                                                                                                                             |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 14:21:10.799 | The adapter's own `offline` (a graceful stop, not the will)                                                                                                                             |
+| 14:21:12.6   | Banner on the open map                                                                                                                                                                  |
+| 14:25:40.6   | New subscriber: 13 retained states                                                                                                                                                      |
+| 14:25:48     | Open map still coloured: readings 4 min 48 s old                                                                                                                                        |
+| 14:26:15.4   | New subscriber: **0** retained states; the status, which has no expiry, still `offline`                                                                                                 |
+| 14:26:48     | Open map: every route grey ("No recent data"), no message received ([screenshot 3](screenshots/3-open-map-after-ttl.png))                                                               |
+| 14:27:09     | Reloaded map: grey from the Postgres initial state, banner from the retained status; no separate screenshot, it looked the same as [screenshot 3](screenshots/3-open-map-after-ttl.png) |
 
 - The open map greys on its own clock (`useNow` ticks every 30 s), from `observedAt`, not because the broker's expiry told it anything: expiry only removes the retained copy for new subscribers.
 - **Recovery:** the backend started 14:27:43. Next, run 2's live adapter connected (`online` 14:27:52.9, banner gone 14:27:54.3), but every TomTom call failed. After a reload at 14:28:40 the map was still entirely grey with no banner ([screenshot 5](screenshots/5-adapter-online-tomtom-401.png)). The adapter switched back to fixture mode; the 14:30:00 poll turned the open map back to colour by 14:30:15 without a reload ([screenshot 6](screenshots/6-recovered-open-map.png)).
